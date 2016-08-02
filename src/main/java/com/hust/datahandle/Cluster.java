@@ -45,9 +45,9 @@ public class Cluster {
             return null;
         }
         List<String[]> listSeg = new ArrayList<String[]>();
-        WordSegment analysis = WordSegment.getInstance();
+        WordSegment ws = WordSegment.getInstance();
         for (String[] row : list) {
-            listSeg.add(analysis.parse(row[targetIndex]));
+            listSeg.add(ws.parse(row[targetIndex]));
         }
         return listSeg;
     }

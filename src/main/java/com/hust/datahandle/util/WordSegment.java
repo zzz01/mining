@@ -1,10 +1,11 @@
 package com.hust.datahandle.util;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;
@@ -29,9 +30,12 @@ public class WordSegment {
 	}
 
 	private void loadStopWord() throws IOException {
-		String path = this.getClass().getResource("/").getPath();
-		path = path.substring(0, path.lastIndexOf("WEB-INF"));
-		File stopwords = new File(path + "/library/stopwords.dic");
+	    Properties pro = new Properties();
+	    String path = this.getClass().getResource("/").getPath();
+	    FileInputStream in = new FileInputStream(path+"library.properties");
+	    pro.load(in);
+	    String stopwords = pro.getProperty("stopwords");
+	    in.close();
 		FileReader fr = new FileReader(stopwords);
 		BufferedReader br = new BufferedReader(fr);
 		String line = br.readLine();
@@ -44,6 +48,7 @@ public class WordSegment {
 	}
 
 	public String[] parse(String str) {
+	    System.out.println(str);
 		List<Term> res = ToAnalysis.parse(str);
 		res = FilterModifWord.modifResult(res);
 		String[] words = new String[res.size()];
