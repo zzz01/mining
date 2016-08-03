@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>æä»¶ä¸ä¼ æµè¯</title>
+<title>错误页面</title>
 <link rel="stylesheet" href="../css/common.css" />
 <link rel="stylesheet" href="../css/bootstrap.min.css" />
 <script src="../js/jquery-1.10.2.min.js"></script>
@@ -13,5 +13,6 @@
 </head>
 <body>
 	出错啦！
+	<%= (String)request.getAttribute("msg") %>
 </body>
 </html>

@@ -1,12 +1,11 @@
 package com.hust.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,43 +15,52 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hust.service.ClusterService;
+import com.hust.service.StatisticService;
 import com.hust.service.UploadService;
+import com.hust.util.Utils;
 
 @Controller
-@RequestMapping("/test")
+@RequestMapping("/data")
 public class ClusterController {
-    /**
-     * Logger for this class
-     */
-    private static final Logger LOG = LoggerFactory
-            .getLogger(ClusterController.class);
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(ClusterController.class);
 
-    @Autowired
-    private UploadService uploadService;
+	@Autowired
+	private UploadService uploadService;
 
-    @Autowired
-    private ClusterService clusterService;
+	@Autowired
+	private ClusterService clusterService;
 
-    @RequestMapping(value = "/cluster", method = RequestMethod.POST)
-    public ModelAndView cluster(
-            @RequestParam(value = "file", required = true) MultipartFile file,
-            @RequestParam(value = "targetIndex", required = true) int targetIndex) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("upload(MultipartFile) - start"); // $NON-NLS-1$
-        }
+	@Autowired
+	private StatisticService statisticService;
 
-        InputStream is;
-        try {
-            is = file.getInputStream();
-        } catch (IOException e) {
-            LOG.error("Upload file error");
-            return new ModelAndView("error.jsp");
-        }
+	@RequestMapping(value = "/handle", method = RequestMethod.POST)
+	public ModelAndView cluster(@RequestParam(value = "file", required = true) MultipartFile file,
+			@RequestParam(value = "targetIndex", required = true) int targetIndex,@RequestParam(value = "timeIndex", required = true) int timeIndex) {
 
-        List<String[]> list = uploadService.readDataFromExcel(is);
-        list = clusterService.getClusterResult(list, targetIndex);
-        ModelAndView mav = new ModelAndView("contentShow.jsp");
-        mav.addObject("list", list);
-        return mav;
-    }
+		InputStream is;
+		try {
+			is = file.getInputStream();
+		} catch (IOException e) {
+			LOG.error("Upload file error \t" + e.toString());
+			return new ModelAndView("error.jsp").addObject("msg", e.toString());
+		}
+
+		List<String[]> list = uploadService.readDataFromExcel(is);
+		if (null == list) {
+			return new ModelAndView("error.jsp").addObject("msg", "文件是空的");
+		}
+		List<List<String[]>> list_res = clusterService.getClusterResult(list, targetIndex);
+		if (null == list_res) {
+			return new ModelAndView("error.jsp").addObject("msg", "解析出错");
+		}
+		List<String[]> clusterList = Utils.convertoStrList(list_res);
+		List<String[]> origAndCountList = statisticService.getOrigAndCount(list_res, timeIndex);
+		ModelAndView mav = new ModelAndView("show.jsp");
+		mav.addObject("clusterList", clusterList);
+		mav.addObject("origAndCountList", origAndCountList);
+		return mav;
+	}
 }

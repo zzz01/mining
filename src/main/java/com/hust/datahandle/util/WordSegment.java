@@ -48,7 +48,6 @@ public class WordSegment {
 	}
 
 	public String[] parse(String str) {
-	    System.out.println(str);
 		List<Term> res = ToAnalysis.parse(str);
 		res = FilterModifWord.modifResult(res);
 		String[] words = new String[res.size()];

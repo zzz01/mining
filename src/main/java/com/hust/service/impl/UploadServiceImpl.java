@@ -20,9 +20,6 @@ public class UploadServiceImpl implements UploadService {
 
 	@Override
 	public List<String[]> readDataFromExcel(InputStream is) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("readDataFromExcel(InputStream) - start"); //$NON-NLS-1$
-		}
 		// TODO Auto-generated method stub
 		List<String[]> list = null;
 		try {
