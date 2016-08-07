@@ -8,9 +8,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.hust.constants.Config;
-import com.hust.datahandle.util.Caculate;
-import com.hust.datahandle.util.WordSegment;
 import com.hust.service.ClusterService;
+import com.hust.util.Caculate;
+import com.hust.util.WordSegment;
 
 @Service
 public class ClusterServiceImpl implements ClusterService {
