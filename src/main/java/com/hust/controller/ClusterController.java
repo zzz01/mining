@@ -11,13 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hust.service.ClusterService;
 import com.hust.service.StatisticService;
 import com.hust.service.UploadService;
-import com.hust.util.Utils;
+import com.hust.util.ConvertUtil;
 
 @Controller
 @RequestMapping("/data")
@@ -56,11 +57,18 @@ public class ClusterController {
 		if (null == list_res) {
 			return new ModelAndView("error.jsp").addObject("msg", "解析出错");
 		}
-		List<String[]> clusterList = Utils.convertoStrList(list_res);
+		List<String[]> clusterList = ConvertUtil.convertoStrList(list_res);
 		List<String[]> origAndCountList = statisticService.getOrigAndCount(list_res, timeIndex);
 		ModelAndView mav = new ModelAndView("show.jsp");
 		mav.addObject("clusterList", clusterList);
 		mav.addObject("origAndCountList", origAndCountList);
 		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/statistic")
+	public Object statistic(List<String[]> list,String type){
+		
+		return "";
 	}
 }
