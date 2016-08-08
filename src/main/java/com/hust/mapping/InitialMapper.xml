@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper>
-	<select id="selectZhongyangMedia" parameterType="java.lang.String" resultType="java.lang.String">
-		select 
+<mapper namespace="com.hust.dao.mapper.InitialMapper">
+	<select id="selectMediaByType" parameterType="java.lang.String" resultType="java.lang.String">
+		select name from media where type=#{type}
 	</select>
 </mapper>
