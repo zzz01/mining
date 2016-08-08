@@ -10,7 +10,11 @@ public interface StatisticService {
 
 	public Map<String, Integer> getEmotionTendencyCount(List<String> list);
 
-	public Map<String, Integer> getResourceCount(List<String> list);
+	public Map<String, Integer> getInfoTypeCount(List<String> list);
 
-	public Map<String, Integer> getTypeCount(List<String> list);
+	public Map<String, Integer> getMediaLevelCount(List<String> list);
+
+	public Map<String, Integer> getNetizenAttention(List<String> list);
+
+	public Map<String, Integer> getMediaAttention(List<String> list);
 }

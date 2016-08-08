@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
 import com.hust.constants.Emotion;
 import com.hust.constants.Interval;
+import com.hust.constants.Media;
+import com.hust.model.MediaLevel;
 import com.hust.service.StatisticService;
 
 @Service
@@ -121,15 +125,68 @@ public class StatisticServiceImpl implements StatisticService {
 	}
 
 	@Override
-	public Map<String, Integer> getResourceCount(List<String> list) {
+	public Map<String, Integer> getInfoTypeCount(List<String> list) {
 		// TODO Auto-generated method stub
-		return null;
+		if (null == list || list.size() == 0) {
+			return null;
+		}
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		for (String infotype : list) {
+			if (null == map.get(infotype)) {
+				map.put(infotype, 1);
+			} else {
+				map.put(infotype, map.get(infotype) + 1);
+			}
+		}
+		return map;
 	}
 
 	@Override
-	public Map<String, Integer> getTypeCount(List<String> list) {
+	public Map<String, Integer> getMediaLevelCount(List<String> list) {
 		// TODO Auto-generated method stub
-		return null;
+		if (null == list || list.size() == 0) {
+			return null;
+		}
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		for (MediaLevel medialevel : Media.LEVEL) {
+			map.put(medialevel.getName(), 0);
+		}
+		for (String media : list) {
+			map.put(media, map.get(media) + 1);
+		}
+		return map;
+	}
+
+	@Override
+	public Map<String, Integer> getNetizenAttention(List<String> list) {
+		// TODO Auto-generated method stub
+		Map<String, Integer> map = getInfoTypeCount(list);
+		if (null == map) {
+			return null;
+		}
+		Map<String, Integer> weightMap = new HashMap<String, Integer>();
+		Set<Entry<String, Integer>> infotype = map.entrySet();
+		for (Entry<String, Integer> entry : infotype) {
+			int weight = entry.getValue() * Media.getInfoTypeWeightByName(entry.getKey());
+			weightMap.put(entry.getKey(), weight);
+		}
+		return weightMap;
+	}
+
+	@Override
+	public Map<String, Integer> getMediaAttention(List<String> list) {
+		// TODO Auto-generated method stub
+		Map<String, Integer> map = getMediaLevelCount(list);
+		if (null == list) {
+			return null;
+		}
+		Map<String, Integer> weightMap = new HashMap<String, Integer>();
+		Set<Entry<String, Integer>> medialevel = map.entrySet();
+		for (Entry<String, Integer> entry : medialevel) {
+			int weight = entry.getValue() * Media.getMediaWeightByName(entry.getKey());
+			weightMap.put(entry.getKey(), weight);
+		}
+		return weightMap;
 	}
 
 }
