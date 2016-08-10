@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.hust.constants.Emotion;
 import com.hust.constants.Interval;
 import com.hust.constants.Media;
-import com.hust.model.MediaLevel;
+import com.hust.model.LMedia;
 import com.hust.service.StatisticService;
 
 @Service
@@ -148,7 +148,7 @@ public class StatisticServiceImpl implements StatisticService {
 			return null;
 		}
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (MediaLevel medialevel : Media.LEVEL) {
+		for (LMedia medialevel : Media.LEVEL) {
 			map.put(medialevel.getName(), 0);
 		}
 		for (String media : list) {
