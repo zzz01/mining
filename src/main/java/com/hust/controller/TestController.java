@@ -30,10 +30,4 @@ public class TestController {
 		}
 		return Media.TYPE;
 	}
-	
-	@ResponseBody
-	@RequestMapping("/init2")
-	public Object init2(){
-		return Media.TYPE;
-	}
 }

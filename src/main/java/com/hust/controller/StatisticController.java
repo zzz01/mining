@@ -29,5 +29,7 @@ public class StatisticController {
 	public Object getIntervalCount(List<String> list, int interval) {
 		return statService.getIntervalCount(list, interval);
 	}
+	
+	
 
 }

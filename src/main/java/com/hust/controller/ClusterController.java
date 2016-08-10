@@ -20,6 +20,8 @@ import com.hust.service.StatisticService;
 import com.hust.service.UploadService;
 import com.hust.util.ConvertUtil;
 
+import net.sf.json.JSONArray;
+
 @Controller
 @RequestMapping("/data")
 public class ClusterController {
@@ -60,8 +62,8 @@ public class ClusterController {
 		List<String[]> clusterList = ConvertUtil.convertoStrList(list_res);
 		List<String[]> origAndCountList = statisticService.getOrigAndCount(list_res, timeIndex);
 		ModelAndView mav = new ModelAndView("show.jsp");
-		mav.addObject("clusterList", clusterList);
-		mav.addObject("origAndCountList", origAndCountList);
+		mav.addObject("clusterList", JSONArray.fromObject(clusterList));
+		mav.addObject("origAndCountList",JSONArray.fromObject(origAndCountList));
 		return mav;
 	}
 	

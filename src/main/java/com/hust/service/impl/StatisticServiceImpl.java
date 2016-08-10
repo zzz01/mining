@@ -152,7 +152,12 @@ public class StatisticServiceImpl implements StatisticService {
 			map.put(medialevel.getName(), 0);
 		}
 		for (String media : list) {
-			map.put(media, map.get(media) + 1);
+			for (LMedia medialevel : Media.LEVEL) {
+				if (medialevel.getMedialist().contains(media)) {
+					map.put(medialevel.getName(), map.get(medialevel.getName()) + 1);
+					break;
+				}
+			}
 		}
 		return map;
 	}
