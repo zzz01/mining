@@ -1,10 +1,12 @@
 package com.hust.model;
 
-public class InfoType {
+import java.util.List;
 
+public class LMedia {
 	private int id;
 	private String name;
 	private int weight;
+	private List<IMedia> medialist;
 
 	public int getId() {
 		return id;
@@ -30,9 +32,17 @@ public class InfoType {
 		this.weight = weight;
 	}
 
+	public List<IMedia> getMedialist() {
+		return medialist;
+	}
+
+	public void setMedialist(List<IMedia> medialist) {
+		this.medialist = medialist;
+	}
+
 	@Override
 	public String toString() {
-		return "InfoType [id=" + id + ", name=" + name + ", weight=" + weight + "]";
+		return "LMedia [id=" + id + ", name=" + name + ", weight=" + weight + ", medialist=" + medialist + "]";
 	}
 
 }

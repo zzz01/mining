@@ -1,10 +1,9 @@
 package com.hust.model;
 
-public class InfoType {
-
+public class IMedia {
 	private int id;
 	private String name;
-	private int weight;
+	private String level;
 
 	public int getId() {
 		return id;
@@ -22,17 +21,17 @@ public class InfoType {
 		this.name = name;
 	}
 
-	public int getWeight() {
-		return weight;
+	public String getLevel() {
+		return level;
 	}
 
-	public void setWeight(int weight) {
-		this.weight = weight;
+	public void setLevel(String level) {
+		this.level = level;
 	}
 
 	@Override
 	public String toString() {
-		return "InfoType [id=" + id + ", name=" + name + ", weight=" + weight + "]";
+		return "IMedia [id=" + id + ", name=" + name + ", level=" + level + "]";
 	}
 
 }
