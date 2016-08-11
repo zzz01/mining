@@ -1,17 +1,20 @@
 package com.hust.service.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.springframework.stereotype.Service;
 
 import com.hust.constants.Emotion;
 import com.hust.constants.Interval;
 import com.hust.constants.Media;
+import com.hust.model.IMedia;
 import com.hust.model.LMedia;
 import com.hust.service.StatisticService;
 
@@ -59,12 +62,19 @@ public class StatisticServiceImpl implements StatisticService {
 		if (null == list || 0 == list.size()) {
 			return null;
 		}
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Integer> map = new TreeMap<String, Integer>(new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				// TODO Auto-generated method stub
+				return o1.compareTo(o2);
+			}
+		});
 		switch (interval) {
 		case Interval.DAY: {
 			for (String time : list) {
 				if ("" != time && null != time) {
-					time = time.substring(5, 9);
+					time = time.substring(5, 10);
 					if (null != map.get(time)) {
 						map.put(time, map.get(time) + 1);
 					} else {
@@ -72,11 +82,13 @@ public class StatisticServiceImpl implements StatisticService {
 					}
 				}
 			}
+
 		}
+			break;
 		case Interval.HOUR: {
 			for (String time : list) {
 				if ("" != time && null != time) {
-					time = time.substring(5);
+					time = time.substring(5, 13);
 					if (null != map.get(time)) {
 						map.put(time, map.get(time) + 1);
 					} else {
@@ -85,10 +97,11 @@ public class StatisticServiceImpl implements StatisticService {
 				}
 			}
 		}
+			break;
 		case Interval.MONTH: {
 			for (String time : list) {
 				if ("" != time && null != time) {
-					time = time.substring(0, 5);
+					time = time.substring(0, 4);
 					if (null != map.get(time)) {
 						map.put(time, map.get(time) + 1);
 					} else {
@@ -97,6 +110,7 @@ public class StatisticServiceImpl implements StatisticService {
 				}
 			}
 		}
+			break;
 		}
 
 		return map;
@@ -152,10 +166,13 @@ public class StatisticServiceImpl implements StatisticService {
 			map.put(medialevel.getName(), 0);
 		}
 		for (String media : list) {
-			for (LMedia medialevel : Media.LEVEL) {
-				if (medialevel.getMedialist().contains(media)) {
-					map.put(medialevel.getName(), map.get(medialevel.getName()) + 1);
-					break;
+			label: for (LMedia medialevel : Media.LEVEL) {
+				List<IMedia> medias = medialevel.getMedialist();
+				for (IMedia m : medias) {
+					if (m.getName().equals(media)) {
+						map.put(m.getLevel(), map.get(m.getLevel()) + 1);
+						break label;
+					}
 				}
 			}
 		}

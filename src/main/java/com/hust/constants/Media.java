@@ -21,7 +21,7 @@ public class Media {
 	public InitialService initialService;
 
 	@PostConstruct
-	public void init(){
+	public void init() {
 		List<InfoType> infotype = initialService.getInfoType();
 		for (InfoType it : infotype) {
 			TYPE.add(it);
@@ -35,7 +35,7 @@ public class Media {
 
 	public static int getInfoTypeWeightByName(String name) {
 		for (InfoType it : TYPE) {
-			if (name == it.getName()) {
+			if (name.equals(it.getName())) {
 				return it.getWeight();
 			}
 		}
@@ -44,7 +44,7 @@ public class Media {
 
 	public static int getMediaWeightByName(String name) {
 		for (LMedia ml : LEVEL) {
-			if (name == ml.getName()) {
+			if (name.equals(ml.getName())) {
 				return ml.getWeight();
 			}
 		}
