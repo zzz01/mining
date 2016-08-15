@@ -82,9 +82,9 @@ public class ClusterController {
 			typeList.add(row[typeIndex]);
 			intervalList.add(row[timeIndex]);
 		}
-//		Map<String, Integer> emotionMap = statisticService.getEmotionTendencyCount(emotionlist);
-//		Map<String, Integer> resourceMap = statisticService.getMediaLevelCount(resourceList);
-//		Map<String, Integer> typeMap = statisticService.getInfoTypeCount(typeList);
+		Map<String, Integer> emotionMap = statisticService.getEmotionTendencyCount(emotionlist);
+		Map<String, Integer> resourceMap = statisticService.getMediaLevelCount(resourceList);
+		Map<String, Integer> typeMap = statisticService.getInfoTypeCount(typeList);
 //		Map<String, Integer> netizenAtten = statisticService.getNetizenAttention(typeList);
 //		Map<String, Integer> mediaAtten = statisticService.getMediaAttention(resourceList);
 		Map<String, Integer> interval = statisticService.getIntervalCount(intervalList, Interval.DAY);
@@ -98,8 +98,17 @@ public class ClusterController {
 //		map.put("mediaAtten", mediaAtten);
 //		map.put("interval", interval);
 //		map.put("msg", "success");
-		JSONObject json = PaintUtil.convertMap(interval);
-		return json;
+		JSONObject result = new JSONObject();
+		JSONObject intervaljson = PaintUtil.convertMapToXY(interval,"网页数量");
+		intervaljson = PaintUtil.packageXYJson(intervaljson);
+		JSONArray emotionjson = PaintUtil.convertMapToPie(emotionMap);
+		JSONArray typejson = PaintUtil.convertMapToPie(typeMap);
+		JSONArray resourcejson = PaintUtil.convertMapToPie(resourceMap);
+		result.put("interval", intervaljson);
+		result.put("emotion", emotionjson);
+		result.put("type", typejson);
+		result.put("resource", resourcejson);
+		return result;
 	}
 
 	@ResponseBody

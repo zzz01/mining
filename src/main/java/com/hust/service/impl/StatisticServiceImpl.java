@@ -132,9 +132,9 @@ public class StatisticServiceImpl implements StatisticService {
 				neutral++;
 			}
 		}
-		map.put("positive", positive);
-		map.put("neutral", neutral);
-		map.put("negative", negative);
+		map.put("正面", positive);
+		map.put("中性", neutral);
+		map.put("负面", negative);
 		return map;
 	}
 
