@@ -13,14 +13,15 @@ function upload() {
 				success : function(data) {
 					var xaixs = data.xaxis;
 					var yaixs = data.yaxis;
-					paintline(xaixs,yaixs,'line','#line');
-					paintline(xaixs,yaixs,'bar','#bar');
-					paintline(xaixs,yaixs,'column','#column');
+					paintline(xaixs, yaixs, 'line', '#line');
+					paintline(xaixs, yaixs, 'bar', '#bar');
+					paintline(xaixs, yaixs, 'column', '#column');
+					paintline(xaixs, yaixs, 'pie', '#pie');
 				}
 			});
 }
 
-function paintline(xaixs,yaixs,type,html) {
+function paintline(xaixs, yaixs, type, html) {
 	$(html).highcharts({
 		chart : {
 			type : type
@@ -28,12 +29,7 @@ function paintline(xaixs,yaixs,type,html) {
 		title : {
 			text : '事件每日发布量走势图'
 		},
-		legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
+		
 		xAxis : {
 			categories : xaixs
 		},
@@ -43,6 +39,9 @@ function paintline(xaixs,yaixs,type,html) {
 			}
 		},
 		series : [ {
+			name : '网页数量',
+			data : yaixs
+		}, {
 			name : '网页数量',
 			data : yaixs
 		} ]

@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.hust.service.UploadService;
-import com.hust.util.ExcelReader;
+import com.hust.util.ExcelUtil;
 
 @Service
 public class UploadServiceImpl implements UploadService {
@@ -23,7 +23,7 @@ public class UploadServiceImpl implements UploadService {
 		// TODO Auto-generated method stub
 		List<String[]> list = null;
 		try {
-			list = ExcelReader.read(is);
+			list = ExcelUtil.read(is);
 		} catch (Exception e) {
 			LOG.error("readDataFromExcel(InputStream)", e); //$NON-NLS-1$
 			return null;

@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ExcelReader {
+public class ExcelUtil {
     
     public static List<String[]> read(InputStream inputStream) throws FileNotFoundException, IOException {
         List<String[]> list = new ArrayList<String[]>();
