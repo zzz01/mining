@@ -1,8 +1,8 @@
 package com.hust.service.impl;
 
 import com.hust.dao.InitialDao;
-import com.hust.model.InfoType;
-import com.hust.model.LMedia;
+import com.hust.model.po.InfoType;
+import com.hust.model.po.LMedia;
 import com.hust.service.InitialService;
 import org.springframework.beans.factory.annotation.Autowired;
 

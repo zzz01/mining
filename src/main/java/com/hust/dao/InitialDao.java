@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hust.dao.mapper.InitialMapper;
-import com.hust.model.InfoType;
-import com.hust.model.LMedia;
+import com.hust.model.po.InfoType;
+import com.hust.model.po.LMedia;
 
 @Repository
 public class InitialDao {

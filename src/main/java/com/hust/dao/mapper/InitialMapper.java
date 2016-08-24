@@ -2,8 +2,8 @@ package com.hust.dao.mapper;
 
 import java.util.List;
 
-import com.hust.model.InfoType;
-import com.hust.model.LMedia;
+import com.hust.model.po.InfoType;
+import com.hust.model.po.LMedia;
 
 public interface InitialMapper {
 

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import com.hust.constants.Emotion;
 import com.hust.constants.Interval;
 import com.hust.constants.Media;
-import com.hust.model.IMedia;
-import com.hust.model.LMedia;
+import com.hust.model.po.IMedia;
+import com.hust.model.po.LMedia;
 import com.hust.service.StatisticService;
 
 @Service

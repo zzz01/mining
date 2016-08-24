@@ -1,5 +1,10 @@
-package com.hust.model;
+package com.hust.model.po;
 
+/**
+ * 具体media的model
+ * @author Kevin
+ *
+ */
 public class IMedia {
 	private int id;
 	private String name;

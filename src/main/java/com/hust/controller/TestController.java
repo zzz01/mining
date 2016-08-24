@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.constants.Media;
-import com.hust.model.InfoType;
+import com.hust.model.po.InfoType;
 import com.hust.service.InitialService;
 
 @RequestMapping("/test")
@@ -24,8 +24,8 @@ public class TestController {
 			Media.TYPE.add(it);
 		}
 
-		List<com.hust.model.LMedia> media = initService.getMedia();
-		for (com.hust.model.LMedia m : media) {
+		List<com.hust.model.po.LMedia> media = initService.getMedia();
+		for (com.hust.model.po.LMedia m : media) {
 			Media.LEVEL.add(m);
 		}
 		return Media.TYPE;

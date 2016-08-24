@@ -1,7 +1,12 @@
-package com.hust.model;
+package com.hust.model.po;
 
 import java.util.List;
 
+/**
+ * 媒体级别的model
+ * @author Kevin
+ *
+ */
 public class LMedia {
 	private int id;
 	private String name;

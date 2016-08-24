@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.hust.model.InfoType;
-import com.hust.model.LMedia;
+import com.hust.model.po.InfoType;
+import com.hust.model.po.LMedia;
 
 @Service
 public interface InitialService {

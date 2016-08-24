@@ -1,4 +1,4 @@
-package com.hust.model;
+package com.hust.model.po;
 
 public class InfoType {
 
