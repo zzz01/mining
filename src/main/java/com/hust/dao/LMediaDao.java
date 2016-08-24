@@ -15,49 +15,49 @@ public class LMediaDao {
     @Autowired
     private LMediaMapper lMediaMapper;
 
-    long countByExample(LMediaExample example) {
+    public long countByExample(LMediaExample example) {
         return lMediaMapper.countByExample(example);
     }
 
-    int deleteByExample(LMediaExample example) {
+    public int deleteByExample(LMediaExample example) {
         return lMediaMapper.deleteByExample(example);
     }
 
-    int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Integer id) {
         return lMediaMapper.deleteByPrimaryKey(id);
     }
 
-    int insert(LMedia record) {
+    public int insert(LMedia record) {
         return lMediaMapper.insert(record);
     }
 
-    int insertSelective(LMedia record) {
+    public int insertSelective(LMedia record) {
         return lMediaMapper.insertSelective(record);
     }
 
-    List<LMedia> selectByExample(LMediaExample example) {
+    public List<LMedia> selectByExample(LMediaExample example) {
         return lMediaMapper.selectByExample(example);
     }
 
-    LMedia selectByPrimaryKey(Integer id) {
+    public LMedia selectByPrimaryKey(Integer id) {
         return lMediaMapper.selectByPrimaryKey(id);
     }
 
-    int updateByExampleSelective(@Param("record") LMedia record,
+    public int updateByExampleSelective(@Param("record") LMedia record,
             @Param("example") LMediaExample example) {
         return lMediaMapper.updateByExampleSelective(record, example);
     }
 
-    int updateByExample(@Param("record") LMedia record,
+    public int updateByExample(@Param("record") LMedia record,
             @Param("example") LMediaExample example) {
         return lMediaMapper.updateByExample(record, example);
     }
 
-    int updateByPrimaryKeySelective(LMedia record) {
+    public int updateByPrimaryKeySelective(LMedia record) {
         return lMediaMapper.updateByPrimaryKeySelective(record);
     }
 
-    int updateByPrimaryKey(LMedia record) {
+    public int updateByPrimaryKey(LMedia record) {
         return lMediaMapper.updateByPrimaryKey(record);
     }
 }

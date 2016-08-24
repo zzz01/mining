@@ -1,53 +1,33 @@
 package com.hust.model.po;
 
-import java.util.List;
-
-/**
- * 媒体级别的model
- * @author Kevin
- *
- */
 public class LMedia {
-	private int id;
-	private String name;
-	private int weight;
-	private List<IMedia> medialist;
+    private Integer id;
 
-	public int getId() {
-		return id;
-	}
+    private String name;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    private Integer weight;
 
-	public String getName() {
-		return name;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public int getWeight() {
-		return weight;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-	public List<IMedia> getMedialist() {
-		return medialist;
-	}
+    public Integer getWeight() {
+        return weight;
+    }
 
-	public void setMedialist(List<IMedia> medialist) {
-		this.medialist = medialist;
-	}
-
-	@Override
-	public String toString() {
-		return "LMedia [id=" + id + ", name=" + name + ", weight=" + weight + ", medialist=" + medialist + "]";
-	}
-
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
 }

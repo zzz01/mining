@@ -14,49 +14,49 @@ public class InfoTypeDao {
     @Autowired
     private InfoTypeMapper infoTypeMapper;
 
-    long countByExample(InfoTypeExample example) {
+    public long countByExample(InfoTypeExample example) {
         return infoTypeMapper.countByExample(example);
     }
 
-    int deleteByExample(InfoTypeExample example) {
+    public int deleteByExample(InfoTypeExample example) {
         return infoTypeMapper.deleteByExample(example);
     }
 
-    int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Integer id) {
         return infoTypeMapper.deleteByPrimaryKey(id);
     }
 
-    int insert(InfoType record) {
+    public int insert(InfoType record) {
         return infoTypeMapper.insert(record);
     }
 
-    int insertSelective(InfoType record) {
+    public int insertSelective(InfoType record) {
         return infoTypeMapper.insertSelective(record);
     }
 
-    List<InfoType> selectByExample(InfoTypeExample example) {
+    public List<InfoType> selectByExample(InfoTypeExample example) {
         return infoTypeMapper.selectByExample(example);
     }
 
-    InfoType selectByPrimaryKey(Integer id) {
+    public InfoType selectByPrimaryKey(Integer id) {
         return infoTypeMapper.selectByPrimaryKey(id);
     }
 
-    int updateByExampleSelective(@Param("record") InfoType record,
+    public int updateByExampleSelective(@Param("record") InfoType record,
             @Param("example") InfoTypeExample example) {
         return infoTypeMapper.updateByExampleSelective(record, example);
     }
 
-    int updateByExample(@Param("record") InfoType record,
+    public int updateByExample(@Param("record") InfoType record,
             @Param("example") InfoTypeExample example) {
         return infoTypeMapper.updateByExample(record, example);
     }
 
-    int updateByPrimaryKeySelective(InfoType record) {
+    public int updateByPrimaryKeySelective(InfoType record) {
         return infoTypeMapper.updateByPrimaryKeySelective(record);
     }
 
-    int updateByPrimaryKey(InfoType record) {
+    public int updateByPrimaryKey(InfoType record) {
         return infoTypeMapper.updateByPrimaryKey(record);
     }
 }

@@ -13,49 +13,49 @@ public class IMediaDao {
     @Autowired
     private IMediaMapper iMediaMapper;
 
-    long countByExample(IMediaExample example) {
+    public long countByExample(IMediaExample example) {
         return iMediaMapper.countByExample(example);
     }
 
-    int deleteByExample(IMediaExample example) {
+    public int deleteByExample(IMediaExample example) {
         return iMediaMapper.deleteByExample(example);
     }
 
-    int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Integer id) {
         return iMediaMapper.deleteByPrimaryKey(id);
     }
 
-    int insert(IMedia record) {
+    public int insert(IMedia record) {
         return iMediaMapper.insert(record);
     }
 
-    int insertSelective(IMedia record) {
+    public int insertSelective(IMedia record) {
         return iMediaMapper.insertSelective(record);
     }
 
-    List<IMedia> selectByExample(IMediaExample example) {
+    public List<IMedia> selectByExample(IMediaExample example) {
         return iMediaMapper.selectByExample(example);
     }
 
-    IMedia selectByPrimaryKey(Integer id) {
+    public IMedia selectByPrimaryKey(Integer id) {
         return iMediaMapper.selectByPrimaryKey(id);
     }
 
-    int updateByExampleSelective(@Param("record") IMedia record,
+    public int updateByExampleSelective(@Param("record") IMedia record,
             @Param("example") IMediaExample example) {
         return iMediaMapper.updateByExampleSelective(record, example);
     }
 
-    int updateByExample(@Param("record") IMedia record,
+    public int updateByExample(@Param("record") IMedia record,
             @Param("example") IMediaExample example) {
         return iMediaMapper.updateByExample(record, example);
     }
 
-    int updateByPrimaryKeySelective(IMedia record) {
+    public int updateByPrimaryKeySelective(IMedia record) {
         return iMediaMapper.updateByPrimaryKeySelective(record);
     }
 
-    int updateByPrimaryKey(IMedia record) {
+    public int updateByPrimaryKey(IMedia record) {
         return iMediaMapper.updateByPrimaryKey(record);
     }
 }

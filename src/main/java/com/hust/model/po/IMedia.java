@@ -1,42 +1,33 @@
 package com.hust.model.po;
 
-/**
- * 具体media的model
- * @author Kevin
- *
- */
 public class IMedia {
-	private int id;
-	private String name;
-	private String level;
+    private Integer id;
 
-	public int getId() {
-		return id;
-	}
+    private String name;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    private String level;
 
-	public String getName() {
-		return name;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getLevel() {
-		return level;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-	@Override
-	public String toString() {
-		return "IMedia [id=" + id + ", name=" + name + ", level=" + level + "]";
-	}
+    public String getLevel() {
+        return level;
+    }
 
+    public void setLevel(String level) {
+        this.level = level == null ? null : level.trim();
+    }
 }

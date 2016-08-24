@@ -1,38 +1,33 @@
 package com.hust.model.po;
 
 public class InfoType {
+    private Integer id;
 
-	private int id;
-	private String name;
-	private int weight;
+    private String name;
 
-	public int getId() {
-		return id;
-	}
+    private Integer weight;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getWeight() {
-		return weight;
-	}
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
+    public Integer getWeight() {
+        return weight;
+    }
 
-	@Override
-	public String toString() {
-		return "InfoType [id=" + id + ", name=" + name + ", weight=" + weight + "]";
-	}
-
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
 }
