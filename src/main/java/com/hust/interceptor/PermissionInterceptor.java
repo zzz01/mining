@@ -28,7 +28,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// TODO Auto-generated method stub
-		if (null != request.getSession().getAttribute("USERNAME")) {
+		if (null != request.getSession().getAttribute("username")) {
 			return true;
 		}
 		try {
