@@ -20,11 +20,9 @@ public interface LMediaMapper {
 
     LMedia selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") LMedia record,
-            @Param("example") LMediaExample example);
+    int updateByExampleSelective(@Param("record") LMedia record, @Param("example") LMediaExample example);
 
-    int updateByExample(@Param("record") LMedia record,
-            @Param("example") LMediaExample example);
+    int updateByExample(@Param("record") LMedia record, @Param("example") LMediaExample example);
 
     int updateByPrimaryKeySelective(LMedia record);
 

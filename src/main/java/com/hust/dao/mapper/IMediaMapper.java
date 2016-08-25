@@ -1,11 +1,9 @@
 package com.hust.dao.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.hust.model.po.IMedia;
 import com.hust.model.vo.IMediaExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface IMediaMapper {
     long countByExample(IMediaExample example);

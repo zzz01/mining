@@ -14,11 +14,12 @@
 		location="file:/home/work/var/conf/mining/config.properties"
 		ignore-unresolvable="true" ignore-resource-not-found="true" />
 	<context:property-placeholder order="2"
-		location="classpath:dbconfig.properties" ignore-unresolvable="true"
+		location="classpath:config.properties" ignore-unresolvable="true"
 		ignore-resource-not-found="true" />
 
 	<context:annotation-config />
 	<aop:aspectj-autoproxy />
 	<import resource="spring-db.xml" />
+	<import resource="spring-ehcache.xml" />
 
 </beans>

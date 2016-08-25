@@ -25,4 +25,7 @@ public class ResultBody {
         this.status = status;
     }
 
+    public ResultBody() {
+    }
+    
 }

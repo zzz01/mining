@@ -20,11 +20,9 @@ public interface InfoTypeMapper {
 
     InfoType selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") InfoType record,
-            @Param("example") InfoTypeExample example);
+    int updateByExampleSelective(@Param("record") InfoType record, @Param("example") InfoTypeExample example);
 
-    int updateByExample(@Param("record") InfoType record,
-            @Param("example") InfoTypeExample example);
+    int updateByExample(@Param("record") InfoType record, @Param("example") InfoTypeExample example);
 
     int updateByPrimaryKeySelective(InfoType record);
 

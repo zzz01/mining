@@ -31,8 +31,7 @@ public class InitialServiceImpl implements InitialService {
     public Map<String, String> getMedia() {
         Map<String, String> map = new HashMap<String, String>();
         IMediaExample iexample = new IMediaExample();
-        IMediaExample.Criteria icriteria = iexample.createCriteria();
-        icriteria.andIdIsNotNull();
+        iexample.createCriteria().andIdIsNotNull();
         List<IMedia> iMedialist = iMediaDao.selectByExample(iexample);
         for (IMedia iMedia : iMedialist) {
             map.put(iMedia.getName(), iMedia.getLevel());
@@ -44,8 +43,7 @@ public class InitialServiceImpl implements InitialService {
     public Map<String, Integer> getLevel() {
         Map<String, Integer> map = new HashMap<String, Integer>();
         LMediaExample lexample = new LMediaExample();
-        LMediaExample.Criteria lcriteria = lexample.createCriteria();
-        lcriteria.andIdIsNotNull();
+        lexample.createCriteria().andIdIsNotNull();
         List<LMedia> lmedialist = lMediaDao.selectByExample(lexample);
         for (LMedia lMedia : lmedialist) {
             map.put(lMedia.getName(), lMedia.getWeight());
@@ -57,8 +55,7 @@ public class InitialServiceImpl implements InitialService {
     public Map<String, Integer> getInfoType() {
         // TODO Auto-generated method stub
         InfoTypeExample example = new InfoTypeExample();
-        Criteria criteria = example.createCriteria();
-        criteria.andIdIsNotNull();
+        example.createCriteria().andIdIsNotNull();
         List<InfoType> list = infoTypeDao.selectByExample(example);
         Map<String, Integer> map = new HashMap<String, Integer>();
         for (InfoType it : list) {

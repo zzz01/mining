@@ -85,21 +85,26 @@ public class InfoTypeExample {
 
         protected void addCriterion(String condition) {
             if (condition == null) {
-                throw new RuntimeException("Value for condition cannot be null");
+                throw new RuntimeException(
+                        "Value for condition cannot be null");
             }
             criteria.add(new Criterion(condition));
         }
 
-        protected void addCriterion(String condition, Object value, String property) {
+        protected void addCriterion(String condition, Object value,
+                String property) {
             if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
+                throw new RuntimeException(
+                        "Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
         }
 
-        protected void addCriterion(String condition, Object value1, Object value2, String property) {
+        protected void addCriterion(String condition, Object value1,
+                Object value2, String property) {
             if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
+                throw new RuntimeException(
+                        "Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
         }
@@ -351,6 +356,10 @@ public class InfoTypeExample {
             return typeHandler;
         }
 
+        protected Criterion() {
+            super();
+        }
+
         protected Criterion(String condition) {
             super();
             this.condition = condition;
@@ -358,7 +367,8 @@ public class InfoTypeExample {
             this.noValue = true;
         }
 
-        protected Criterion(String condition, Object value, String typeHandler) {
+        protected Criterion(String condition, Object value,
+                String typeHandler) {
             super();
             this.condition = condition;
             this.value = value;
@@ -374,7 +384,8 @@ public class InfoTypeExample {
             this(condition, value, null);
         }
 
-        protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
+        protected Criterion(String condition, Object value, Object secondValue,
+                String typeHandler) {
             super();
             this.condition = condition;
             this.value = value;
@@ -383,7 +394,8 @@ public class InfoTypeExample {
             this.betweenValue = true;
         }
 
-        protected Criterion(String condition, Object value, Object secondValue) {
+        protected Criterion(String condition, Object value,
+                Object secondValue) {
             this(condition, value, secondValue, null);
         }
     }
