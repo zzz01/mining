@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.dao.IMediaDao;
 import com.hust.dao.InfoTypeDao;
-import com.hust.dao.InitialDao;
 import com.hust.dao.LMediaDao;
 import com.hust.model.po.IMedia;
 import com.hust.model.po.InfoType;
@@ -22,8 +21,6 @@ import com.hust.service.InitialService;
 public class InitialServiceImpl implements InitialService {
 
     @Autowired
-    private InitialDao initialDao;
-    @Autowired
     private InfoTypeDao infoTypeDao;
     @Autowired
     private IMediaDao iMediaDao;
@@ -33,29 +30,41 @@ public class InitialServiceImpl implements InitialService {
     @Override
     public Map<String, String> getMedia() {
         Map<String, String> map = new HashMap<String, String>();
-        LMediaExample lexample = new LMediaExample();
-        LMediaExample.Criteria lcriteria = lexample.createCriteria();
-        lcriteria.andIdIsNotNull();
-        List<LMedia> lmedialist = lMediaDao.selectByExample(lexample);
-        for (LMedia lMedia : lmedialist) {
-            IMediaExample iexample = new IMediaExample();
-            IMediaExample.Criteria icriteria = iexample.createCriteria();
-            icriteria.andLevelEqualTo(lMedia.getName());
-            List<IMedia> iMedialist = iMediaDao.selectByExample(iexample);
-            for (IMedia iMedia : iMedialist) {
-                map.put(iMedia.getName(), iMedia.getLevel());
-            }
+        IMediaExample iexample = new IMediaExample();
+        IMediaExample.Criteria icriteria = iexample.createCriteria();
+        icriteria.andIdIsNotNull();
+        List<IMedia> iMedialist = iMediaDao.selectByExample(iexample);
+        for (IMedia iMedia : iMedialist) {
+            map.put(iMedia.getName(), iMedia.getLevel());
         }
         return map;
     }
 
     @Override
-    public List<InfoType> getInfoType() {
+    public Map<String, Integer> getLevel() {
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        LMediaExample lexample = new LMediaExample();
+        LMediaExample.Criteria lcriteria = lexample.createCriteria();
+        lcriteria.andIdIsNotNull();
+        List<LMedia> lmedialist = lMediaDao.selectByExample(lexample);
+        for (LMedia lMedia : lmedialist) {
+            map.put(lMedia.getName(), lMedia.getWeight());
+        }
+        return map;
+    }
+
+    @Override
+    public Map<String, Integer> getInfoType() {
         // TODO Auto-generated method stub
         InfoTypeExample example = new InfoTypeExample();
         Criteria criteria = example.createCriteria();
         criteria.andIdIsNotNull();
-        return infoTypeDao.selectByExample(example);
+        List<InfoType> list = infoTypeDao.selectByExample(example);
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for (InfoType it : list) {
+            map.put(it.getName(), it.getWeight());
+        }
+        return map;
     }
 
 }

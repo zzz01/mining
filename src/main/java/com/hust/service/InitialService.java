@@ -11,5 +11,7 @@ import com.hust.model.po.InfoType;
 public interface InitialService {
     public Map<String, String> getMedia();
 
-    public List<InfoType> getInfoType();
+    public Map<String, Integer> getInfoType();
+
+    public Map<String, Integer> getLevel();
 }
