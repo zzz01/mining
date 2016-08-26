@@ -1,7 +1,7 @@
 package com.hust.dao.mapper;
 
-import com.hust.model.po.InfoType;
-import com.hust.model.vo.InfoTypeExample;
+import com.hust.model.InfoType;
+import com.hust.model.InfoTypeExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

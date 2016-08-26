@@ -9,13 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hust.dao.IMediaDao;
 import com.hust.dao.InfoTypeDao;
 import com.hust.dao.LMediaDao;
-import com.hust.model.po.IMedia;
-import com.hust.model.po.InfoType;
-import com.hust.model.po.LMedia;
-import com.hust.model.vo.IMediaExample;
-import com.hust.model.vo.InfoTypeExample;
-import com.hust.model.vo.InfoTypeExample.Criteria;
-import com.hust.model.vo.LMediaExample;
+import com.hust.model.IMedia;
+import com.hust.model.IMediaExample;
+import com.hust.model.InfoType;
+import com.hust.model.InfoTypeExample;
+import com.hust.model.LMedia;
+import com.hust.model.LMediaExample;
 import com.hust.service.InitialService;
 
 public class InitialServiceImpl implements InitialService {

@@ -1,7 +1,7 @@
 package com.hust.dao.mapper;
 
-import com.hust.model.po.LMedia;
-import com.hust.model.vo.LMediaExample;
+import com.hust.model.LMedia;
+import com.hust.model.LMediaExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

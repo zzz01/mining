@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AuthController {
 	
+    
 	
 	public ModelAndView login(String userName, String passwd) {
 		

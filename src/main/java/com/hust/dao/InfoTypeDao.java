@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.dao.mapper.InfoTypeMapper;
-import com.hust.model.po.InfoType;
-import com.hust.model.vo.InfoTypeExample;
+import com.hust.model.InfoType;
+import com.hust.model.InfoTypeExample;
 
 public class InfoTypeDao {
 

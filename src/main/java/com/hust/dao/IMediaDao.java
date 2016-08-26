@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.dao.mapper.IMediaMapper;
-import com.hust.model.po.IMedia;
-import com.hust.model.vo.IMediaExample;
+import com.hust.model.IMedia;
+import com.hust.model.IMediaExample;
 
 public class IMediaDao {
     @Autowired

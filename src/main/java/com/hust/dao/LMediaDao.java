@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hust.dao.mapper.LMediaMapper;
-import com.hust.model.po.LMedia;
-import com.hust.model.vo.LMediaExample;
+import com.hust.model.LMedia;
+import com.hust.model.LMediaExample;
 
 @Repository
 public class LMediaDao {
