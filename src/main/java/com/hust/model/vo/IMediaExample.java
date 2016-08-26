@@ -361,10 +361,9 @@ public class IMediaExample {
             return typeHandler;
         }
 
-        
-        public Criterion() {
-            super();
-        }
+        // public Criterion() {
+        // super();
+        // }
 
         protected Criterion(String condition) {
             super();

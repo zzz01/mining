@@ -356,9 +356,9 @@ public class LMediaExample {
             return typeHandler;
         }
 
-        protected Criterion() {
-            super();
-        }
+        // protected Criterion() {
+        // super();
+        // }
 
         protected Criterion(String condition) {
             super();

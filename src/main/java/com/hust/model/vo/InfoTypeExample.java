@@ -356,9 +356,9 @@ public class InfoTypeExample {
             return typeHandler;
         }
 
-        protected Criterion() {
-            super();
-        }
+        // protected Criterion() {
+        // super();
+        // }
 
         protected Criterion(String condition) {
             super();
