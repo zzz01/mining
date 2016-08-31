@@ -14,16 +14,18 @@
 			expression="com.hust.*" />
 	</context:component-scan>
 
-	<!-- <mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
-			<bean class="com.hust.interceptor.PermissionInterceptor" />
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/images/**" />
 			<mvc:exclude-mapping path="/js/**" />
 			<mvc:exclude-mapping path="/css/**" />
-			<mvc:exclude-mapping path="/page/login.html" />
+			<mvc:exclude-mapping path="/index.html" />
+			<mvc:exclude-mapping path="/login" />
+			<mvc:exclude-mapping path="/page/error.html" />
+			<bean class="com.hust.interceptor.PermissionInterceptor" />
 		</mvc:interceptor>
-	</mvc:interceptors> -->
+	</mvc:interceptors>
 
 	<!--RequestMappingHandlerAdapter -->
 	<mvc:annotation-driven>
@@ -44,7 +46,7 @@
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/page/" />
-		<!-- <property name="suffix" value=".html" /> -->
+		<property name="suffix" value=".html" />
 	</bean>
 
 	<bean id="multipartResolver"

@@ -42,11 +42,11 @@ public class InfoTypeDao {
         return infoTypeMapper.selectByPrimaryKey(id);
     }
 
-    public int updateByExampleSelective(@Param("record") InfoType record, @Param("example") InfoTypeExample example) {
+    public int updateByExampleSelective(InfoType record, InfoTypeExample example) {
         return infoTypeMapper.updateByExampleSelective(record, example);
     }
 
-    public int updateByExample(@Param("record") InfoType record, @Param("example") InfoTypeExample example) {
+    public int updateByExample(InfoType record, InfoTypeExample example) {
         return infoTypeMapper.updateByExample(record, example);
     }
 

@@ -43,11 +43,11 @@ public class LMediaDao {
         return lMediaMapper.selectByPrimaryKey(id);
     }
 
-    public int updateByExampleSelective(@Param("record") LMedia record, @Param("example") LMediaExample example) {
+    public int updateByExampleSelective(LMedia record, LMediaExample example) {
         return lMediaMapper.updateByExampleSelective(record, example);
     }
 
-    public int updateByExample(@Param("record") LMedia record, @Param("example") LMediaExample example) {
+    public int updateByExample(LMedia record, LMediaExample example) {
         return lMediaMapper.updateByExample(record, example);
     }
 

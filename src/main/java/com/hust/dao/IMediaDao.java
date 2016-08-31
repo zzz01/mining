@@ -41,13 +41,11 @@ public class IMediaDao {
         return iMediaMapper.selectByPrimaryKey(id);
     }
 
-    public int updateByExampleSelective(@Param("record") IMedia record,
-            @Param("example") IMediaExample example) {
+    public int updateByExampleSelective(IMedia record, IMediaExample example) {
         return iMediaMapper.updateByExampleSelective(record, example);
     }
 
-    public int updateByExample(@Param("record") IMedia record,
-            @Param("example") IMediaExample example) {
+    public int updateByExample(IMedia record, IMediaExample example) {
         return iMediaMapper.updateByExample(record, example);
     }
 
