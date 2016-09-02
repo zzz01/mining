@@ -19,7 +19,7 @@
 
 	<context:annotation-config />
 	<aop:aspectj-autoproxy />
-	<import resource="spring-db.xml" />
-	<import resource="spring-ehcache.xml" />
+	<import resource="ext/spring-db.xml" />
+	<import resource="ext/spring-ehcache.xml" />
 
 </beans>
