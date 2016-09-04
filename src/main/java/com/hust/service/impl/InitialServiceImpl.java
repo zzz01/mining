@@ -63,4 +63,9 @@ public class InitialServiceImpl implements InitialService {
         return map;
     }
 
+    @Override
+    public void loadStopwords() {
+        
+    }
+
 }

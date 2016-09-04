@@ -1,10 +1,10 @@
 package com.hust.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +20,7 @@ import com.hust.constants.Interval;
 import com.hust.service.ClusterService;
 import com.hust.service.StatisticService;
 import com.hust.service.UploadService;
+import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
 import com.hust.util.PaintUtil;
 import com.hust.util.ResultUtil;
@@ -42,6 +43,10 @@ public class ClusterController {
 
     @Autowired
     private StatisticService statisticService;
+    
+    @Autowired
+    private UserService userService;
+    
 
     @ResponseBody
     @RequestMapping(value = "/handle", method = RequestMethod.POST)
@@ -50,19 +55,15 @@ public class ClusterController {
             @RequestParam(value = "timeIndex", required = true) int timeIndex,
             @RequestParam(value = "sourceIndex", required = true) int resourceIndex,
             @RequestParam(value = "typeIndex", required = true) int typeIndex,
-            @RequestParam(value = "emotionIndex", required = true) int emotionIndex) {
-
-        InputStream is;
-        try {
-            is = file.getInputStream();
-        } catch (IOException e) {
-            return ResultUtil.errorWithMsg(e.toString());
-        }
-
-        List<String[]> list = uploadService.readDataFromExcel(is);
+            @RequestParam(value = "emotionIndex", required = true) int emotionIndex,
+            @RequestParam(value = "sourceType", required = false) String sourceType,
+            HttpServletRequest request) {
+        String userName = userService.getCurrentUser(request);
+        List<String[]> list = uploadService.readDataFromExcel(file,sourceType,userName);
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("文件是空的");
         }
+        
         List<List<String[]>> list_res = clusterService.getClusterResult(list, targetIndex);
         if (null == list_res) {
             return ResultUtil.errorWithMsg("文件解析出错");

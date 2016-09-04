@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface InitialService {
-    public Map<String, String> getMedia();
+    Map<String, String> getMedia();
 
-    public Map<String, Integer> getInfoType();
+    Map<String, Integer> getInfoType();
 
-    public Map<String, Integer> getLevel();
+    Map<String, Integer> getLevel();
+
+    void loadStopwords();
 }
