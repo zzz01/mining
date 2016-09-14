@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hust.cluster.Cluster;
+import com.hust.cluster.KMeans;
 import com.hust.constants.Interval;
 import com.hust.service.ClusterService;
 import com.hust.service.StatisticService;
@@ -43,10 +45,9 @@ public class ClusterController {
 
     @Autowired
     private StatisticService statisticService;
-    
+
     @Autowired
     private UserService userService;
-    
 
     @ResponseBody
     @RequestMapping(value = "/handle", method = RequestMethod.POST)
@@ -56,14 +57,13 @@ public class ClusterController {
             @RequestParam(value = "sourceIndex", required = true) int resourceIndex,
             @RequestParam(value = "typeIndex", required = true) int typeIndex,
             @RequestParam(value = "emotionIndex", required = true) int emotionIndex,
-            @RequestParam(value = "sourceType", required = false) String sourceType,
-            HttpServletRequest request) {
+            @RequestParam(value = "sourceType", required = false) String sourceType, HttpServletRequest request) {
         String userName = userService.getCurrentUser(request);
-        List<String[]> list = uploadService.readDataFromExcel(file,sourceType,userName);
+        List<String[]> list = uploadService.readDataFromExcel(file, sourceType, userName);
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("文件是空的");
         }
-        
+
         List<List<String[]>> list_res = clusterService.getClusterResult(list, targetIndex);
         if (null == list_res) {
             return ResultUtil.errorWithMsg("文件解析出错");
