@@ -13,7 +13,14 @@ public class SegmentServiceImpl implements SegmentService {
 
     @Override
     public String[] getSegresult(String str) {
-        List<Term> res = ToAnalysis.parse(str);
+        List<Term> res;
+        try {
+            res = ToAnalysis.parse(str);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new String[]{"失败"};
+        }
         res = FilterModifWord.modifResult(res);
         String[] words = new String[res.size()];
         for (int i = 0; i < res.size(); i++) {

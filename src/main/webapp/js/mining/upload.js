@@ -1,5 +1,5 @@
 function upload() {
-	$('#file').ajaxSubmit(
+	$('#fileUpload').ajaxSubmit(
 			{
 				type : "POST",
 				error : function(data) {
