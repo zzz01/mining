@@ -3,9 +3,8 @@ package com.hust.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ansj.domain.Term;
+import org.ansj.domain.Result;
 import org.ansj.splitWord.analysis.ToAnalysis;
-import org.ansj.util.FilterModifWord;
 
 import com.hust.service.SegmentService;
 
@@ -13,8 +12,14 @@ public class SegmentServiceImpl implements SegmentService {
 
     @Override
     public String[] getSegresult(String str) {
-        List<Term> res = ToAnalysis.parse(str);
-        res = FilterModifWord.modifResult(res);
+        Result res;
+        try {
+            res = ToAnalysis.parse(str);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            System.out.println(e.toString() + "\t" + str);
+            return new String[] { "失败" };
+        }
         String[] words = new String[res.size()];
         for (int i = 0; i < res.size(); i++) {
             words[i] = res.get(i).getName();

@@ -59,7 +59,7 @@ public class ClusterController {
             @RequestParam(value = "emotionIndex", required = true) int emotionIndex,
             @RequestParam(value = "sourceType", required = false) String sourceType, HttpServletRequest request) {
         String userName = userService.getCurrentUser(request);
-        List<String[]> list = uploadService.readDataFromExcel(file, sourceType, userName);
+        List<String[]> list = uploadService.readDataFromExcel(file, "微博", userName);
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("文件是空的");
         }

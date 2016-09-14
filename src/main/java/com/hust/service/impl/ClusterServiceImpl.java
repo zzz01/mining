@@ -1,5 +1,8 @@
 package com.hust.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,13 +11,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hust.cluster.Canopy;
+import com.hust.cluster.Cluster;
 import com.hust.constants.Config;
+import com.hust.convertor.Convertor;
+import com.hust.convertor.TFIDFConvertor;
 import com.hust.service.ClusterService;
 import com.hust.service.SegmentService;
 import com.hust.util.Caculate;
 
 @Service
 public class ClusterServiceImpl implements ClusterService {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ClusterServiceImpl.class);
 
     @Autowired
     private SegmentService segmentService;
@@ -24,10 +35,22 @@ public class ClusterServiceImpl implements ClusterService {
         // TODO Auto-generated method stub
         List<List<Object>> segmentList = segmentService.getSegresult(list, targetIndex);
         List<String[]> segment = new ArrayList<String[]>();
-        for(List<Object> templist : segmentList){
+        for (List<Object> templist : segmentList) {
             segment.add((String[]) templist.get(targetIndex));
         }
-        List<List<Integer>> resultIndexSetList = cluster(segment);
+        Convertor convertor = new TFIDFConvertor();
+        convertor.setList(segment);
+        List<double[]> vectors = convertor.getVector();
+        Cluster cluster = new Canopy();
+        cluster.setVectors(vectors);
+        try {
+            cluster.clustering();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            logger.error("error occur during clustering" + e.toString());
+            return null;
+        }
+        List<List<Integer>> resultIndexSetList = cluster.getResultIndex();
         return convertToStringSet(list, resultIndexSetList, targetIndex);
     }
 
