@@ -15,6 +15,7 @@ import com.hust.convertor.Convertor;
 import com.hust.convertor.TFIDFConvertor;
 import com.hust.service.ClusterService;
 import com.hust.service.SegmentService;
+import com.hust.util.ConvertUtil;
 
 @Service
 public class ClusterServiceImpl implements ClusterService {
@@ -48,47 +49,7 @@ public class ClusterServiceImpl implements ClusterService {
             return null;
         }
         List<List<Integer>> resultIndexSetList = canopy.getResultIndex();
-        return convertToStringSet(list, resultIndexSetList, targetIndex);
+        return ConvertUtil.convertToStringSet(list, resultIndexSetList, targetIndex);
     }
 
-    private List<List<String[]>> convertToStringSet(List<String[]> list, List<List<Integer>> resultIndexSet,
-            final int targetIndex) {
-        if (null == resultIndexSet) {
-            return null;
-        }
-        List<List<String[]>> listStrSet = new ArrayList<List<String[]>>();
-        List<String[]> singleDataList = new ArrayList<String[]>();
-        for (List<Integer> set : resultIndexSet) {
-            if (set.size() == 1) {
-                singleDataList.add(list.get(set.get(0)));
-                continue;
-            }
-            List<String[]> setDataList = new ArrayList<String[]>();
-            for (int i : set) {
-                setDataList.add(list.get(i));
-            }
-            Collections.sort(setDataList, new Comparator<String[]>() {
-                public int compare(String[] o1, String[] o2) {
-                    return o1[targetIndex].compareTo(o2[targetIndex]);
-                }
-            });
-            listStrSet.add(setDataList);
-        }
-
-        Collections.sort(singleDataList, new Comparator<String[]>() {
-            public int compare(String[] o1, String[] o2) {
-                return o1[targetIndex].compareTo(o2[targetIndex]);
-            }
-        });
-        listStrSet.add(singleDataList);
-        Collections.sort(listStrSet, new Comparator<List<String[]>>() {
-
-            @Override
-            public int compare(List<String[]> o1, List<String[]> o2) {
-                // TODO Auto-generated method stub
-                return o2.size() - o1.size();
-            }
-        });
-        return listStrSet;
-    }
 }
