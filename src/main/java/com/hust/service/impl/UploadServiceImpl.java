@@ -39,16 +39,20 @@ public class UploadServiceImpl implements UploadService {
             LOG.error("读取文件出现异常\t" + e.toString());
             return list;
         }
-//        IssueInfo issueInfo = new IssueInfo();
-//        issueInfo.setIssueId(UUID.randomUUID().toString());
-//        issueInfo.setIssueName(file.getName());
-//        issueInfo.setSourceType(sourceType);
-//        issueInfo.setCreator(userName);
-//        issueInfo.setCreateTime(new Date());
-//        int count = issueInfoDao.insert(issueInfo);
-//        if (count < 1) {
-//            LOG.error("向issue_info中插入一条数据失败");
-//        }
+        IssueInfo issueInfo = new IssueInfo();
+        issueInfo.setIssueId(UUID.randomUUID().toString());
+        issueInfo.setIssueName(file.getOriginalFilename());
+        issueInfo.setSourceType(sourceType);
+        issueInfo.setCreator(userName);
+        issueInfo.setCreateTime(new Date());
+        try {
+            int count = issueInfoDao.insertSelective(issueInfo);
+            if (count < 1) {
+                LOG.error("向issue_info中插入一条数据失败");
+            }
+        } catch (Exception e) {
+            LOG.error("向issue_info中插入一条数据时发生异常" + e.toString());
+        }
         return list;
     }
 }

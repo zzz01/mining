@@ -13,4 +13,8 @@ public class IssueInfoDao {
     public int insert(IssueInfo issueInfo) {
         return issueInfoMapper.insert(issueInfo);
     }
+
+    public int insertSelective(IssueInfo issueInfo) {
+        return issueInfoMapper.insertSelective(issueInfo);
+    }
 }

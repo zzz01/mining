@@ -20,7 +20,7 @@
 	</appender>
 
 	<!-- project default level -->
-	<logger name="com.hust" level="ERROR" />
+	<logger name="com.hust" level="DEBUG" />
 
 	<root level="INFO">
 		<appender-ref ref="console" />
