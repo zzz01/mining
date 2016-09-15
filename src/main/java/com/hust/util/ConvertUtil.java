@@ -13,11 +13,13 @@ public class ConvertUtil {
             if (null != set && set.size() != 0) {
                 for (String[] row : set) {
                     listStr.add(row);
+                    System.out.println(row[1]);
                 }
                 /**
                  * 新加一行空行，以区分类间的区别
                  */
                 listStr.add(new String[set.get(0).length]);
+                System.out.println();
             }
         }
         return listStr;

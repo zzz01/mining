@@ -1,24 +1,20 @@
 package com.hust.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hust.cluster.Canopy;
-import com.hust.cluster.Cluster;
-import com.hust.constants.Config;
 import com.hust.convertor.Convertor;
 import com.hust.convertor.TFIDFConvertor;
 import com.hust.service.ClusterService;
 import com.hust.service.SegmentService;
-import com.hust.util.Caculate;
 
 @Service
 public class ClusterServiceImpl implements ClusterService {
@@ -41,55 +37,18 @@ public class ClusterServiceImpl implements ClusterService {
         Convertor convertor = new TFIDFConvertor();
         convertor.setList(segment);
         List<double[]> vectors = convertor.getVector();
-        Cluster cluster = new Canopy();
-        cluster.setVectors(vectors);
+        Canopy canopy = new Canopy();
+        canopy.setVectors(vectors);
+        canopy.setThreshold(0.4f);
         try {
-            cluster.clustering();
+            canopy.clustering();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             logger.error("error occur during clustering" + e.toString());
             return null;
         }
-        List<List<Integer>> resultIndexSetList = cluster.getResultIndex();
+        List<List<Integer>> resultIndexSetList = canopy.getResultIndex();
         return convertToStringSet(list, resultIndexSetList, targetIndex);
-    }
-
-    private List<List<Integer>> cluster(List<String[]> list) {
-        if (null == list || list.size() == 0) {
-            return null;
-        }
-        List<List<Integer>> resultIndexSet = new ArrayList<List<Integer>>();
-        for (int i = 0; i < list.size(); i++) {
-            int maxSimSetIndex = -1;
-            float maxSim = -1.0f;
-            if (i == 0) {
-                List<Integer> set = new ArrayList<Integer>();
-                set.add(0);
-                resultIndexSet.add(set);
-                continue;
-            }
-            for (int j = 0; j < resultIndexSet.size(); j++) {
-                float sim = Caculate.sim(list, list.get(i), resultIndexSet.get(j));
-                if (maxSim < sim) {
-                    maxSim = sim;
-                    maxSimSetIndex = j;
-                }
-            }
-            if (maxSim <= Config.SIMILARITYTHRESHOLD) {
-                List<Integer> set = new ArrayList<Integer>();
-                set.add(i);
-                resultIndexSet.add(set);
-            } else {
-                resultIndexSet.get(maxSimSetIndex).add(i);
-            }
-        }
-        Collections.sort(resultIndexSet, new Comparator<List<Integer>>() {
-            public int compare(List<Integer> o1, List<Integer> o2) {
-                return o2.size() - o1.size();
-            }
-
-        });
-        return resultIndexSet;
     }
 
     private List<List<String[]>> convertToStringSet(List<String[]> list, List<List<Integer>> resultIndexSet,
@@ -122,6 +81,14 @@ public class ClusterServiceImpl implements ClusterService {
             }
         });
         listStrSet.add(singleDataList);
+        Collections.sort(listStrSet, new Comparator<List<String[]>>() {
+
+            @Override
+            public int compare(List<String[]> o1, List<String[]> o2) {
+                // TODO Auto-generated method stub
+                return o2.size() - o1.size();
+            }
+        });
         return listStrSet;
     }
 }
