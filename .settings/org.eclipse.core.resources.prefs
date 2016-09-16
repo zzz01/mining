@@ -6,3 +6,4 @@ encoding//src/main/resources/library.properties=UTF-8
 encoding//src/main/webapp/page/error.jsp=UTF-8
 encoding//src/test/java=UTF-8
 encoding//src/test/resources=UTF-8
+encoding/<project>=UTF-8

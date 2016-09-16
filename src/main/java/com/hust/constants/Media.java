@@ -69,10 +69,18 @@ public class Media {
         return weight;
     }
 
+    public static int getLevelWeightByName(String level) {
+        Integer weight = LEVEL.get(level);
+        if (null == weight) {
+            return 0;
+        }
+        return weight;
+    }
+
     public static String getMediaLevelByName(String name) {
         String level = MEDIA.get(name);
         if (null == level) {
-            return "";
+            return "未知";
         }
         return level;
     }

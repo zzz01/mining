@@ -15,7 +15,7 @@ public class ResultUtil {
      */
     private static final Logger logger = LoggerFactory.getLogger(ResultUtil.class);
 
-    public static Object sucess(int status, Object result) {
+    public static Object success(Object result) {
         JSONObject object = new JSONObject();
         object.put("status", HttpStatus.OK);
         object.put("result", result);

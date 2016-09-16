@@ -3,6 +3,7 @@ package com.hust.service.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,13 +13,17 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.hust.constants.Constants;
 import com.hust.constants.Emotion;
 import com.hust.constants.Interval;
 import com.hust.constants.Media;
 import com.hust.constants.Media.INFOTYPE;
 import com.hust.constants.Media.MEDIALEVEL;
+import com.hust.model.StatisticCondition;
 import com.hust.service.StatisticService;
 import com.hust.util.Time;
+
+import net.sf.json.JSONObject;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
@@ -81,7 +86,6 @@ public class StatisticServiceImpl implements StatisticService {
                         }
                     }
                 }
-
             }
                 break;
             case Interval.HOUR: {
@@ -253,9 +257,8 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public Map<String, Integer> getNetizenAttention(List<String> list) {
+    public Map<String, Integer> getNetizenAttention(Map<String, Integer> map) {
         // TODO Auto-generated method stub
-        Map<String, Integer> map = getInfoTypeCount(list);
         Map<String, Integer> weightMap = new HashMap<String, Integer>();
         if (null == map || map.size() == 0) {
             return weightMap;
@@ -281,6 +284,126 @@ public class StatisticServiceImpl implements StatisticService {
             weightMap.put(entry.getKey(), weight);
         }
         return weightMap;
+    }
+
+    @Override
+    public JSONObject statistic(StatisticCondition sc) {
+        // TODO Auto-generated method stub
+        List<String[]> list = sc.getList();
+        JSONObject json = new JSONObject();
+        if (null == list || list.size() == 0) {
+            json.put("msg", "error");
+            return json;
+        }
+        for (String[] array : list) {
+            String timeKey = getTimeKey(array[sc.getTimeIndex()], sc.getInterval());
+            putValue(json, timeKey, Constants.EMOTION_STR, array[sc.getEmotionIndex()]);
+            putValue(json, timeKey, Constants.INFOTYPE_STR, array[sc.getInfoTypeIndex()]);
+            putValue(json, timeKey, Constants.MEDIA_STR, Media.getMediaLevelByName(array[sc.getMediaIndex()]));
+        }
+        calculateNetizenAttention(json);
+        calculateMediaAttention(json);
+        return json;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private void calculateMediaAttention(JSONObject json) {
+        if (null == json) {
+            return;
+        }
+        for (Iterator iterator = json.keys(); iterator.hasNext();) {
+            JSONObject timeJson = json.getJSONObject(iterator.next().toString());
+            JSONObject mediaJson = timeJson.getJSONObject(Constants.MEDIA_STR);
+            JSONObject mediaAttenJson = new JSONObject();
+            for (Iterator mediaIterator = mediaJson.keys(); mediaIterator.hasNext();) {
+                String key = mediaIterator.next().toString();
+                int value = mediaJson.getInt(key);
+                int attention = value * Media.getLevelWeightByName(key);
+                mediaAttenJson.put(key, attention);
+            }
+            timeJson.put(Constants.MEDIAATTENTION, mediaAttenJson);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    private void calculateNetizenAttention(JSONObject json) {
+        if (null == json) {
+            return;
+        }
+        for (Iterator iterator = json.keys(); iterator.hasNext();) {
+            JSONObject timeJson = json.getJSONObject(iterator.next().toString());
+            JSONObject infoTypeJson = timeJson.getJSONObject(Constants.INFOTYPE_STR);
+            JSONObject netizenAttenJson = new JSONObject();
+            for (Iterator infoIterator = infoTypeJson.keys(); infoIterator.hasNext();) {
+                String key = infoIterator.next().toString();
+                int value = infoTypeJson.getInt(key);
+                int attention = value * Media.getInfoTypeWeightByName(key);
+                netizenAttenJson.put(key, attention);
+            }
+            timeJson.put(Constants.NETIZENATTENTION, netizenAttenJson);
+        }
+    }
+
+    private void putValue(JSONObject json, String timeKey, String proKey, String elemKey) {
+        try {
+            JSONObject timeJson = json.getJSONObject(timeKey);
+            if (null == timeJson || timeJson.isNullObject()) {
+                JSONObject proJson = new JSONObject();
+                proJson.put(elemKey, 1);
+                timeJson = new JSONObject();
+                timeJson.put(proKey, proJson);
+                json.put(timeKey, timeJson);
+                return;
+            }
+            try {
+                JSONObject proJson = timeJson.getJSONObject(proKey);
+                if (null == proJson || proJson.isNullObject()) {
+                    proJson = new JSONObject();
+                    proJson.put(elemKey, 1);
+                    timeJson.put(proKey, proJson);
+                    return;
+                }
+                try {
+                    int value = proJson.getInt(elemKey);
+                    proJson.put(elemKey, value + 1);
+                } catch (Exception e) {
+                    proJson.put(elemKey, 1);
+                    return;
+                }
+            } catch (Exception e) {
+                JSONObject proJson = new JSONObject();
+                proJson.put(elemKey, 1);
+                timeJson.put(Constants.EMOTION_STR, proJson);
+                return;
+            }
+        } catch (Exception e) {
+            JSONObject proJson = new JSONObject();
+            proJson.put(elemKey, 1);
+            JSONObject timeJson = new JSONObject();
+            timeJson.put(Constants.EMOTION_STR, proJson);
+            json.put(timeKey, timeJson);
+            return;
+        }
+    }
+
+    private String getTimeKey(String time, int interval) {
+        if (StringUtils.isBlank(time) || !Time.isvalidate(time)) {
+            return Constants.INVALID_TIME;
+        }
+        switch (interval) {
+            case Interval.DAY: {
+                return time.substring(5, 10);
+            }
+            case Interval.HOUR: {
+                return time.substring(5, 13);
+            }
+            case Interval.MONTH: {
+                return time.substring(0, 7);
+            }
+            default: {
+                return Constants.INVALID_TIME;
+            }
+        }
     }
 
 }

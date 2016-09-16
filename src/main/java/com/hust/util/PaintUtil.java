@@ -8,7 +8,7 @@ import net.sf.json.JSONObject;
 
 public class PaintUtil {
 
-	public static JSONObject convertMap(Map<String, Integer> map) {
+	public static JSONObject convertMap1(Map<String, Integer> map) {
 		JSONObject json = new JSONObject();
 		JSONArray xaxis = new JSONArray();
 		JSONArray yaxis = new JSONArray();
@@ -19,5 +19,10 @@ public class PaintUtil {
 		json.put("xaxis", xaxis);
 		json.put("yaxis", yaxis);
 		return json;
+	}
+	
+	public static JSONObject convertMap(Map<String,Object> map){
+	    
+	    return null;
 	}
 }
