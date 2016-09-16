@@ -80,7 +80,7 @@ public class Media {
     public static String getMediaLevelByName(String name) {
         String level = MEDIA.get(name);
         if (null == level) {
-            return "未知";
+            return MEDIALEVEL.WEIZHI;
         }
         return level;
     }
