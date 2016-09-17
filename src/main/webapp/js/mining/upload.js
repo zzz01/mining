@@ -29,7 +29,6 @@ function paintline(xaixs, yaixs, type, html) {
 		title : {
 			text : '事件每日发布量走势图'
 		},
-		
 		xAxis : {
 			categories : xaixs
 		},

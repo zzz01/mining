@@ -295,15 +295,70 @@ public class StatisticServiceImpl implements StatisticService {
             json.put("msg", "error");
             return json;
         }
+        JSONObject timelineJson = new JSONObject();
         for (String[] array : list) {
             String timeKey = getTimeKey(array[sc.getTimeIndex()], sc.getInterval());
-            putValue(json, timeKey, Constants.EMOTION_STR, array[sc.getEmotionIndex()]);
-            putValue(json, timeKey, Constants.INFOTYPE_STR, array[sc.getInfoTypeIndex()]);
-            putValue(json, timeKey, Constants.MEDIA_STR, Media.getMediaLevelByName(array[sc.getMediaIndex()]));
+            putValue(timelineJson, timeKey, Constants.EMOTION_STR, array[sc.getEmotionIndex()]);
+            putValue(timelineJson, timeKey, Constants.INFOTYPE_STR, array[sc.getInfoTypeIndex()]);
+            putValue(timelineJson, timeKey, Constants.MEDIA_STR, Media.getMediaLevelByName(array[sc.getMediaIndex()]));
         }
+        json.put(Constants.TIMELINE_STR, timelineJson);
         calculateNetizenAttention(json);
         calculateMediaAttention(json);
+        calculateCount(json);
+        json.put("msg", "success");
         return json;
+    }
+
+    private void calculateCount(JSONObject json) {
+        if (null == json) {
+            return;
+        }
+        JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_STR);
+        JSONObject mediaCount = new JSONObject();
+        JSONObject infoTypeCount = new JSONObject();
+        JSONObject emotionCount = new JSONObject();
+        for (Iterator iterator = timelineJson.keys(); iterator.hasNext();) {
+            JSONObject timeJson = timelineJson.getJSONObject(iterator.next().toString());
+            JSONObject mediaJson = timeJson.getJSONObject(Constants.MEDIA_STR);
+            for (Iterator mediaIterator = mediaJson.keys(); mediaIterator.hasNext();) {
+                String key = mediaIterator.next().toString();
+                int value = mediaJson.getInt(key);
+                try {
+                    int oldValue = mediaCount.getInt(key);
+                    mediaCount.put(key, oldValue + value);
+                } catch (Exception e) {
+                    mediaCount.put(key, value);
+                }
+            }
+            JSONObject infoTypeJson = timeJson.getJSONObject(Constants.INFOTYPE_STR);
+            for (Iterator infoTypeIterator = infoTypeJson.keys(); infoTypeIterator.hasNext();) {
+                String key = infoTypeIterator.next().toString();
+                int value = infoTypeJson.getInt(key);
+                try {
+                    int oldValue = infoTypeCount.getInt(key);
+                    infoTypeCount.put(key, oldValue + value);
+                } catch (Exception e) {
+                    infoTypeCount.put(key, value);
+                }
+            }
+            JSONObject emotionJson = timeJson.getJSONObject(Constants.EMOTION_STR);
+            for (Iterator emotionIterator = emotionJson.keys(); emotionIterator.hasNext();) {
+                String key = emotionIterator.next().toString();
+                int value = emotionJson.getInt(key);
+                try {
+                    int oldValue = emotionCount.getInt(key);
+                    emotionCount.put(key, oldValue + value);
+                } catch (Exception e) {
+                    emotionCount.put(key, value);
+                }
+            }
+        }
+        JSONObject countJson = new JSONObject();
+        countJson.put(Constants.MEDIA_COUNT, mediaCount);
+        countJson.put(Constants.INFOTYPE_COUNT, infoTypeCount);
+        countJson.put(Constants.EMOTION_COUNT, emotionCount);
+        timelineJson.put(Constants.COUNT_STR, countJson);
     }
 
     @SuppressWarnings("rawtypes")
@@ -311,8 +366,9 @@ public class StatisticServiceImpl implements StatisticService {
         if (null == json) {
             return;
         }
-        for (Iterator iterator = json.keys(); iterator.hasNext();) {
-            JSONObject timeJson = json.getJSONObject(iterator.next().toString());
+        JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_STR);
+        for (Iterator iterator = timelineJson.keys(); iterator.hasNext();) {
+            JSONObject timeJson = timelineJson.getJSONObject(iterator.next().toString());
             JSONObject mediaJson = timeJson.getJSONObject(Constants.MEDIA_STR);
             JSONObject mediaAttenJson = new JSONObject();
             for (Iterator mediaIterator = mediaJson.keys(); mediaIterator.hasNext();) {
@@ -330,8 +386,9 @@ public class StatisticServiceImpl implements StatisticService {
         if (null == json) {
             return;
         }
-        for (Iterator iterator = json.keys(); iterator.hasNext();) {
-            JSONObject timeJson = json.getJSONObject(iterator.next().toString());
+        JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_STR);
+        for (Iterator iterator = timelineJson.keys(); iterator.hasNext();) {
+            JSONObject timeJson = timelineJson.getJSONObject(iterator.next().toString());
             JSONObject infoTypeJson = timeJson.getJSONObject(Constants.INFOTYPE_STR);
             JSONObject netizenAttenJson = new JSONObject();
             for (Iterator infoIterator = infoTypeJson.keys(); infoIterator.hasNext();) {
