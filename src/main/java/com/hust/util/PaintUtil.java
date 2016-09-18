@@ -1,13 +1,16 @@
 package com.hust.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.hust.constants.Constants;
-import com.sun.tools.javac.code.Attribute.Constant;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -44,8 +47,19 @@ public class PaintUtil {
         }
         JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_EN);
         JSONArray categories = new JSONArray();
+        List<String> times = new ArrayList<String>();
         for (Iterator timeIterator = timelineJson.keys(); timeIterator.hasNext();) {
-            String timeKey = timeIterator.next().toString();
+            times.add(timeIterator.next().toString());
+        }
+        Collections.sort(times, new Comparator<String>() {
+
+            @Override
+            public int compare(String o1, String o2) {
+                // TODO Auto-generated method stub
+                return o1.compareTo(o2);
+            }
+        });
+        for (String timeKey : times) {
             JSONObject timeJson = timelineJson.getJSONObject(timeKey);
             categories.add(timeKey);
             for (Iterator proIterator = timeJson.keys(); proIterator.hasNext();) {
@@ -69,9 +83,39 @@ public class PaintUtil {
             String key = proIterator.next().toString();
             JSONObject proJson = paintJson.getJSONObject(key);
             proJson.put(Constants.CATEGORIES_EN, categories);
-            proJson.put(Constants.TITLE_EN, json.getString(Constants.TITLE_EN));
+            proJson.put(Constants.TITLE_EN, keyENtoCH(key, json.getString(Constants.TITLE_EN)));
         }
         return paintJson;
+    }
+
+    private static String keyENtoCH(String key, String issue) {
+        if (StringUtils.isBlank(key)) {
+            return StringUtils.EMPTY;
+        }
+        String title = "";
+        switch (key) {
+            case Constants.EMOTION_EN: {
+                title = Constants.EMOTION_CH;
+                break;
+            }
+            case Constants.INFOTYPE_EN: {
+                title = Constants.INFOTYPE_CH;
+                break;
+            }
+            case Constants.MEDIA_EN: {
+                title = Constants.MEDIA_CH;
+                break;
+            }
+            case Constants.MEDIAATTENTION_EN: {
+                title = Constants.MEDIAATTENTION_CH;
+                break;
+            }
+            case Constants.NETIZENATTENTION_EN: {
+                title = Constants.NETIZENATTENTION_CH;
+                break;
+            }
+        }
+        return issue + "事件" + title + "趋势";
     }
 
     private static void addToSeries(JSONArray series, String name, int value) {

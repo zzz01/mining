@@ -123,7 +123,7 @@ public class ClusterController {
         sc.setInfoTypeIndex(typeIndex);
         sc.setMediaIndex(resourceIndex);
         sc.setTimeIndex(timeIndex);
-        sc.setInterval(Interval.MONTH);
+        sc.setInterval(Interval.DAY);
         JSONObject json = statisticService.statistic(sc);
         String filename = file.getOriginalFilename();
         json.put("title", filename.substring(0, filename.indexOf(".")));

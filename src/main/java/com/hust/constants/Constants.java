@@ -10,7 +10,9 @@ public class Constants {
     public final static String MEDIA_EN = "media";
     public final static String MEDIA_CH = "媒体";
     public final static String NETIZENATTENTION_EN = "netizenAttention";
+    public final static String NETIZENATTENTION_CH = "网民关注度";
     public final static String MEDIAATTENTION_EN = "mediaAttention";
+    public final static String MEDIAATTENTION_CH = "媒体关注度";
     public final static String MEDIA_COUNT_EN = "mediaCount";
     public final static String INFOTYPE_COUNT_EN = "infoTyeCount";
     public final static String EMOTION_COUNT_EN = "emotionCount";
