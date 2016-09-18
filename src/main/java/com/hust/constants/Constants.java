@@ -3,15 +3,23 @@ package com.hust.constants;
 public class Constants {
 
     public final static String INVALID_TIME = "1970-01-01";
-    public final static String EMOTION_STR = "emotion";
-    public final static String INFOTYPE_STR = "infoType";
-    public final static String MEDIA_STR = "media";
-    public final static String NETIZENATTENTION = "netizenAttention";
-    public final static String MEDIAATTENTION = "mediaAttention";
-    public final static String MEDIA_COUNT = "mediaCount";
-    public final static String INFOTYPE_COUNT = "infoTyeCount";
-    public final static String EMOTION_COUNT = "emotionCount";
-    public final static String COUNT_STR = "count";
-    public final static String TIMELINE_STR = "timeline";
-    public final static String TITLE_STR = "title";
+    public final static String EMOTION_EN = "emotion";
+    public final static String EMOTION_CH = "情感";
+    public final static String INFOTYPE_EN = "infoType";
+    public final static String INFOTYPE_CH = "类型";
+    public final static String MEDIA_EN = "media";
+    public final static String MEDIA_CH = "媒体";
+    public final static String NETIZENATTENTION_EN = "netizenAttention";
+    public final static String MEDIAATTENTION_EN = "mediaAttention";
+    public final static String MEDIA_COUNT_EN = "mediaCount";
+    public final static String INFOTYPE_COUNT_EN = "infoTyeCount";
+    public final static String EMOTION_COUNT_EN = "emotionCount";
+    public final static String COUNT_EN = "count";
+    public final static String TIMELINE_EN = "timeline";
+    public final static String TITLE_EN = "title";
+    public final static String CATEGORIES_EN = "categories";
+    public final static String SERIES_EN = "series";
+    public final static String NAME_EN = "name";
+    public final static String DATA_EN = "data";
+    public final static String WEIZHI_CH = "未知";
 }

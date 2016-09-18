@@ -8,4 +8,5 @@ public class Emotion {
     public static final String POSITIVE = "正面";
     public static final String NEGATIVE = "负面";
     public static final String NEUTRAL = "中性";
+    public static final String WEIZHI = "未知";
 }

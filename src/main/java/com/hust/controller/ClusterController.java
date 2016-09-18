@@ -127,6 +127,7 @@ public class ClusterController {
         JSONObject json = statisticService.statistic(sc);
         String filename = file.getOriginalFilename();
         json.put("title", filename.substring(0, filename.indexOf(".")));
-        return ResultUtil.success(json);
+        JSONObject paintJson = PaintUtil.convertPaintLine(json);
+        return ResultUtil.success(paintJson);
     }
 }
