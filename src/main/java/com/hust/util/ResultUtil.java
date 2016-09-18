@@ -19,14 +19,15 @@ public class ResultUtil {
         JSONObject object = new JSONObject();
         object.put("status", HttpStatus.OK);
         object.put("result", result);
-        logger.info("结果状态：{}，结果内容：{}", HttpStatus.OK, result.toString());
+        // logger.info("status：{}，result：{}", HttpStatus.OK, result.toString());
+        logger.info("结果\t" + object.toString());
         return object;
     }
 
     public static Object successWithoutStatus(Object result) {
         JSONObject object = new JSONObject();
         object.put("result", result);
-        logger.info("结果内容：{}", HttpStatus.OK, result.toString());
+        logger.info("结果\t" + object.toString());
         return object;
     }
 
@@ -34,11 +35,11 @@ public class ResultUtil {
         JSONObject object = new JSONObject();
         object.put("status", Result.ERROR_CODE);
         object.put("result", Result.UNKNOW_ERROR);
-        logger.info("结果状态：{}，结果内容：{}", Result.ERROR_CODE, Result.UNKNOW_ERROR);
+        logger.info("结果\t" + object);
         return object;
     }
-    
-    public static Object errorWithMsg(Object msg){
+
+    public static Object errorWithMsg(Object msg) {
         JSONObject object = new JSONObject();
         object.put("status", Result.ERROR_CODE);
         object.put("result", msg);
