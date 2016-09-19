@@ -90,9 +90,6 @@ function cluster() {
 							paintcolumn(result.media, '#column_media');
 							paintcolumn(result.mediaAttention, '#column_mediaAttention');
 							paintcolumn(result.netizenAttention, '#column_netizenAttention');
-							paintcolumn(result.mediaCount, '#column_netizenAttention');
-							paintcolumn(result.infoTyeCount, '#column_netizenAttention');
-							paintcolumn(result.emotionCount, '#column_netizenAttention');
 							paintcolumn(result.mediaCount, '#column_mediaCount');
 							paintcolumn(result.infoTyeCount,
 							'#column_infoTypeCount');
