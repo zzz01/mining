@@ -30,13 +30,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public List<String[]> readDataFromExcel(MultipartFile file, String sourceType, String userName) {
-        List<String[]> list = new ArrayList<String[]>();
-        InputStream is = null;
-        try {
-            is = file.getInputStream();
-            list = ExcelUtil.read(is);
-        } catch (IOException e) {
-            LOG.error("读取文件出现异常\t" + e.toString());
+        List<String[]> list = readDataFromExcel(file);
+        if (null == list) {
             return list;
         }
         IssueInfo issueInfo = new IssueInfo();
@@ -52,6 +47,20 @@ public class UploadServiceImpl implements UploadService {
             }
         } catch (Exception e) {
             LOG.error("向issue_info中插入一条数据时发生异常" + e.toString());
+        }
+        return list;
+    }
+
+    @Override
+    public List<String[]> readDataFromExcel(MultipartFile file) {
+        List<String[]> list = new ArrayList<String[]>();
+        InputStream is = null;
+        try {
+            is = file.getInputStream();
+            list = ExcelUtil.read(is);
+        } catch (IOException e) {
+            LOG.error("读取文件出现异常\t" + e.toString());
+            return null;
         }
         return list;
     }

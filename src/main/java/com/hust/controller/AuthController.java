@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.service.UserService;
 
@@ -25,7 +26,7 @@ public class AuthController {
             request.getSession().setAttribute("username", userName);
             // mav.setViewName("page/upload.html");
             // return mav;
-            return "redirect:page/upload.html";
+            return "redirect:page/main.html";
         }
         // mav.setViewName("page/error.html");
         // return mav;

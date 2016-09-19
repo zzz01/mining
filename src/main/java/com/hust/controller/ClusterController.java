@@ -106,11 +106,11 @@ public class ClusterController {
     @ResponseBody
     @RequestMapping("/statistic")
     public Object statistic(@RequestParam(value = "file", required = true) MultipartFile file,
-            @RequestParam(value = "targetIndex", required = true) int targetIndex,
-            @RequestParam(value = "timeIndex", required = true) int timeIndex,
-            @RequestParam(value = "sourceIndex", required = true) int resourceIndex,
-            @RequestParam(value = "typeIndex", required = true) int typeIndex,
-            @RequestParam(value = "emotionIndex", required = true) int emotionIndex,
+            @RequestParam(value = "select_target", required = true) int targetIndex,
+            @RequestParam(value = "select_time", required = true) int timeIndex,
+            @RequestParam(value = "select_media", required = true) int resourceIndex,
+            @RequestParam(value = "select_infotype", required = true) int typeIndex,
+            @RequestParam(value = "select_emotion", required = true) int emotionIndex,
             @RequestParam(value = "sourceType", required = false) String sourceType, HttpServletRequest request) {
         String userName = userService.getCurrentUser(request);
         List<String[]> list = uploadService.readDataFromExcel(file, "微博", userName);

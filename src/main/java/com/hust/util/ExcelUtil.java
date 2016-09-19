@@ -20,7 +20,7 @@ public class ExcelUtil {
         Sheet sheet = workbook.getSheetAt(0);
         int rowNum = sheet.getLastRowNum();
         int colNum = sheet.getRow(0).getLastCellNum();
-        for (int i = 1; i <= rowNum; i++) {
+        for (int i = 0; i <= rowNum; i++) {
             String[] rowStr = new String[colNum];
             for (int j = 0; j < colNum; j++) {
                 try {

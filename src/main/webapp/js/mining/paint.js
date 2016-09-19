@@ -1,25 +1,59 @@
-function paintline() {
-	$('#container').highcharts({
+function paintline(property, html) {
+	$(html).highcharts({
+		chart : {
+			type : 'line'
+		},
+		title : {
+			text : property.title
+		},
+		xAxis : {
+			categories : property.categories
+		},
+		yAxis : {
+			title : {
+				text : '数量'
+			}
+		},
+		series : property.series
+	});
+}
+
+function paintcolumn(property, html) {
+	$(html).highcharts({
 		chart : {
 			type : 'column'
 		},
 		title : {
-			text : 'My first Highcharts chart'
+			text : property.title
 		},
 		xAxis : {
-			categories : [ 'my', 'first', 'chart' ]
+			categories : property.categories
 		},
 		yAxis : {
 			title : {
-				text : 'something'
+				text : '数量'
 			}
 		},
-		series : [ {
-			name : 'Jane',
-			data : [ 1, 0, 4 ]
-		}, {
-			name : 'John',
-			data : [ 5, 7, 3 ]
-		} ]
+		series : property.series
+	});
+}
+
+function paintpie(property, html) {
+	$(html).highcharts({
+		chart : {
+			type : 'pie'
+		},
+		title : {
+			text : property.title
+		},
+		xAxis : {
+			categories : property.categories
+		},
+		yAxis : {
+			title : {
+				text : '数量'
+			}
+		},
+		series : property.series
 	});
 }

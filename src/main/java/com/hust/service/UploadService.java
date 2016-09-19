@@ -9,5 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UploadService {
 
+    List<String[]> readDataFromExcel(MultipartFile file);
+
     List<String[]> readDataFromExcel(MultipartFile file, String sourceType, String userName);
 }
