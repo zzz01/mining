@@ -1,5 +1,8 @@
 package com.hust.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,6 +31,10 @@ import net.sf.json.JSONObject;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(StatisticServiceImpl.class);
 
     @Override
     public List<String[]> getOrigAndCount(List<List<String[]>> setList, int timeIndex) {
@@ -308,6 +315,7 @@ public class StatisticServiceImpl implements StatisticService {
         calculateMediaAttention(json);
         calculateCount(json);
         json.put("msg", "success");
+        logger.info("统计结果：" + json.toString());
         return json;
     }
 

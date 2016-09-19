@@ -79,6 +79,8 @@ public class PaintUtil {
                 paintJson.put(proKey, paintProJson);
             }
         }
+        JSONObject countJson = json.getJSONObject(Constants.COUNT_EN);
+        
         for (Iterator proIterator = paintJson.keys(); proIterator.hasNext();) {
             String key = proIterator.next().toString();
             JSONObject proJson = paintJson.getJSONObject(key);
