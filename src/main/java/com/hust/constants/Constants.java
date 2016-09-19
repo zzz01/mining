@@ -24,4 +24,5 @@ public class Constants {
     public final static String NAME_EN = "name";
     public final static String DATA_EN = "data";
     public final static String WEIZHI_CH = "未知";
+    public final static String SHULIANG_CH = "数量";
 }

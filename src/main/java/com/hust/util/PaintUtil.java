@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardResizeToggleHandler;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.hust.constants.Constants;
@@ -46,7 +48,7 @@ public class PaintUtil {
             return paintJson;
         }
         JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_EN);
-        JSONArray categories = new JSONArray();
+        JSONArray timeCategories = new JSONArray();
         List<String> times = new ArrayList<String>();
         for (Iterator timeIterator = timelineJson.keys(); timeIterator.hasNext();) {
             times.add(timeIterator.next().toString());
@@ -61,7 +63,7 @@ public class PaintUtil {
         });
         for (String timeKey : times) {
             JSONObject timeJson = timelineJson.getJSONObject(timeKey);
-            categories.add(timeKey);
+            timeCategories.add(timeKey);
             for (Iterator proIterator = timeJson.keys(); proIterator.hasNext();) {
                 String proKey = proIterator.next().toString();
                 JSONObject paintProJson = paintJson.getJSONObject(proKey);
@@ -79,13 +81,34 @@ public class PaintUtil {
                 paintJson.put(proKey, paintProJson);
             }
         }
-        JSONObject countJson = json.getJSONObject(Constants.COUNT_EN);
-        
         for (Iterator proIterator = paintJson.keys(); proIterator.hasNext();) {
             String key = proIterator.next().toString();
             JSONObject proJson = paintJson.getJSONObject(key);
-            proJson.put(Constants.CATEGORIES_EN, categories);
+            proJson.put(Constants.CATEGORIES_EN, timeCategories);
             proJson.put(Constants.TITLE_EN, keyENtoCH(key, json.getString(Constants.TITLE_EN)));
+        }
+        JSONObject countJson = json.getJSONObject(Constants.COUNT_EN);
+        for (Iterator proIterator = countJson.keys(); proIterator.hasNext();) {
+            String proKey = proIterator.next().toString();
+            JSONObject proJson = countJson.getJSONObject(proKey);
+            JSONObject paintProJson = JSONCreator.createPaintProJson();
+            paintProJson.put(Constants.TITLE_EN, keyENtoCH(proKey, json.getString(Constants.TITLE_EN)));
+            for (Iterator eleIterator = proJson.keys(); eleIterator.hasNext();) {
+                String eleKey = eleIterator.next().toString();
+                paintProJson.getJSONArray(Constants.CATEGORIES_EN).add(eleKey);
+                int eleValue = proJson.getInt(eleKey);
+                JSONArray serie = paintProJson.getJSONArray(Constants.SERIES_EN);
+                if (serie.isEmpty()) {
+                    JSONObject serieJson = new JSONObject();
+                    serieJson.put(Constants.NAME_EN, Constants.SHULIANG_CH);
+                    serieJson.put(Constants.DATA_EN, new JSONArray());
+                    serie.add(serieJson);
+                }
+                paintProJson.put(Constants.SERIES_EN, serie);
+                ((JSONObject) paintProJson.getJSONArray(Constants.SERIES_EN).get(0)).getJSONArray(Constants.DATA_EN)
+                        .add(eleValue);
+            }
+            paintJson.put(proKey, paintProJson);
         }
         return paintJson;
     }

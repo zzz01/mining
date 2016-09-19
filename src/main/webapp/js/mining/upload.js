@@ -30,6 +30,13 @@ function upload() {
 									'#line_mediaAttention');
 							paintline(result.netizenAttention,
 									'#line_netizenAttention');
+							paintline(result.mediaCount,
+							'#line_mediaCount');
+							paintline(result.infoTyeCount,
+							'#line_infoTypeCount');
+							paintline(result.emotionCount,
+							'#line_emotionCount');
+							
 						}
 					});
 }
@@ -37,7 +44,7 @@ function upload() {
 function paintline(property, html) {
 	$(html).highcharts({
 		chart : {
-			type : 'line'
+			type : 'column'
 		},
 		title : {
 			text : property.title
