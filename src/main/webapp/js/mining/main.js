@@ -1,5 +1,5 @@
 function upload() {
-	document.getElementById('fileUpload').action='/upload/scanfile';
+	document.getElementById('fileUpload').action = '/upload/scanfile';
 	$('#fileUpload').ajaxSubmit(
 			{
 				type : "POST",
@@ -17,21 +17,21 @@ function upload() {
 						return;
 					}
 					var result = data.result;
-					fillhead(result.head);
-					fillbody(result.body);
+					fillhead(result.head, '#table_scan_head');
+					fillbody(result.body, '#scan_table_body');
 					fillselect(result.head);
 				}
 			});
 }
 
-function fillhead(head) {
+function fillhead(head, element) {
 	var html;
 	for (var i = 0; i < head.length; i++) {
 		html += "<th>" + head[i] + "</th>";
 	}
-	$('#table_scan_head').append(html);
+	$(element).append(html);
 }
-function fillbody(body) {
+function fillbody(body, element) {
 	var html;
 	for (var i = 0; i < body.length; i++) {
 		html += "<tr>";
@@ -41,14 +41,14 @@ function fillbody(body) {
 		}
 		html += "</tr>"
 	}
-	$('#scan_table_body').append(html);
+	$(element).append(html);
 }
 
 function fillselect(head) {
-	var html="";
+	var html = "";
 	for (var i = 0; i < head.length; i++) {
-		var line = "<option value=\"" + i +"\">" + head[i] + "</option>";
-		html +=line;
+		var line = "<option value=\"" + i + "\">" + head[i] + "</option>";
+		html += line;
 	}
 	$('#select_target').html(html);
 	$('#select_time').html(html);
@@ -58,7 +58,7 @@ function fillselect(head) {
 }
 
 function cluster() {
-	document.getElementById('fileUpload').action='/data/statistic';
+	document.getElementById('fileUpload').action = '/data/statistic';
 	$('#fileUpload')
 			.ajaxSubmit(
 					{
@@ -77,6 +77,11 @@ function cluster() {
 								return;
 							}
 							var result = data.result;
+							fillhead(result.clusterResult.head,
+									'#table_result_head');
+							fillbody(result.clusterResult.body,
+									'#result_table_body');
+
 							paintline(result.emotion, '#line_emotion');
 							paintline(result.infoType, '#line_infotype');
 							paintline(result.media, '#line_media');
@@ -84,21 +89,22 @@ function cluster() {
 									'#line_mediaAttention');
 							paintline(result.netizenAttention,
 									'#line_netizenAttention');
-							
+
 							paintcolumn(result.emotion, '#column_emotion');
 							paintcolumn(result.infoType, '#column_infotype');
 							paintcolumn(result.media, '#column_media');
-							paintcolumn(result.mediaAttention, '#column_mediaAttention');
-							paintcolumn(result.netizenAttention, '#column_netizenAttention');
+							paintcolumn(result.mediaAttention,
+									'#column_mediaAttention');
+							paintcolumn(result.netizenAttention,
+									'#column_netizenAttention');
 							paintcolumn(result.mediaCount, '#column_mediaCount');
 							paintcolumn(result.infoTyeCount,
-							'#column_infoTypeCount');
-							paintcolumn(result.emotionCount, '#column_emotionCount');
-							
-							
+									'#column_infoTypeCount');
+							paintcolumn(result.emotionCount,
+									'#column_emotionCount');
+
 							paintpie(result.mediaCount, '#pie_mediaCount');
-							paintpie(result.infoTyeCount,
-									'#pie_infoTypeCount');
+							paintpie(result.infoTyeCount, '#pie_infoTypeCount');
 							paintpie(result.emotionCount, '#pie_emotionCount');
 						}
 					});

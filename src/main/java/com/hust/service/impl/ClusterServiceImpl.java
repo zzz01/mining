@@ -1,6 +1,5 @@
 package com.hust.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hust.cluster.Canopy;
+import com.hust.constants.Config;
 import com.hust.convertor.Convertor;
 import com.hust.convertor.TFIDFConvertor;
 import com.hust.service.ClusterService;
@@ -28,17 +28,13 @@ public class ClusterServiceImpl implements ClusterService {
     @Override
     public List<List<String[]>> getClusterResult(List<String[]> list, int targetIndex) {
         // TODO Auto-generated method stub
-        List<List<Object>> segmentList = segmentService.getSegresult(list, targetIndex);
-        List<String[]> segment = new ArrayList<String[]>();
-        for (List<Object> templist : segmentList) {
-            segment.add((String[]) templist.get(targetIndex));
-        }
+        List<String[]> segmentList = segmentService.getSegresult(list, targetIndex, 1);
         Convertor convertor = new TFIDFConvertor();
-        convertor.setList(segment);
+        convertor.setList(segmentList);
         List<double[]> vectors = convertor.getVector();
         Canopy canopy = new Canopy();
         canopy.setVectors(vectors);
-        canopy.setThreshold(0.4f);
+        canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
         try {
             canopy.clustering();
         } catch (Exception e) {

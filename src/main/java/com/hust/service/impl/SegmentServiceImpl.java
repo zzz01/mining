@@ -28,38 +28,59 @@ public class SegmentServiceImpl implements SegmentService {
     }
 
     @Override
-    public List<String[]> getSegresult(List<String> list) {
+    public List<String[]> getSegresult(List<String> list, int start) {
         if (null == list) {
             throw new IllegalArgumentException();
         }
+        if (start + 1 > list.size()) {
+            throw new IllegalArgumentException();
+        }
         List<String[]> result = new ArrayList<String[]>();
-        for (String str : list) {
-            String[] array = getSegresult(str);
+        for (int i = start; i < list.size(); i++) {
+            String[] array = getSegresult(list.get(i));
             result.add(array);
         }
         return result;
     }
 
     @Override
-    public List<List<Object>> getSegresult(List<String[]> list, int index) {
+    public List<List<Object>> getResult(List<String[]> list, int index, int start) {
         if (null == list) {
             throw new NullPointerException();
         }
-        if (index < 0) {
+        if (index < 0 || start + 1 > list.size()) {
             throw new IllegalArgumentException();
         }
         List<List<Object>> relist = new ArrayList<List<Object>>();
-        for (String[] array : list) {
+        for (int i = start; i < list.size(); i++) {
+            String[] array = list.get(i);
             List<Object> templist = new ArrayList<Object>();
-            for (int i = 0; i < array.length; i++) {
-                if (i == index) {
-                    String[] temparray = getSegresult(array[i]);
+            for (int j = 0; j < array.length; j++) {
+                if (j == index) {
+                    String[] temparray = getSegresult(array[j]);
                     templist.add(temparray);
                 } else {
-                    templist.add(array[i]);
+                    templist.add(array[j]);
                 }
             }
             relist.add(templist);
+        }
+        return relist;
+    }
+
+    @Override
+    public List<String[]> getSegresult(List<String[]> list, int index, int start) {
+        if (null == list) {
+            throw new NullPointerException();
+        }
+        if (index < 0 || start + 1 > list.size()) {
+            throw new IllegalArgumentException();
+        }
+        List<String[]> relist = new ArrayList<String[]>();
+        for (int i = start; i < list.size(); i++) {
+            String[] array = list.get(i);
+            String[] temparray = getSegresult(array[index]);
+            relist.add(temparray);
         }
         return relist;
     }

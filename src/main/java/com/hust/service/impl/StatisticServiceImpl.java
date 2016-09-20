@@ -305,6 +305,9 @@ public class StatisticServiceImpl implements StatisticService {
         }
         JSONObject timelineJson = new JSONObject();
         for (String[] array : list) {
+            if (isEmptyArray(array)) {
+                continue;
+            }
             String timeKey = getTimeKey(array[sc.getTimeIndex()], sc.getInterval());
             putValue(timelineJson, timeKey, Constants.EMOTION_EN, array[sc.getEmotionIndex()]);
             putValue(timelineJson, timeKey, Constants.INFOTYPE_EN, array[sc.getInfoTypeIndex()]);
@@ -317,6 +320,18 @@ public class StatisticServiceImpl implements StatisticService {
         json.put("msg", "success");
         logger.info("统计结果：" + json.toString());
         return json;
+    }
+
+    private boolean isEmptyArray(String[] array) {
+        if (null == array || array.length == 0) {
+            return true;
+        }
+        for (int i = 0; i < array.length / 2; i++) {
+            if (!StringUtils.isBlank(array[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void calculateCount(JSONObject json) {

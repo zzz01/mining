@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.cluster.Cluster;
-import com.hust.cluster.KMeans;
+import com.hust.constants.Constants;
 import com.hust.constants.Interval;
 import com.hust.model.StatisticCondition;
 import com.hust.service.ClusterService;
@@ -29,6 +29,7 @@ import com.hust.util.ConvertUtil;
 import com.hust.util.PaintUtil;
 import com.hust.util.ResultUtil;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
@@ -111,23 +112,55 @@ public class ClusterController {
             @RequestParam(value = "select_media", required = true) int resourceIndex,
             @RequestParam(value = "select_infotype", required = true) int typeIndex,
             @RequestParam(value = "select_emotion", required = true) int emotionIndex,
-            @RequestParam(value = "sourceType", required = false) String sourceType, HttpServletRequest request) {
+            @RequestParam(value = "select_sourcetype", required = true) String sourceType,
+            @RequestParam(value = "select_interval", required = true) int interval, HttpServletRequest request) {
         String userName = userService.getCurrentUser(request);
-        List<String[]> list = uploadService.readDataFromExcel(file, "微博", userName);
+        List<String[]> list = uploadService.readDataFromExcel(file, sourceType, userName);
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("文件是空的");
         }
+        List<List<String[]>> list_res = clusterService.getClusterResult(list, targetIndex);
+        if (null == list_res) {
+            return ResultUtil.errorWithMsg("文件解析出错");
+        }
+        List<String[]> clusterList = ConvertUtil.convertoStrList(list_res);
         StatisticCondition sc = new StatisticCondition();
-        sc.setList(list);
+        sc.setList(clusterList);
         sc.setEmotionIndex(emotionIndex);
         sc.setInfoTypeIndex(typeIndex);
         sc.setMediaIndex(resourceIndex);
         sc.setTimeIndex(timeIndex);
-        sc.setInterval(Interval.DAY);
+        sc.setInterval(interval);
         JSONObject json = statisticService.statistic(sc);
         String filename = file.getOriginalFilename();
         json.put("title", filename.substring(0, filename.indexOf(".")));
         JSONObject paintJson = PaintUtil.convertPaintLine(json);
+
+        JSONObject clusterResult = new JSONObject();
+        JSONArray head = new JSONArray();
+        JSONArray body = new JSONArray();
+        for (String str : list.get(0)) {
+            if (StringUtils.isBlank(str)) {
+                head.add("");
+            } else {
+                head.add(str);
+            }
+        }
+        for (int i = 0; i < clusterList.size(); i++) {
+            JSONArray line = new JSONArray();
+            String[] lineArray = clusterList.get(i);
+            for (String str : lineArray) {
+                if (StringUtils.isBlank(str)) {
+                    line.add("");
+                } else {
+                    line.add(str);
+                }
+            }
+            body.add(line);
+        }
+        clusterResult.put("head", head);
+        clusterResult.put("body", body);
+        paintJson.put(Constants.CLUSTER_RESULT_EN, clusterResult);
         return ResultUtil.success(paintJson);
     }
 }
