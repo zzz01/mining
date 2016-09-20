@@ -134,7 +134,7 @@ public class ClusterController {
         JSONObject json = statisticService.statistic(sc);
         String filename = file.getOriginalFilename();
         json.put("title", filename.substring(0, filename.indexOf(".")));
-        JSONObject paintJson = PaintUtil.convertPaintLine(json);
+        JSONObject paintJson = PaintUtil.convertPaintJson(json);
 
         JSONObject clusterResult = new JSONObject();
         JSONArray head = new JSONArray();

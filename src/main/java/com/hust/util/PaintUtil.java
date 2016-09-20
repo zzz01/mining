@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardResizeToggleHandler;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.hust.constants.Constants;
@@ -32,17 +30,7 @@ public class PaintUtil {
         return json;
     }
 
-    public static JSONObject convertMap(Map<String, Object> map) {
-
-        return null;
-    }
-
-    public static JSONObject convertPaintPie(JSONObject json) {
-
-        return null;
-    }
-
-    public static JSONObject convertPaintLine(JSONObject json) {
+    public static JSONObject convertPaintJson(JSONObject json) {
         JSONObject paintJson = new JSONObject();
         if (null == json) {
             return paintJson;
@@ -105,8 +93,13 @@ public class PaintUtil {
                     serie.add(serieJson);
                 }
                 paintProJson.put(Constants.SERIES_EN, serie);
-                ((JSONObject) paintProJson.getJSONArray(Constants.SERIES_EN).get(0)).getJSONArray(Constants.DATA_EN)
-                        .add(eleValue);
+
+                JSONArray data = ((JSONObject) paintProJson.getJSONArray(Constants.SERIES_EN).get(0))
+                        .getJSONArray(Constants.DATA_EN);
+                JSONArray eleArray = new JSONArray();
+                eleArray.add(eleKey);
+                eleArray.add(eleValue);
+                data.add(eleArray);
             }
             paintJson.put(proKey, paintProJson);
         }

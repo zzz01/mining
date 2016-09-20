@@ -1,8 +1,5 @@
 package com.hust.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,6 +11,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.hust.constants.Constants;
@@ -304,7 +303,8 @@ public class StatisticServiceImpl implements StatisticService {
             return json;
         }
         JSONObject timelineJson = new JSONObject();
-        for (String[] array : list) {
+        for (int i = 0; i < list.size() - 1; i++) {
+            String[] array = list.get(i);
             if (isEmptyArray(array)) {
                 continue;
             }
