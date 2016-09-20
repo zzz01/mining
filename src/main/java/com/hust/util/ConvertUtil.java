@@ -2,7 +2,6 @@ package com.hust.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
@@ -13,11 +12,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ConvertUtil {
-    public static List<String[]> convertoStrList(List<List<String[]>> setList) {
+    public static List<String[]> convertoStrList(List<List<String[]>> setList, String[] title) {
         if (null == setList)
             return null;
         List<String[]> listStr = new ArrayList<String[]>();
-        // listStr.add(this.list.get(0));
+        listStr.add(title);
         for (List<String[]> set : setList) {
             if (null != set && set.size() != 0) {
                 for (String[] row : set) {
@@ -47,18 +46,15 @@ public class ConvertUtil {
             }
         });
         List<List<String[]>> listStrSet = new ArrayList<List<String[]>>();
-        List<String[]> firstLine = new ArrayList<String[]>();
-        firstLine.add(list.get(0));
-        listStrSet.add(firstLine);
         List<String[]> singleDataList = new ArrayList<String[]>();
         for (List<Integer> set : resultIndexSet) {
             if (set.size() == 1) {
-                singleDataList.add(list.get(set.get(0)));
+                singleDataList.add(list.get(set.get(0) + 1));
                 continue;
             }
             List<String[]> setDataList = new ArrayList<String[]>();
             for (int i : set) {
-                setDataList.add(list.get(i));
+                setDataList.add(list.get(i + 1));
             }
             Collections.sort(setDataList, new Comparator<String[]>() {
                 public int compare(String[] o1, String[] o2) {

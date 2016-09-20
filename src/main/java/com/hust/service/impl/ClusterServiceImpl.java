@@ -11,8 +11,6 @@ import com.hust.cluster.Canopy;
 import com.hust.constants.Config;
 import com.hust.convertor.Convertor;
 import com.hust.convertor.DigitalConvertor;
-import com.hust.convertor.TFIDFConvertor;
-import com.hust.dao.IssueInfoDao;
 import com.hust.service.ClusterService;
 import com.hust.service.SegmentService;
 import com.hust.similarity.CrossSimilarity;
