@@ -1,5 +1,12 @@
 package com.hust.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,4 +72,24 @@ public class ConvertUtil {
         });
         return listStrSet;
     }
+
+    public static byte[] convertToBytes(Object obj) throws Exception {
+        if (null == obj) {
+            return null;
+        }
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        ObjectOutput output = new ObjectOutputStream(byteStream);
+        output.writeObject(obj);
+        return byteStream.toByteArray();
+    }
+
+    public static Object convertBytesToObject(byte[] bytes) throws Exception {
+        if (null == bytes || bytes.length == 0) {
+            return null;
+        }
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInput input = new ObjectInputStream(byteArrayInputStream);
+        return input.readObject();
+    }
+
 }

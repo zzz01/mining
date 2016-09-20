@@ -26,4 +26,5 @@ public class Constants {
     public final static String WEIZHI_CH = "未知";
     public final static String SHULIANG_CH = "数量";
     public final static String CLUSTER_RESULT_EN = "clusterResult";
+    public final static String ISSUE_ID = "issueId";
 }

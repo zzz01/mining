@@ -9,6 +9,12 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="source_type" jdbcType="VARCHAR" property="sourceType" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hust.model.IssueInfoWithBLOBs">
+    <result column="content" jdbcType="LONGVARBINARY" property="content" />
+    <result column="result_list" jdbcType="LONGVARBINARY" property="resultList" />
+    <result column="result_json" jdbcType="LONGVARBINARY" property="resultJson" />
+    <result column="paint_json" jdbcType="LONGVARBINARY" property="paintJson" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -70,6 +76,26 @@
   <sql id="Base_Column_List">
     id, issue_id, issue_name, create_time, creator, source_type
   </sql>
+  <sql id="Blob_Column_List">
+    content, result_list, result_json, paint_json
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.hust.model.IssueInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from issue_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.hust.model.IssueInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -85,9 +111,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from issue_info
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -101,15 +129,17 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.hust.model.IssueInfo">
+  <insert id="insert" parameterType="com.hust.model.IssueInfoWithBLOBs">
     insert into issue_info (id, issue_id, issue_name, 
-      create_time, creator, source_type
-      )
+      create_time, creator, source_type, 
+      content, result_list, result_json, 
+      paint_json)
     values (#{id,jdbcType=BIGINT}, #{issueId,jdbcType=VARCHAR}, #{issueName,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=DATE}, #{creator,jdbcType=VARCHAR}, #{sourceType,jdbcType=VARCHAR}
-      )
+      #{createTime,jdbcType=DATE}, #{creator,jdbcType=VARCHAR}, #{sourceType,jdbcType=VARCHAR}, 
+      #{content,jdbcType=LONGVARBINARY}, #{resultList,jdbcType=LONGVARBINARY}, #{resultJson,jdbcType=LONGVARBINARY}, 
+      #{paintJson,jdbcType=LONGVARBINARY})
   </insert>
-  <insert id="insertSelective" parameterType="com.hust.model.IssueInfo">
+  <insert id="insertSelective" parameterType="com.hust.model.IssueInfoWithBLOBs">
     insert into issue_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -130,6 +160,18 @@
       <if test="sourceType != null">
         source_type,
       </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="resultList != null">
+        result_list,
+      </if>
+      <if test="resultJson != null">
+        result_json,
+      </if>
+      <if test="paintJson != null">
+        paint_json,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -149,6 +191,18 @@
       </if>
       <if test="sourceType != null">
         #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="resultList != null">
+        #{resultList,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="resultJson != null">
+        #{resultJson,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="paintJson != null">
+        #{paintJson,jdbcType=LONGVARBINARY},
       </if>
     </trim>
   </insert>
@@ -179,7 +233,35 @@
       <if test="record.sourceType != null">
         source_type = #{record.sourceType,jdbcType=VARCHAR},
       </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="record.resultList != null">
+        result_list = #{record.resultList,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="record.resultJson != null">
+        result_json = #{record.resultJson,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="record.paintJson != null">
+        paint_json = #{record.paintJson,jdbcType=LONGVARBINARY},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update issue_info
+    set id = #{record.id,jdbcType=BIGINT},
+      issue_id = #{record.issueId,jdbcType=VARCHAR},
+      issue_name = #{record.issueName,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=DATE},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      source_type = #{record.sourceType,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=LONGVARBINARY},
+      result_list = #{record.resultList,jdbcType=LONGVARBINARY},
+      result_json = #{record.resultJson,jdbcType=LONGVARBINARY},
+      paint_json = #{record.paintJson,jdbcType=LONGVARBINARY}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -196,7 +278,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hust.model.IssueInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.hust.model.IssueInfoWithBLOBs">
     update issue_info
     <set>
       <if test="issueId != null">
@@ -214,7 +296,32 @@
       <if test="sourceType != null">
         source_type = #{sourceType,jdbcType=VARCHAR},
       </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="resultList != null">
+        result_list = #{resultList,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="resultJson != null">
+        result_json = #{resultJson,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="paintJson != null">
+        paint_json = #{paintJson,jdbcType=LONGVARBINARY},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.model.IssueInfoWithBLOBs">
+    update issue_info
+    set issue_id = #{issueId,jdbcType=VARCHAR},
+      issue_name = #{issueName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=DATE},
+      creator = #{creator,jdbcType=VARCHAR},
+      source_type = #{sourceType,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARBINARY},
+      result_list = #{resultList,jdbcType=LONGVARBINARY},
+      result_json = #{resultJson,jdbcType=LONGVARBINARY},
+      paint_json = #{paintJson,jdbcType=LONGVARBINARY}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hust.model.IssueInfo">

@@ -2,6 +2,10 @@ package com.hust.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,28 +14,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.service.UploadService;
+import com.hust.service.IssueService;
 import com.hust.util.ResultUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("/upload")
+@RequestMapping("/file")
 public class UploadController {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
     @Autowired
-    private UploadService uploadService;
+    private IssueService fileService;
 
     @ResponseBody
-    @RequestMapping(value = "scanfile", method = RequestMethod.POST)
-    public Object scanExcelFile(@RequestParam(value = "file", required = true) MultipartFile file) {
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public Object scanExcelFile(@RequestParam(value = "file", required = true) MultipartFile file,
+            @RequestParam(value = "sourceType", required = true) String sourceType, HttpServletRequest request) {
         if (file.isEmpty()) {
             return ResultUtil.errorWithMsg("文件为空");
         }
-        List<String[]> list = uploadService.readDataFromExcel(file);
-        if (null == list || list.size() == 0) {
-            return ResultUtil.errorWithMsg("文件是空的");
+        List<String[]> list = null;
+        try {
+            list = fileService.readAndSave(file, sourceType, request);
+            if (null == list || list.size() == 0) {
+                return ResultUtil.errorWithMsg("文件是空的");
+            }
+        } catch (Exception e) {
+            logger.info(e.toString());
+            return ResultUtil.errorWithMsg(e.toString());
         }
         JSONObject result = new JSONObject();
         JSONArray head = new JSONArray();

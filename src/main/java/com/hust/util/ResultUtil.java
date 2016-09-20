@@ -20,7 +20,7 @@ public class ResultUtil {
         object.put("status", HttpStatus.OK);
         object.put("result", result);
         // logger.info("status：{}，result：{}", HttpStatus.OK, result.toString());
-        //logger.info("结果\t" + object.toString());
+        logger.info("结果\t" + object.toString());
         return object;
     }
 

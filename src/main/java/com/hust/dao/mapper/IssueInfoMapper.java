@@ -2,6 +2,7 @@ package com.hust.dao.mapper;
 
 import com.hust.model.IssueInfo;
 import com.hust.model.IssueInfoExample;
+import com.hust.model.IssueInfoWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,19 +13,25 @@ public interface IssueInfoMapper {
 
     int deleteByPrimaryKey(Long id);
 
-    int insert(IssueInfo record);
+    int insert(IssueInfoWithBLOBs record);
 
-    int insertSelective(IssueInfo record);
+    int insertSelective(IssueInfoWithBLOBs record);
+
+    List<IssueInfoWithBLOBs> selectByExampleWithBLOBs(IssueInfoExample example);
 
     List<IssueInfo> selectByExample(IssueInfoExample example);
 
-    IssueInfo selectByPrimaryKey(Long id);
+    IssueInfoWithBLOBs selectByPrimaryKey(Long id);
 
-    int updateByExampleSelective(@Param("record") IssueInfo record, @Param("example") IssueInfoExample example);
+    int updateByExampleSelective(@Param("record") IssueInfoWithBLOBs record, @Param("example") IssueInfoExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") IssueInfoWithBLOBs record, @Param("example") IssueInfoExample example);
 
     int updateByExample(@Param("record") IssueInfo record, @Param("example") IssueInfoExample example);
 
-    int updateByPrimaryKeySelective(IssueInfo record);
+    int updateByPrimaryKeySelective(IssueInfoWithBLOBs record);
+
+    int updateByPrimaryKeyWithBLOBs(IssueInfoWithBLOBs record);
 
     int updateByPrimaryKey(IssueInfo record);
 }

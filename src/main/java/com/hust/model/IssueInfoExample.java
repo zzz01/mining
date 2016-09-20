@@ -589,7 +589,7 @@ public class IssueInfoExample {
             return typeHandler;
         }
 
-        public Criterion() {
+        protected Criterion() {
             super();
         }
 
