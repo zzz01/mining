@@ -4,17 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ansj.domain.Result;
-import org.ansj.splitWord.analysis.ToAnalysis;
+import org.ansj.recognition.impl.FilterRecognition;
+import org.ansj.splitWord.analysis.NlpAnalysis;
 
 import com.hust.service.SegmentService;
 
 public class SegmentServiceImpl implements SegmentService {
 
+    private static FilterRecognition filter = new FilterRecognition();
+    static {
+        filter.insertStopNatures("w", "u", "mq", "p", "e", "y", "o");
+    }
+
     @Override
     public String[] getSegresult(String str) {
         Result res;
         try {
-            res = ToAnalysis.parse(str);
+            res = NlpAnalysis.parse(str).recognition(filter);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             System.out.println(e.toString() + "\t" + str);

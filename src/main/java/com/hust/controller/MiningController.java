@@ -147,7 +147,8 @@ public class MiningController {
                 head.add(str);
             }
         }
-        for (int i = 0; i < clusterList.size(); i++) {
+        int length = clusterList.size() > 11 ? 11 : clusterList.size();
+        for (int i = 1; i < length; i++) {
             JSONArray line = new JSONArray();
             String[] lineArray = clusterList.get(i);
             for (String str : lineArray) {
@@ -164,7 +165,7 @@ public class MiningController {
         paintJson.put(Constants.CLUSTER_RESULT_EN, clusterResult);
         try {
             issue.setResultList(ConvertUtil.convertToBytes(clusterList));
-            issue.setResultJson(ConvertUtil.convertToBytes(clusterResult));
+            // issue.setResultJson(ConvertUtil.convertToBytes(clusterResult));
             issue.setPaintJson(ConvertUtil.convertToBytes(paintJson));
             issueService.updateIssueInfo(issue);
         } catch (Exception e) {

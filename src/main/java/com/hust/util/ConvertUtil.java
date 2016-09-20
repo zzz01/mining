@@ -34,10 +34,22 @@ public class ConvertUtil {
 
     public static List<List<String[]>> convertToStringSet(List<String[]> list, List<List<Integer>> resultIndexSet,
             final int targetIndex) {
-        if (null == resultIndexSet) {
+        if (null == resultIndexSet || resultIndexSet.size() == 0 || list.size() == 0 || null == list
+                || targetIndex < 0) {
             return null;
         }
+        Collections.sort(resultIndexSet, new Comparator<List<Integer>>() {
+
+            @Override
+            public int compare(List<Integer> o1, List<Integer> o2) {
+                // TODO Auto-generated method stub
+                return o2.size() - o1.size();
+            }
+        });
         List<List<String[]>> listStrSet = new ArrayList<List<String[]>>();
+        List<String[]> firstLine = new ArrayList<String[]>();
+        firstLine.add(list.get(0));
+        listStrSet.add(firstLine);
         List<String[]> singleDataList = new ArrayList<String[]>();
         for (List<Integer> set : resultIndexSet) {
             if (set.size() == 1) {
@@ -55,21 +67,12 @@ public class ConvertUtil {
             });
             listStrSet.add(setDataList);
         }
-
         Collections.sort(singleDataList, new Comparator<String[]>() {
             public int compare(String[] o1, String[] o2) {
                 return o1[targetIndex].compareTo(o2[targetIndex]);
             }
         });
         listStrSet.add(singleDataList);
-        Collections.sort(listStrSet, new Comparator<List<String[]>>() {
-
-            @Override
-            public int compare(List<String[]> o1, List<String[]> o2) {
-                // TODO Auto-generated method stub
-                return o2.size() - o1.size();
-            }
-        });
         return listStrSet;
     }
 

@@ -1,4 +1,5 @@
 function upload() {
+	$('#downbtn').hide();
 	$('#fileUpload').ajaxSubmit(
 			{
 				type : "POST",
@@ -28,7 +29,7 @@ function fillhead(head, element) {
 	for (var i = 0; i < head.length; i++) {
 		html += "<th>" + head[i] + "</th>";
 	}
-	$(element).append(html);
+	$(element).html(html);
 }
 function fillbody(body, element) {
 	var html;
@@ -40,7 +41,7 @@ function fillbody(body, element) {
 		}
 		html += "</tr>"
 	}
-	$(element).append(html);
+	$(element).html(html);
 }
 
 function fillselect(head) {
@@ -88,7 +89,7 @@ function cluster() {
 			var result = data.result;
 			fillhead(result.clusterResult.head, '#table_result_head');
 			fillbody(result.clusterResult.body, '#result_table_body');
-
+			$('#downbtn').show();
 			paintline(result.emotion, '#line_emotion');
 			paintline(result.infoType, '#line_infotype');
 			paintline(result.media, '#line_media');
@@ -109,4 +110,10 @@ function cluster() {
 			paintpie(result.emotionCount, '#pie_emotionCount');
 		}
 	});
+}
+
+function download() {
+	// document.getElementById('miningForm').action = '/file/download';
+	$('#miningForm').attr('action', '/file/download');
+	$('#miningForm').submit();
 }
