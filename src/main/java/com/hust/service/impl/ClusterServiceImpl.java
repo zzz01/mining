@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import com.hust.cluster.Canopy;
 import com.hust.constants.Config;
 import com.hust.convertor.Convertor;
+import com.hust.convertor.DigitalConvertor;
 import com.hust.convertor.TFIDFConvertor;
 import com.hust.dao.IssueInfoDao;
 import com.hust.service.ClusterService;
 import com.hust.service.SegmentService;
+import com.hust.similarity.CrossSimilarity;
 import com.hust.util.ConvertUtil;
 
 @Service
@@ -30,11 +32,12 @@ public class ClusterServiceImpl implements ClusterService {
     public List<List<String[]>> getClusterResult(List<String[]> list, int targetIndex) {
         // TODO Auto-generated method stub
         List<String[]> segmentList = segmentService.getSegresult(list, targetIndex, 1);
-        Convertor convertor = new TFIDFConvertor();
+        Convertor convertor = new DigitalConvertor();
         convertor.setList(segmentList);
         List<double[]> vectors = convertor.getVector();
         Canopy canopy = new Canopy();
         canopy.setVectors(vectors);
+        canopy.setSimilarity(new CrossSimilarity());
         canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
         try {
             canopy.clustering();
