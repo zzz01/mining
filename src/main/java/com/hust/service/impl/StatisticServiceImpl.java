@@ -303,7 +303,7 @@ public class StatisticServiceImpl implements StatisticService {
             return json;
         }
         JSONObject timelineJson = new JSONObject();
-        for (int i = 0; i < list.size() - 1; i++) {
+        for (int i = 1; i < list.size() - 1; i++) {
             String[] array = list.get(i);
             if (isEmptyArray(array)) {
                 continue;

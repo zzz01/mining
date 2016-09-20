@@ -100,6 +100,7 @@ public class MiningController {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/statistic")
     public Object statistic(@RequestBody Condition condition, HttpServletRequest request) {
@@ -124,7 +125,8 @@ public class MiningController {
         if (null == list_res) {
             return ResultUtil.errorWithMsg("文件解析出错");
         }
-        List<String[]> clusterList = ConvertUtil.convertoStrList(list_res);
+        List<String[]> clusterList = ConvertUtil.convertoStrList(list_res, list.get(0));
+        
         StatisticCondition sc = new StatisticCondition();
         sc.setList(clusterList);
         sc.setEmotionIndex(condition.getEmotionIndex());

@@ -1,8 +1,5 @@
 package com.hust.constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,11 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hust.service.InitialService;
 
 public class Media {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(Media.class);
-
     public static final Map<String, Integer> LEVEL = new HashMap<String, Integer>();
 
     public static final Map<String, String> MEDIA = new HashMap<String, String>();
@@ -35,21 +27,18 @@ public class Media {
         Map<String, Integer> infotype = initialService.getInfoType();
         for (Entry<String, Integer> entry : infotype.entrySet()) {
             TYPE.put(entry.getKey(), entry.getValue());
-            logger.info("key:{},value:{}", entry.getKey(), entry.getValue());
         }
 
         // 初始化媒体表
         Map<String, String> media = initialService.getMedia();
         for (Entry<String, String> entry : media.entrySet()) {
             MEDIA.put(entry.getKey(), entry.getValue());
-            logger.info("key:{},value:{}", entry.getKey(), entry.getValue());
         }
 
         // 初始化媒体级别
         Map<String, Integer> level = initialService.getLevel();
         for (Entry<String, Integer> entry : level.entrySet()) {
             LEVEL.put(entry.getKey(), entry.getValue());
-            logger.info("key:{},value:{}", entry.getKey(), entry.getValue());
         }
     }
 
