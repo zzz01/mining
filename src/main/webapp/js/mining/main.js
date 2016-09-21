@@ -109,9 +109,9 @@ function cluster() {
 			paintcolumn(result.infoTyeCount, '#column_infoTypeCount');
 			paintcolumn(result.emotionCount, '#column_emotionCount');
 
-			paintpie(result.mediaCount, '#pie_mediaCount');
-			paintpie(result.infoTyeCount, '#pie_infoTypeCount');
-			paintpie(result.emotionCount, '#pie_emotionCount');
+			paintpie1(result.mediaCount, '#pie_mediaCount');
+			paintpie2(result.infoTyeCount, '#pie_infoTypeCount');
+			paintpie1(result.emotionCount, '#pie_emotionCount');
 		}
 	});
 }
