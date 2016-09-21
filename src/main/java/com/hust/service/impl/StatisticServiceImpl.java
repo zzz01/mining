@@ -23,8 +23,8 @@ import com.hust.constants.Media.INFOTYPE;
 import com.hust.constants.Media.MEDIALEVEL;
 import com.hust.model.StatisticCondition;
 import com.hust.service.StatisticService;
-import com.hust.util.JSONCreator;
-import com.hust.util.Time;
+import com.hust.util.JSONUtil;
+import com.hust.util.TimeUtil;
 
 import net.sf.json.JSONObject;
 
@@ -54,7 +54,7 @@ public class StatisticServiceImpl implements StatisticService {
                 origIndex = 0;
             }
             String[] oldRow = tmpList.get(0);
-            String[] newRow = new String[tmpList.get(0).length + 1];
+            String[] newRow = new String[oldRow.length + 1];
             System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
             newRow[0] = tmpList.size() + "";
             reList.add(newRow);
@@ -84,7 +84,7 @@ public class StatisticServiceImpl implements StatisticService {
         switch (interval) {
             case Interval.DAY: {
                 for (String time : list) {
-                    if (!StringUtils.isBlank(time) && Time.isvalidate(time)) {
+                    if (!StringUtils.isBlank(time) && TimeUtil.isvalidate(time)) {
                         time = time.substring(5, 10);
                         if (null != map.get(time)) {
                             map.put(time, map.get(time) + 1);
@@ -428,7 +428,7 @@ public class StatisticServiceImpl implements StatisticService {
     private void putValue(JSONObject json, String timeKey, String proKey, String elemKey) {
         JSONObject timeJson = json.getJSONObject(timeKey);
         if (timeJson.isNullObject()) {
-            timeJson = JSONCreator.createTimeJson();
+            timeJson = JSONUtil.createTimeJson();
             json.put(timeKey, timeJson);
         }
         JSONObject proJson = timeJson.getJSONObject(proKey);
@@ -441,7 +441,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     private String getTimeKey(String time, int interval) {
-        if (StringUtils.isBlank(time) || !Time.isvalidate(time)) {
+        if (StringUtils.isBlank(time) || !TimeUtil.isvalidate(time)) {
             return Constants.INVALID_TIME;
         }
         switch (interval) {

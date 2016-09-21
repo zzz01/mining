@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 
-public class Time {
+public class TimeUtil {
 
     public static String convert(Cell cell) {
         if (cell == null)

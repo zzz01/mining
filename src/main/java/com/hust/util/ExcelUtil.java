@@ -28,7 +28,7 @@ public class ExcelUtil {
                 try {
                     Cell cell = sheet.getRow(i).getCell(j);
                     if (cell.getCellType() == 0) {
-                        rowStr[j] = Time.convert(cell);
+                        rowStr[j] = TimeUtil.convert(cell);
                     } else {
                         rowStr[j] = cell.toString();
                     }
@@ -42,15 +42,18 @@ public class ExcelUtil {
         return list;
     }
 
-    public static HSSFWorkbook exportToExcel(List<String[]> list) {
+    public static HSSFWorkbook exportToExcel(List<String[]>...lists) {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        Sheet sheet = workbook.createSheet("结果");
-        for (int i = 0; i < list.size(); i++) {
-            String[] rowList = list.get(i);
-            Row row = sheet.createRow(i);
-            for (int j = 0; j < rowList.length; j++) {
-                Cell cell = row.createCell(j);
-                cell.setCellValue(rowList[j]);
+        for (int k = 0; k < lists.length; k++) {
+            List<String[]> list = lists[k];
+            Sheet sheet = workbook.createSheet("sheet" + (k + 1));
+            for (int i = 0; i < list.size(); i++) {
+                String[] rowList = list.get(i);
+                Row row = sheet.createRow(i);
+                for (int j = 0; j < rowList.length; j++) {
+                    Cell cell = row.createCell(j);
+                    cell.setCellValue(rowList[j]);
+                }
             }
         }
         return workbook;

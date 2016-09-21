@@ -86,10 +86,14 @@ function cluster() {
 				alert(data.result);
 				return;
 			}
-			var result = data.result;
-			fillhead(result.clusterResult.head, '#table_result_head');
-			fillbody(result.clusterResult.body, '#result_table_body');
 			$('#downbtn').show();
+			var result = data.result;
+			fillhead(result.clusterResult10row.head, '#table_result_head');
+			fillbody(result.clusterResult10row.body, '#result_table_body');
+			
+			fillhead(result.origAndCount10row.head, '#table_orig_head');
+			fillbody(result.origAndCount10row.body, '#result_orig_body');
+			
 			paintline(result.emotion, '#line_emotion');
 			paintline(result.infoType, '#line_infotype');
 			paintline(result.media, '#line_media');

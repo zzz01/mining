@@ -24,10 +24,10 @@ import com.hust.service.ClusterService;
 import com.hust.service.IssueService;
 import com.hust.service.StatisticService;
 import com.hust.util.ConvertUtil;
+import com.hust.util.JSONUtil;
 import com.hust.util.PaintUtil;
 import com.hust.util.ResultUtil;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Controller
@@ -126,7 +126,14 @@ public class MiningController {
             return ResultUtil.errorWithMsg("文件解析出错");
         }
         List<String[]> clusterList = ConvertUtil.convertoStrList(list_res, list.get(0));
-        
+
+        List<String[]> origAndCountList = statisticService.getOrigAndCount(list_res, condition.getTimeIndex());
+        String[] oldRow = list.get(0);
+        String[] newRow = new String[oldRow.length + 1];
+        System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
+        newRow[0] = "数量";
+        origAndCountList.add(0, newRow);
+
         StatisticCondition sc = new StatisticCondition();
         sc.setList(clusterList);
         sc.setEmotionIndex(condition.getEmotionIndex());
@@ -139,35 +146,13 @@ public class MiningController {
         statResultJson.put("title", filename.substring(0, filename.indexOf(".")));
         JSONObject paintJson = PaintUtil.convertPaintJson(statResultJson);
 
-        JSONObject clusterResult = new JSONObject();
-        JSONArray head = new JSONArray();
-        JSONArray body = new JSONArray();
-        for (String str : list.get(0)) {
-            if (StringUtils.isBlank(str)) {
-                head.add("");
-            } else {
-                head.add(str);
-            }
-        }
-        int length = clusterList.size() > 11 ? 11 : clusterList.size();
-        for (int i = 1; i < length; i++) {
-            JSONArray line = new JSONArray();
-            String[] lineArray = clusterList.get(i);
-            for (String str : lineArray) {
-                if (StringUtils.isBlank(str)) {
-                    line.add("");
-                } else {
-                    line.add(str);
-                }
-            }
-            body.add(line);
-        }
-        clusterResult.put("head", head);
-        clusterResult.put("body", body);
-        paintJson.put(Constants.CLUSTER_RESULT_EN, clusterResult);
+        JSONObject clusterResult10row = JSONUtil.createFisrt10rowJson(clusterList);
+        JSONObject origAndCount10row = JSONUtil.createFisrt10rowJson(origAndCountList);
+        paintJson.put(Constants.CLUSTER_RESULT_10ROW_EN, clusterResult10row);
+        paintJson.put(Constants.ORIG_COUNT_10ROW_EN, origAndCount10row);
         try {
             issue.setResultList(ConvertUtil.convertToBytes(clusterList));
-            // issue.setResultJson(ConvertUtil.convertToBytes(clusterResult));
+            issue.setResultJson(ConvertUtil.convertToBytes(origAndCountList));
             issue.setPaintJson(ConvertUtil.convertToBytes(paintJson));
             issueService.updateIssueInfo(issue);
         } catch (Exception e) {

@@ -2,7 +2,7 @@ package com.hust.util;
 
 import java.util.List;
 
-public class Caculate {
+public class CaculateUtil {
     public static float sim(List<String[]> list, String[] str, List<Integer> set) {
         if (str.length == 0 || set.size() == 0) {
             return 0.0f;

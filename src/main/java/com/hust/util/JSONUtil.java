@@ -1,5 +1,7 @@
 package com.hust.util;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.hust.constants.Constants;
@@ -10,15 +12,15 @@ import com.hust.constants.Media.MEDIALEVEL;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-public class JSONCreator {
+public class JSONUtil {
 
     public static JSONObject createTimeJson() {
         JSONObject json = new JSONObject();
-        JSONObject emotionJson = JSONCreator.createEmotionJson();
-        JSONObject infoTypeJson = JSONCreator.createInfoTypeJson();
-        JSONObject mediaJson = JSONCreator.createMediaJson();
-        JSONObject netizenAttenJson = JSONCreator.createInfoTypeJson();
-        JSONObject mediaAttenJson = JSONCreator.createMediaJson();
+        JSONObject emotionJson = JSONUtil.createEmotionJson();
+        JSONObject infoTypeJson = JSONUtil.createInfoTypeJson();
+        JSONObject mediaJson = JSONUtil.createMediaJson();
+        JSONObject netizenAttenJson = JSONUtil.createInfoTypeJson();
+        JSONObject mediaAttenJson = JSONUtil.createMediaJson();
         json.put(Constants.EMOTION_EN, emotionJson);
         json.put(Constants.INFOTYPE_EN, infoTypeJson);
         json.put(Constants.MEDIA_EN, mediaJson);
@@ -59,7 +61,7 @@ public class JSONCreator {
         mediaJson.put(MEDIALEVEL.WEIZHI, 0);
         return mediaJson;
     }
-    
+
     public static JSONObject createPaintProJson() {
         JSONObject json = new JSONObject();
         json.put(Constants.TITLE_EN, StringUtils.EMPTY);
@@ -68,5 +70,34 @@ public class JSONCreator {
         json.put(Constants.CATEGORIES_EN, categories);
         json.put(Constants.SERIES_EN, series);
         return json;
+    }
+
+    public static JSONObject createFisrt10rowJson(List<String[]> list) {
+        JSONObject result = new JSONObject();
+        JSONArray head = new JSONArray();
+        JSONArray body = new JSONArray();
+        for (String str : list.get(0)) {
+            if (StringUtils.isBlank(str)) {
+                head.add("");
+            } else {
+                head.add(str);
+            }
+        }
+        int length = list.size() > 11 ? 11 : list.size();
+        for (int i = 1; i < length; i++) {
+            JSONArray line = new JSONArray();
+            String[] lineArray = list.get(i);
+            for (String str : lineArray) {
+                if (StringUtils.isBlank(str)) {
+                    line.add("");
+                } else {
+                    line.add(str);
+                }
+            }
+            body.add(line);
+        }
+        result.put("head", head);
+        result.put("body", body);
+        return result;
     }
 }

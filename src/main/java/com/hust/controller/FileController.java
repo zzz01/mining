@@ -78,6 +78,7 @@ public class FileController {
         return ResultUtil.success(result);
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping("/download")
     public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Object uuidObj = request.getSession().getAttribute(Constants.ISSUE_ID);
@@ -90,12 +91,13 @@ public class FileController {
         OutputStream outputStream = null;
         try {
             IssueInfoWithBLOBs issue = issueService.getByUUID(uuid);
-            List<String[]> list = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getResultList());
+            List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getResultList());
+            List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getResultJson());
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition", "attachment;fileName=result.xls");
-            HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
+            HSSFWorkbook workbook = ExcelUtil.exportToExcel(relist, origlist);
             workbook.write(outputStream);
         } catch (Exception e) {
             logger.info("excel 导出失败\t" + e.toString());

@@ -56,7 +56,7 @@ public class PaintUtil {
                 String proKey = proIterator.next().toString();
                 JSONObject paintProJson = paintJson.getJSONObject(proKey);
                 if (paintProJson.isNullObject()) {
-                    paintProJson = JSONCreator.createPaintProJson();
+                    paintProJson = JSONUtil.createPaintProJson();
                     paintJson.put(proKey, paintProJson);
                 }
                 JSONArray seriesJson = paintProJson.getJSONArray(Constants.SERIES_EN);
@@ -79,7 +79,7 @@ public class PaintUtil {
         for (Iterator proIterator = countJson.keys(); proIterator.hasNext();) {
             String proKey = proIterator.next().toString();
             JSONObject proJson = countJson.getJSONObject(proKey);
-            JSONObject paintProJson = JSONCreator.createPaintProJson();
+            JSONObject paintProJson = JSONUtil.createPaintProJson();
             paintProJson.put(Constants.TITLE_EN, keyENtoCH(proKey, json.getString(Constants.TITLE_EN)));
             for (Iterator eleIterator = proJson.keys(); eleIterator.hasNext();) {
                 String eleKey = eleIterator.next().toString();
