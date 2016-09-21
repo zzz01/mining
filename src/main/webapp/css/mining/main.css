@@ -2,12 +2,12 @@
 /* CSS Document */
 table {
 	table-layout: fixed;
-	white-space: normal;
 }
 
-td, th {
-	vertical-align: middle !important;
-	text-align: center;
+td {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .paint {
