@@ -15,10 +15,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
 
-    public static List<String[]> read(InputStream inputStream) throws FileNotFoundException, IOException {
+    public static List<String[]> read(String filename, InputStream inputStream)
+            throws FileNotFoundException, IOException {
         List<String[]> list = new ArrayList<String[]>();
         Workbook workbook;
-        workbook = new XSSFWorkbook(inputStream);
+        if(filename.endsWith("xls")){
+            workbook = new HSSFWorkbook(inputStream);
+        }else{
+            workbook = new XSSFWorkbook(inputStream);
+        }
         Sheet sheet = workbook.getSheetAt(0);
         int rowNum = sheet.getLastRowNum();
         int colNum = sheet.getRow(0).getLastCellNum();

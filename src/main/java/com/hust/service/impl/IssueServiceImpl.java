@@ -64,7 +64,7 @@ public class IssueServiceImpl implements IssueService {
         InputStream is = null;
         try {
             is = file.getInputStream();
-            list = ExcelUtil.read(is);
+            list = ExcelUtil.read(file.getOriginalFilename(), is);
         } catch (IOException e) {
             LOG.error("读取文件出现异常\t" + e.toString());
             return null;
