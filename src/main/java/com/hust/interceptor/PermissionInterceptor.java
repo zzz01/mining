@@ -16,9 +16,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
      */
     private static final Logger LOG = LoggerFactory.getLogger(PermissionInterceptor.class);
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter converter;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
