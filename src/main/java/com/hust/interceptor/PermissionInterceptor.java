@@ -27,7 +27,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             return true;
         }
         try {
-            LOG.error("PermissionDeny: errorMsg=用户{}没有权限", request.getRemoteHost());
+            LOG.error("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(), request.getRequestURI());
             response.sendRedirect("/index.html");
         } catch (Exception e) {
             // TODO Auto-generated catch block
