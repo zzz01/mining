@@ -106,7 +106,7 @@ public class MiningController {
     public Object statistic(@RequestBody Condition condition, HttpServletRequest request) {
         String fileUUID = request.getSession().getAttribute(Constants.ISSUE_ID).toString();
         if (StringUtils.isBlank(fileUUID)) {
-            return ResultUtil.errorWithMsg("无法从session中获取到文件uuid，请尝试重新登录");
+            return ResultUtil.errorWithMsg("无法从session中获取到文件uuid，请尝试重新上传");
         }
         IssueInfoWithBLOBs issue = issueService.getByUUID(fileUUID);
         List<String[]> list;

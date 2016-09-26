@@ -20,19 +20,30 @@ public class PermissionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // TODO Auto-generated method stub
-        if (null != request.getSession().getAttribute("username")) {
-            return true;
-        }
         try {
-            LOG.error("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(), request.getRequestURI());
-            response.sendRedirect("/index.html");
+            String url = request.getRequestURI();
+            if ("/".equals(url) || "/index.html".equals(url)) {
+                if (null != request.getSession().getAttribute("username")) {
+                    response.sendRedirect("/page/main.html");
+                } else {
+                    return true;
+                }
+            } else {
+                if (null != request.getSession().getAttribute("username")) {
+                    return true;
+                } else {
+                    LOG.warn("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(),
+                            request.getRequestURI());
+                    response.sendRedirect("/index.html");
+                }
+            }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             LOG.error("redirect to index.html error \t" + e.toString());
             try {
                 response.sendRedirect("/page/error.html");
             } catch (Exception e1) {
-                LOG.error(e1.toString());
+                LOG.error("跳转发生异常" + e1.toString());
             }
         }
         return false;
