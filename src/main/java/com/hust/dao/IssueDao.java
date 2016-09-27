@@ -21,9 +21,7 @@ public class IssueDao {
     }
 
     public IssueWithBLOBs selectByUUID(String UUID) {
-        IssueExample example = new IssueExample();
-        example.createCriteria().andIssueIdEqualTo(UUID);
-        return issueMapper.selectByExampleWithBLOBs(example).get(0);
+        return issueMapper.selectByPrimaryKey(UUID);
     }
 
     public int updateIssueInfo(IssueWithBLOBs issue) {

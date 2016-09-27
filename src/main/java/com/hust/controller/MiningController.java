@@ -32,16 +32,14 @@ public class MiningController {
 
     @Autowired
     private IssueService issueService;
-
     @Autowired
     private ClusterService clusterService;
-
     @Autowired
     private StatisticService statisticService;
-
     @Autowired
     private UserService userService;
 
+    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/cluster")
     public Object cluster(HttpServletRequest request) {
@@ -49,7 +47,7 @@ public class MiningController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("query current issue failed,please create or select a issue");
         }
-        IssueWithBLOBs issue = issueService.getByUUID(issueId);
+        IssueWithBLOBs issue = issueService.getById(issueId);
         List<String[]> content = null;
         try {
             content = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getFilteredContent());
@@ -78,4 +76,5 @@ public class MiningController {
     public Object statistic(HttpServletRequest request) {
         return null;
     }
+
 }

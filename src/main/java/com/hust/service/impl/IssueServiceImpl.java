@@ -33,7 +33,7 @@ public class IssueServiceImpl implements IssueService {
     private FileDao fileDao;
 
     @Override
-    public IssueWithBLOBs getByUUID(String UUID) {
+    public IssueWithBLOBs getById(String UUID) {
         return issueDao.selectByUUID(UUID);
     }
 

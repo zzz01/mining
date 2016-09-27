@@ -48,4 +48,5 @@ public class ClusterServiceImpl implements ClusterService {
         return ConvertUtil.convertToStringSet(list, resultIndexSetList, targetIndex);
     }
 
+    
 }

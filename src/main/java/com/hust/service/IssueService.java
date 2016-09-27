@@ -8,7 +8,7 @@ public interface IssueService {
 
     int createIssue(IssueWithBLOBs issue);
 
-    IssueWithBLOBs getByUUID(String UUID);
+    IssueWithBLOBs getById(String UUID);
 
     int updateIssueInfo(IssueWithBLOBs issue);
 

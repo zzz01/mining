@@ -66,7 +66,7 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            IssueWithBLOBs issue = issueService.getByUUID(uuid);
+            IssueWithBLOBs issue = issueService.getById(uuid);
             List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
             List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
             outputStream = response.getOutputStream();
