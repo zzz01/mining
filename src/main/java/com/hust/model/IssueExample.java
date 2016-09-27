@@ -2,17 +2,16 @@ package com.hust.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-public class IssueInfoExample {
+public class IssueExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public IssueInfoExample() {
+    public IssueExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,92 +103,6 @@ public class IssueInfoExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
-        }
-
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdEqualTo(Long value) {
-            addCriterion("id =", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotEqualTo(Long value) {
-            addCriterion("id <>", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThan(Long value) {
-            addCriterion("id >", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("id >=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThan(Long value) {
-            addCriterion("id <", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdLessThanOrEqualTo(Long value) {
-            addCriterion("id <=", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<Long> values) {
-            addCriterion("id in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotIn(List<Long> values) {
-            addCriterion("id not in", values, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdBetween(Long value1, Long value2) {
-            addCriterion("id between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotBetween(Long value1, Long value2) {
-            addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
         }
 
         public Criteria andIssueIdIsNull() {
@@ -343,52 +256,52 @@ public class IssueInfoExample {
         }
 
         public Criteria andCreateTimeEqualTo(Date value) {
-            addCriterionForJDBCDate("create_time =", value, "createTime");
+            addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotEqualTo(Date value) {
-            addCriterionForJDBCDate("create_time <>", value, "createTime");
+            addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThan(Date value) {
-            addCriterionForJDBCDate("create_time >", value, "createTime");
+            addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("create_time >=", value, "createTime");
+            addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThan(Date value) {
-            addCriterionForJDBCDate("create_time <", value, "createTime");
+            addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("create_time <=", value, "createTime");
+            addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIn(List<Date> values) {
-            addCriterionForJDBCDate("create_time in", values, "createTime");
+            addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotIn(List<Date> values) {
-            addCriterionForJDBCDate("create_time not in", values, "createTime");
+            addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("create_time between", value1, value2, "createTime");
+            addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("create_time not between", value1, value2, "createTime");
+            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
@@ -462,73 +375,133 @@ public class IssueInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeIsNull() {
-            addCriterion("source_type is null");
+        public Criteria andLastOperatorIsNull() {
+            addCriterion("last_operator is null");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeIsNotNull() {
-            addCriterion("source_type is not null");
+        public Criteria andLastOperatorIsNotNull() {
+            addCriterion("last_operator is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeEqualTo(String value) {
-            addCriterion("source_type =", value, "sourceType");
+        public Criteria andLastOperatorEqualTo(String value) {
+            addCriterion("last_operator =", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotEqualTo(String value) {
-            addCriterion("source_type <>", value, "sourceType");
+        public Criteria andLastOperatorNotEqualTo(String value) {
+            addCriterion("last_operator <>", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeGreaterThan(String value) {
-            addCriterion("source_type >", value, "sourceType");
+        public Criteria andLastOperatorGreaterThan(String value) {
+            addCriterion("last_operator >", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("source_type >=", value, "sourceType");
+        public Criteria andLastOperatorGreaterThanOrEqualTo(String value) {
+            addCriterion("last_operator >=", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeLessThan(String value) {
-            addCriterion("source_type <", value, "sourceType");
+        public Criteria andLastOperatorLessThan(String value) {
+            addCriterion("last_operator <", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeLessThanOrEqualTo(String value) {
-            addCriterion("source_type <=", value, "sourceType");
+        public Criteria andLastOperatorLessThanOrEqualTo(String value) {
+            addCriterion("last_operator <=", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeLike(String value) {
-            addCriterion("source_type like", value, "sourceType");
+        public Criteria andLastOperatorLike(String value) {
+            addCriterion("last_operator like", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotLike(String value) {
-            addCriterion("source_type not like", value, "sourceType");
+        public Criteria andLastOperatorNotLike(String value) {
+            addCriterion("last_operator not like", value, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeIn(List<String> values) {
-            addCriterion("source_type in", values, "sourceType");
+        public Criteria andLastOperatorIn(List<String> values) {
+            addCriterion("last_operator in", values, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotIn(List<String> values) {
-            addCriterion("source_type not in", values, "sourceType");
+        public Criteria andLastOperatorNotIn(List<String> values) {
+            addCriterion("last_operator not in", values, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeBetween(String value1, String value2) {
-            addCriterion("source_type between", value1, value2, "sourceType");
+        public Criteria andLastOperatorBetween(String value1, String value2) {
+            addCriterion("last_operator between", value1, value2, "lastOperator");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotBetween(String value1, String value2) {
-            addCriterion("source_type not between", value1, value2, "sourceType");
+        public Criteria andLastOperatorNotBetween(String value1, String value2) {
+            addCriterion("last_operator not between", value1, value2, "lastOperator");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeIsNull() {
+            addCriterion("last_update_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeIsNotNull() {
+            addCriterion("last_update_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeEqualTo(Date value) {
+            addCriterion("last_update_time =", value, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeNotEqualTo(Date value) {
+            addCriterion("last_update_time <>", value, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeGreaterThan(Date value) {
+            addCriterion("last_update_time >", value, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("last_update_time >=", value, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeLessThan(Date value) {
+            addCriterion("last_update_time <", value, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("last_update_time <=", value, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeIn(List<Date> values) {
+            addCriterion("last_update_time in", values, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeNotIn(List<Date> values) {
+            addCriterion("last_update_time not in", values, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("last_update_time between", value1, value2, "lastUpdateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("last_update_time not between", value1, value2, "lastUpdateTime");
             return (Criteria) this;
         }
     }
@@ -587,10 +560,6 @@ public class IssueInfoExample {
 
         public String getTypeHandler() {
             return typeHandler;
-        }
-
-        protected Criterion() {
-            super();
         }
 
         protected Criterion(String condition) {

@@ -13,21 +13,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.constants.Constants;
-import com.hust.model.IssueInfoWithBLOBs;
+import com.hust.model.Condition;
+import com.hust.model.IssueWithBLOBs;
+import com.hust.service.FileService;
 import com.hust.service.IssueService;
 import com.hust.util.ConvertUtil;
 import com.hust.util.ExcelUtil;
 import com.hust.util.ResultUtil;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/file")
@@ -38,44 +37,21 @@ public class FileController {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
+    private FileService fileService;
+    @Autowired
     private IssueService issueService;
 
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public Object upload(@RequestParam(value = "file", required = true) MultipartFile file,
-            @RequestParam(value = "sourceType", required = true) String sourceType, HttpServletRequest request) {
+    public Object upload(@RequestBody Condition condition, HttpServletRequest request) {
+        MultipartFile file = condition.getFile();
         if (file.isEmpty()) {
             return ResultUtil.errorWithMsg("文件为空");
         }
-        List<String[]> list = null;
-        try {
-            list = issueService.readAndSave(file, sourceType, request);
-            if (null == list || list.size() == 0) {
-                return ResultUtil.errorWithMsg("文件是空的");
-            }
-        } catch (Exception e) {
-            logger.info(e.toString());
-            return ResultUtil.errorWithMsg(e.toString());
+        if (fileService.insert(condition, request) == 0) {
+            return ResultUtil.errorWithMsg("上传失败");
         }
-        JSONObject result = new JSONObject();
-        JSONArray head = new JSONArray();
-        JSONArray body = new JSONArray();
-        String[] headArray = list.get(0);
-        for (String str : headArray) {
-            head.add(str);
-        }
-        int length = list.size() < 10 ? list.size() : 10;
-        for (int i = 1; i < length; i++) {
-            JSONArray line = new JSONArray();
-            String[] lineArray = list.get(i);
-            for (String str : lineArray) {
-                line.add(str);
-            }
-            body.add(line);
-        }
-        result.put("head", head);
-        result.put("body", body);
-        return ResultUtil.success(result);
+        return ResultUtil.success("上传成功");
     }
 
     @SuppressWarnings("unchecked")
@@ -84,15 +60,15 @@ public class FileController {
         Object uuidObj = request.getSession().getAttribute(Constants.ISSUE_ID);
         String uuid = uuidObj == null ? StringUtils.EMPTY : uuidObj.toString();
         if (StringUtils.isBlank(uuid)) {
-            response.sendError(404, "未找到文件，请先上传");
+            response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
             logger.info("从session中无法获得文件uuid");
             return;
         }
         OutputStream outputStream = null;
         try {
-            IssueInfoWithBLOBs issue = issueService.getByUUID(uuid);
-            List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getResultList());
-            List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getResultJson());
+            IssueWithBLOBs issue = issueService.getByUUID(uuid);
+            List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
+            List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");

@@ -28,4 +28,51 @@ public class Constants {
     public final static String CLUSTER_RESULT_10ROW_EN = "clusterResult10row";
     public final static String ORIG_COUNT_10ROW_EN = "origAndCount10row";
     public final static String ISSUE_ID = "issueId";
+
+    public static class Index {
+        public static final int URL_INDEX = 0;
+        public static final int TITLE_INDEX = 1;
+        public static final int TIME_INDEX = 2;
+        public static final int CLICK_INDEX = 3;
+        public static final int REPLY_INDEX = 4;
+    }
+
+    // 情感
+    public static class Emotion {
+
+        public static final String POSITIVE = "正面";
+        public static final String NEGATIVE = "负面";
+        public static final String NEUTRAL = "中性";
+        public static final String WEIZHI = "未知";
+    }
+
+    // 统计时间间隔
+    public static class Interval {
+        public static final int HOUR = 1;
+        public static final int DAY = 2;
+        public static final int MONTH = 3;
+    }
+
+    // 媒体级别
+    public static class MEDIALEVEL {
+        public static final String ZHONGYANG = "中央";
+        public static final String SHENGJI = "省级";
+        public static final String QITA = "其他新闻网站";
+        public static final String WEIZHI = "未知";
+    }
+
+    public static class INFOTYPE {
+        public static final String XINWEN = "新闻";
+        public static final String BAOZHI = "报纸";
+        public static final String LUNTAN = "论坛";
+        public static final String WENDA = "问答";
+        public static final String BOKE = "博客";
+        public static final String WEIXIN = "微信";
+        public static final String TIEBA = "贴吧";
+        public static final String SHOUJI = "手机";
+        public static final String SHIPING = "视频";
+        public static final String WEIBO = "微博";
+        public static final String WEIZHI = "未知";
+    }
+
 }

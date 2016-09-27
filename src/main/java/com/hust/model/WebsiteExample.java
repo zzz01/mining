@@ -3,14 +3,14 @@ package com.hust.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LMediaExample {
+public class WebsiteExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public LMediaExample() {
+    public WebsiteExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -114,53 +114,123 @@ public class LMediaExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(Long value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(Long value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(Long value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(Long value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(Long value1, Long value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(Long value1, Long value2) {
             addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlIsNull() {
+            addCriterion("url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlIsNotNull() {
+            addCriterion("url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlEqualTo(String value) {
+            addCriterion("url =", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlNotEqualTo(String value) {
+            addCriterion("url <>", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlGreaterThan(String value) {
+            addCriterion("url >", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("url >=", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlLessThan(String value) {
+            addCriterion("url <", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlLessThanOrEqualTo(String value) {
+            addCriterion("url <=", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlLike(String value) {
+            addCriterion("url like", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlNotLike(String value) {
+            addCriterion("url not like", value, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlIn(List<String> values) {
+            addCriterion("url in", values, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlNotIn(List<String> values) {
+            addCriterion("url not in", values, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlBetween(String value1, String value2) {
+            addCriterion("url between", value1, value2, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andUrlNotBetween(String value1, String value2) {
+            addCriterion("url not between", value1, value2, "url");
             return (Criteria) this;
         }
 
@@ -234,63 +304,143 @@ public class LMediaExample {
             return (Criteria) this;
         }
 
-        public Criteria andWeightIsNull() {
-            addCriterion("weight is null");
+        public Criteria andLevelIsNull() {
+            addCriterion("level is null");
             return (Criteria) this;
         }
 
-        public Criteria andWeightIsNotNull() {
-            addCriterion("weight is not null");
+        public Criteria andLevelIsNotNull() {
+            addCriterion("level is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWeightEqualTo(Integer value) {
-            addCriterion("weight =", value, "weight");
+        public Criteria andLevelEqualTo(String value) {
+            addCriterion("level =", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightNotEqualTo(Integer value) {
-            addCriterion("weight <>", value, "weight");
+        public Criteria andLevelNotEqualTo(String value) {
+            addCriterion("level <>", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightGreaterThan(Integer value) {
-            addCriterion("weight >", value, "weight");
+        public Criteria andLevelGreaterThan(String value) {
+            addCriterion("level >", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightGreaterThanOrEqualTo(Integer value) {
-            addCriterion("weight >=", value, "weight");
+        public Criteria andLevelGreaterThanOrEqualTo(String value) {
+            addCriterion("level >=", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightLessThan(Integer value) {
-            addCriterion("weight <", value, "weight");
+        public Criteria andLevelLessThan(String value) {
+            addCriterion("level <", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightLessThanOrEqualTo(Integer value) {
-            addCriterion("weight <=", value, "weight");
+        public Criteria andLevelLessThanOrEqualTo(String value) {
+            addCriterion("level <=", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightIn(List<Integer> values) {
-            addCriterion("weight in", values, "weight");
+        public Criteria andLevelLike(String value) {
+            addCriterion("level like", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightNotIn(List<Integer> values) {
-            addCriterion("weight not in", values, "weight");
+        public Criteria andLevelNotLike(String value) {
+            addCriterion("level not like", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightBetween(Integer value1, Integer value2) {
-            addCriterion("weight between", value1, value2, "weight");
+        public Criteria andLevelIn(List<String> values) {
+            addCriterion("level in", values, "level");
             return (Criteria) this;
         }
 
-        public Criteria andWeightNotBetween(Integer value1, Integer value2) {
-            addCriterion("weight not between", value1, value2, "weight");
+        public Criteria andLevelNotIn(List<String> values) {
+            addCriterion("level not in", values, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelBetween(String value1, String value2) {
+            addCriterion("level between", value1, value2, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelNotBetween(String value1, String value2) {
+            addCriterion("level not between", value1, value2, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(String value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(String value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(String value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(String value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(String value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLike(String value) {
+            addCriterion("type like", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotLike(String value) {
+            addCriterion("type not like", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<String> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<String> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(String value1, String value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(String value1, String value2) {
+            addCriterion("type not between", value1, value2, "type");
             return (Criteria) this;
         }
     }
@@ -349,10 +499,6 @@ public class LMediaExample {
 
         public String getTypeHandler() {
             return typeHandler;
-        }
-
-        public Criterion() {
-            super();
         }
 
         protected Criterion(String condition) {

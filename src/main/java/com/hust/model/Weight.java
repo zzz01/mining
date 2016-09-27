@@ -1,11 +1,11 @@
 package com.hust.model;
 
-public class IMedia {
+public class Weight {
     private Integer id;
 
     private String name;
 
-    private String level;
+    private Integer weight;
 
     public Integer getId() {
         return id;
@@ -23,11 +23,11 @@ public class IMedia {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getLevel() {
-        return level;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setLevel(String level) {
-        this.level = level == null ? null : level.trim();
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 }

@@ -1,5 +1,6 @@
 package com.hust.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,29 +10,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.constants.Constants;
-import com.hust.model.Condition;
-import com.hust.model.IssueInfoWithBLOBs;
-import com.hust.model.StatisticCondition;
+import com.hust.constants.Constants.Index;
+import com.hust.model.IssueWithBLOBs;
 import com.hust.service.ClusterService;
 import com.hust.service.IssueService;
 import com.hust.service.StatisticService;
+import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
-import com.hust.util.JSONUtil;
-import com.hust.util.PaintUtil;
 import com.hust.util.ResultUtil;
 
-import net.sf.json.JSONObject;
-
 @Controller
-@RequestMapping("/data")
+@RequestMapping("/mining")
 public class MiningController {
     /**
      * Logger for this class
@@ -47,117 +39,43 @@ public class MiningController {
     @Autowired
     private StatisticService statisticService;
 
+    @Autowired
+    private UserService userService;
+
     @ResponseBody
-    @RequestMapping(value = "/handle", method = RequestMethod.POST)
-    public Object cluster(@RequestParam(value = "file", required = true) MultipartFile file,
-            @RequestParam(value = "targetIndex", required = true) int targetIndex,
-            @RequestParam(value = "timeIndex", required = true) int timeIndex,
-            @RequestParam(value = "sourceIndex", required = true) int resourceIndex,
-            @RequestParam(value = "typeIndex", required = true) int typeIndex,
-            @RequestParam(value = "emotionIndex", required = true) int emotionIndex,
-            @RequestParam(value = "sourceType", required = false) String sourceType, HttpServletRequest request) {
-        // String userName = userService.getCurrentUser(request);
-        // List<String[]> list = uploadService.readDataFromExcel(file, "微博", userName);
-        // if (null == list || list.size() == 0) {
-        // return ResultUtil.errorWithMsg("文件是空的");
-        // }
-        //
-        // List<List<String[]>> list_res = clusterService.getClusterResult(list, targetIndex);
-        // if (null == list_res) {
-        // return ResultUtil.errorWithMsg("文件解析出错");
-        // }
-        // List<String[]> clusterList = ConvertUtil.convertoStrList(list_res);
-        // List<String[]> origAndCountList = statisticService.getOrigAndCount(list_res, timeIndex);
-        // List<String> emotionlist = new ArrayList<String>();
-        // List<String> resourceList = new ArrayList<String>();
-        // List<String> typeList = new ArrayList<String>();
-        // List<String> intervalList = new ArrayList<String>();
-        // for (int i = 0; i < clusterList.size() - 1; i++) {
-        // String[] row = clusterList.get(i);
-        // emotionlist.add(row[emotionIndex]);
-        // resourceList.add(row[resourceIndex]);
-        // typeList.add(row[typeIndex]);
-        // intervalList.add(row[timeIndex]);
-        // }
-        // Map<String, Integer> emotionMap = statisticService.getEmotionTendencyCount(emotionlist);
-        // Map<String, Integer> resourceMap = statisticService.getMediaLevelCount(resourceList);
-        // Map<String, Integer> typeMap = statisticService.getInfoTypeCount(typeList);
-        // Map<String, Integer> netizenAtten = statisticService.getNetizenAttention(typeMap);
-        // Map<String, Integer> mediaAtten = statisticService.getMediaAttention(resourceList);
-        // Map<String, Integer> interval = statisticService.getIntervalCount(intervalList, Interval.DAY);
-        // Map<String, Object> map = new HashMap<String, Object>();
-        // map.put("cluster", clusterList);
-        // map.put("origcount", origAndCountList);
-        // map.put("emotion", emotionMap);
-        // map.put("resource", resourceMap);
-        // map.put("type", typeMap);
-        // map.put("netizenAtten", netizenAtten);
-        // map.put("mediaAtten", mediaAtten);
-        // map.put("interval", interval);
-        // map.put("msg", "success");
-        // JSONObject json = PaintUtil.convertMap1(interval);
-        // return json;
-        return null;
+    @RequestMapping("/cluster")
+    public Object cluster(HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("query current issue failed,please create or select a issue");
+        }
+        IssueWithBLOBs issue = issueService.getByUUID(issueId);
+        List<String[]> content = null;
+        try {
+            content = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getFilteredContent());
+        } catch (Exception e) {
+            return ResultUtil.errorWithMsg("query content from DB failed before cluster \t" + e.toString());
+        }
+        List<List<String[]>> clusterResult = clusterService.getClusterResult(content, Index.TITLE_INDEX);
+        List<String[]> origAndCountResult = statisticService.getOrigAndCount(clusterResult, Index.TIME_INDEX);
+        try {
+            issue.setClusterResult(ConvertUtil.convertToBytes(clusterResult));
+            issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
+        } catch (Exception e) {
+            logger.error("convert cluster result and origAndCount result to byte[] failed \t" + e.toString());
+            return ResultUtil.unknowError();
+        }
+        issue.setLastOperator(userService.getCurrentUser(request));
+        issue.setLastUpdateTime(new Date());
+        if (issueService.updateIssueInfo(issue) == 0) {
+            return ResultUtil.errorWithMsg("update DB failed after cluster and count");
+        }
+        return ResultUtil.success("聚类和统计完成");
     }
 
-    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/statistic")
-    public Object statistic(@RequestBody Condition condition, HttpServletRequest request) {
-        String fileUUID = request.getSession().getAttribute(Constants.ISSUE_ID).toString();
-        if (StringUtils.isBlank(fileUUID)) {
-            return ResultUtil.errorWithMsg("无法从session中获取到文件uuid，请尝试重新上传");
-        }
-        IssueInfoWithBLOBs issue = issueService.getByUUID(fileUUID);
-        List<String[]> list;
-        try {
-            list = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getContent());
-            if (null == list || list.isEmpty()) {
-                return ResultUtil.errorWithMsg("无法从数据库中获取文件，请重新上传");
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            logger.info(e.toString());
-            return ResultUtil.errorWithMsg("无法从数据库中获取文件，请重新上传");
-        }
-        int targetIndex = condition.getTargetIndex();
-        List<List<String[]>> list_res = clusterService.getClusterResult(list, targetIndex);
-        if (null == list_res) {
-            return ResultUtil.errorWithMsg("文件解析出错");
-        }
-        List<String[]> clusterList = ConvertUtil.convertoStrList(list_res, list.get(0));
-
-        List<String[]> origAndCountList = statisticService.getOrigAndCount(list_res, condition.getTimeIndex());
-        String[] oldRow = list.get(0);
-        String[] newRow = new String[oldRow.length + 1];
-        System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
-        newRow[0] = "数量";
-        origAndCountList.add(0, newRow);
-
-        StatisticCondition sc = new StatisticCondition();
-        sc.setList(clusterList);
-        sc.setEmotionIndex(condition.getEmotionIndex());
-        sc.setInfoTypeIndex(condition.getInfoTypeIndex());
-        sc.setMediaIndex(condition.getMediaIndex());
-        sc.setTimeIndex(condition.getTimeIndex());
-        sc.setInterval(condition.getInterval());
-        JSONObject statResultJson = statisticService.statistic(sc);
-        String filename = issue.getIssueName();
-        statResultJson.put("title", filename.substring(0, filename.indexOf(".")));
-        JSONObject paintJson = PaintUtil.convertPaintJson(statResultJson);
-
-        JSONObject clusterResult10row = JSONUtil.createFisrt10rowJson(clusterList);
-        JSONObject origAndCount10row = JSONUtil.createFisrt10rowJson(origAndCountList);
-        paintJson.put(Constants.CLUSTER_RESULT_10ROW_EN, clusterResult10row);
-        paintJson.put(Constants.ORIG_COUNT_10ROW_EN, origAndCount10row);
-        try {
-            issue.setResultList(ConvertUtil.convertToBytes(clusterList));
-            issue.setResultJson(ConvertUtil.convertToBytes(origAndCountList));
-            issue.setPaintJson(ConvertUtil.convertToBytes(paintJson));
-            issueService.updateIssueInfo(issue);
-        } catch (Exception e) {
-            logger.error("update issue_info fail\t" + e.toString());
-        }
-        return ResultUtil.success(paintJson);
+    public Object statistic(HttpServletRequest request) {
+        return null;
     }
 }

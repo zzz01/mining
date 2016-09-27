@@ -3,14 +3,14 @@ package com.hust.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoTypeExample {
+public class WeightExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public InfoTypeExample() {
+    public WeightExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -349,10 +349,6 @@ public class InfoTypeExample {
 
         public String getTypeHandler() {
             return typeHandler;
-        }
-
-        public Criterion() {
-            super();
         }
 
         protected Criterion(String condition) {

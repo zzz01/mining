@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.hust.constants.Constants;
-import com.hust.constants.Emotion;
-import com.hust.constants.Media.INFOTYPE;
-import com.hust.constants.Media.MEDIALEVEL;
+import com.hust.constants.Constants.Emotion;
+import com.hust.constants.Constants.INFOTYPE;
+import com.hust.constants.Constants.MEDIALEVEL;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

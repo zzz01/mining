@@ -2,9 +2,7 @@ package com.hust.model;
 
 import java.util.Date;
 
-public class IssueInfo {
-    private Long id;
-
+public class Issue {
     private String issueId;
 
     private String issueName;
@@ -13,15 +11,9 @@ public class IssueInfo {
 
     private String creator;
 
-    private String sourceType;
+    private String lastOperator;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Date lastUpdateTime;
 
     public String getIssueId() {
         return issueId;
@@ -55,11 +47,19 @@ public class IssueInfo {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    public String getSourceType() {
-        return sourceType;
+    public String getLastOperator() {
+        return lastOperator;
     }
 
-    public void setSourceType(String sourceType) {
-        this.sourceType = sourceType == null ? null : sourceType.trim();
+    public void setLastOperator(String lastOperator) {
+        this.lastOperator = lastOperator == null ? null : lastOperator.trim();
+    }
+
+    public Date getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(Date lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 }

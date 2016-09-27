@@ -10,17 +10,14 @@ import net.sf.json.JSONObject;
 public interface StatisticService {
     public List<String[]> getOrigAndCount(List<List<String[]>> list, int timeIndex);
 
-    public Map<String, Integer> getIntervalCount(List<String> list, int interval);
+    public Map<String, Map<String, Map<String, Integer>>> processAll(List<String[]> list, int interval);
 
     public Map<String, Integer> getEmotionTendencyCount(List<String> list);
 
-    public Map<String, Integer> getInfoTypeCount(List<String> list);
+    public Map<String, Integer> getTypeCount(Map<String, Map<String, Map<String, Integer>>> map);
 
-    public Map<String, Integer> getMediaLevelCount(List<String> list);
+    public Map<String, Integer> getLevelCount(Map<String, Map<String, Map<String, Integer>>> map);
 
-    public Map<String, Integer> getNetizenAttention(Map<String, Integer> map);
+    public Map<String,Integer> calculateAttention(Map<String, Integer> map);
 
-    public Map<String, Integer> getMediaAttention(List<String> list);
-
-    public JSONObject statistic(StatisticCondition sc);
 }

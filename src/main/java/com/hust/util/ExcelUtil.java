@@ -15,23 +15,30 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
 
-    public static List<String[]> read(String filename, InputStream inputStream)
+    public static List<String[]> read(String filename, InputStream inputStream, Integer...indexes)
             throws FileNotFoundException, IOException {
+
         List<String[]> list = new ArrayList<String[]>();
         Workbook workbook;
-        if(filename.endsWith("xls")){
+        if (filename.endsWith("xls")) {
             workbook = new HSSFWorkbook(inputStream);
-        }else{
+        } else {
             workbook = new XSSFWorkbook(inputStream);
         }
         Sheet sheet = workbook.getSheetAt(0);
         int rowNum = sheet.getLastRowNum();
         int colNum = sheet.getRow(0).getLastCellNum();
+        if (null == indexes || indexes.length == 0) {
+            indexes = new Integer[colNum];
+            for (int i = 0; i < colNum; i++) {
+                indexes[i] = i;
+            }
+        }
         for (int i = 0; i <= rowNum; i++) {
             String[] rowStr = new String[colNum];
-            for (int j = 0; j < colNum; j++) {
+            for (int j = 0; j < indexes.length; j++) {
                 try {
-                    Cell cell = sheet.getRow(i).getCell(j);
+                    Cell cell = sheet.getRow(i).getCell(indexes[j]);
                     if (cell.getCellType() == 0) {
                         rowStr[j] = TimeUtil.convert(cell);
                     } else {
@@ -47,7 +54,7 @@ public class ExcelUtil {
         return list;
     }
 
-    public static HSSFWorkbook exportToExcel(List<String[]>...lists) {
+    public static HSSFWorkbook exportToExcel(@SuppressWarnings("unchecked") List<String[]>...lists) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         for (int k = 0; k < lists.length; k++) {
             List<String[]> list = lists[k];

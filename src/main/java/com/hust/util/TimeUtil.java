@@ -2,7 +2,6 @@ package com.hust.util;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,4 +23,6 @@ public class TimeUtil {
         String regex = "^\\d{4}\\D+\\d{1,2}\\D+\\d{1,2}\\D+\\d{1,2}\\D+\\d{1,2}\\D+\\d{1,2}\\D*$";
         return Pattern.matches(regex, time);
     }
+    
+    
 }

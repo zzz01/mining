@@ -1,19 +1,37 @@
 package com.hust.model;
 
-public class Condition {
-    private int targetIndex;
-    private int timeIndex;
-    private int mediaIndex;
-    private int emotionIndex;
-    private int infoTypeIndex;
-    private int interval;
+import org.springframework.web.multipart.MultipartFile;
 
-    public int getTargetIndex() {
-        return targetIndex;
+public class Condition {
+
+    private MultipartFile file;
+    private int urlIndex;
+    private int titleIndex;
+    private int timeIndex;
+    private String sourceType;
+
+    public MultipartFile getFile() {
+        return file;
     }
 
-    public void setTargetIndex(int targetIndex) {
-        this.targetIndex = targetIndex;
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    public int getUrlIndex() {
+        return urlIndex;
+    }
+
+    public void setUrlIndex(int urlIndex) {
+        this.urlIndex = urlIndex;
+    }
+
+    public int getTitleIndex() {
+        return titleIndex;
+    }
+
+    public void setTitleIndex(int titleIndex) {
+        this.titleIndex = titleIndex;
     }
 
     public int getTimeIndex() {
@@ -24,43 +42,18 @@ public class Condition {
         this.timeIndex = timeIndex;
     }
 
-    public int getMediaIndex() {
-        return mediaIndex;
+    public String getSourceType() {
+        return sourceType;
     }
 
-    public void setMediaIndex(int mediaIndex) {
-        this.mediaIndex = mediaIndex;
-    }
-
-    public int getEmotionIndex() {
-        return emotionIndex;
-    }
-
-    public void setEmotionIndex(int emotionIndex) {
-        this.emotionIndex = emotionIndex;
-    }
-
-    public int getInfoTypeIndex() {
-        return infoTypeIndex;
-    }
-
-    public void setInfoTypeIndex(int infoTypeIndex) {
-        this.infoTypeIndex = infoTypeIndex;
-    }
-
-    public int getInterval() {
-        return interval;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
     }
 
     @Override
     public String toString() {
-        return "Condition [targetIndex=" + targetIndex + ", timeIndex=" + timeIndex + ", mediaIndex=" + mediaIndex
-                + ", emotionIndex=" + emotionIndex + ", infoTypeIndex=" + infoTypeIndex + ", interval=" + interval
-                + "]";
+        return "Condition [file=" + file + ", urlIndex=" + urlIndex + ", titleIndex=" + titleIndex + ", timeIndex="
+                + timeIndex + ", sourceType=" + sourceType + "]";
     }
 
 }

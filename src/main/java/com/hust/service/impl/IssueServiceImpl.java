@@ -1,85 +1,90 @@
 package com.hust.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.constants.Constants;
-import com.hust.dao.IssueInfoDao;
-import com.hust.model.IssueInfoWithBLOBs;
+import com.hust.constants.Constants.Index;
+import com.hust.dao.FileDao;
+import com.hust.dao.IssueDao;
+import com.hust.model.IssueWithBLOBs;
 import com.hust.service.IssueService;
-import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
-import com.hust.util.ExcelUtil;
 
 @Service
 public class IssueServiceImpl implements IssueService {
     /**
      * Logger for this class
      */
-    private static final Logger LOG = LoggerFactory.getLogger(IssueServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
     @Autowired
-    private IssueInfoDao issueInfoDao;
+    private IssueDao issueDao;
 
     @Autowired
-    private UserService userService;
+    private FileDao fileDao;
 
     @Override
-    public List<String[]> readAndSave(MultipartFile file, String sourceType, HttpServletRequest request)
-            throws Exception {
-        List<String[]> list = readDataFromExcel(file);
-        if (null == list) {
-            return list;
-        }
-        String userName = userService.getCurrentUser(request);
-        IssueInfoWithBLOBs issueInfo = new IssueInfoWithBLOBs();
-        issueInfo.setIssueId(UUID.randomUUID().toString());
-        issueInfo.setIssueName(file.getOriginalFilename());
-        issueInfo.setCreator(userName);
-        issueInfo.setCreateTime(new Date());
-        issueInfo.setSourceType(sourceType);
-        issueInfo.setContent(ConvertUtil.convertToBytes(list));
-        int count = issueInfoDao.insertSelective(issueInfo);
-        if (count < 1) {
-            throw new Exception("insert data into issue_info error!");
-        }
-        request.getSession().setAttribute(Constants.ISSUE_ID, issueInfo.getIssueId());
-        return list;
+    public IssueWithBLOBs getByUUID(String UUID) {
+        return issueDao.selectByUUID(UUID);
     }
 
-    private List<String[]> readDataFromExcel(MultipartFile file) {
-        List<String[]> list = new ArrayList<String[]>();
-        InputStream is = null;
+    @Override
+    public int updateIssueInfo(IssueWithBLOBs issue) {
+        return issueDao.updateIssueInfo(issue);
+    }
+
+    @Override
+    public int createIssue(IssueWithBLOBs issue) {
+        // TODO Auto-generated method stub
+        return issueDao.insert(issue);
+    }
+
+    @Override
+    public int combineFiles(String issueId, String user) {
+        // TODO Auto-generated method stub
         try {
-            is = file.getInputStream();
-            list = ExcelUtil.read(file.getOriginalFilename(), is);
-        } catch (IOException e) {
-            LOG.error("读取文件出现异常\t" + e.toString());
-            return null;
+            List<String[]> oldlist = fileDao.queryContents(issueId);
+            List<String[]> list = new ArrayList<String[]>();
+            List<String> urllist = new ArrayList<String>();
+            for (String[] row : oldlist) {
+                int exitIndex = urllist.indexOf(row[Index.URL_INDEX]);
+                if (exitIndex != -1) {
+                    if (row[Index.TIME_INDEX].compareTo(list.get(exitIndex)[Index.TIME_INDEX]) < 0) {
+                        list.set(exitIndex, row);
+                    }
+                } else {
+                    list.add(row);
+                    urllist.add(row[Index.URL_INDEX]);
+                }
+            }
+            IssueWithBLOBs issue = new IssueWithBLOBs();
+            issue.setIssueId(issueId);
+            issue.setFilteredContent(ConvertUtil.convertToBytes(list));
+            issue.setLastOperator(user);
+            return issueDao.updateIssueInfo(issue);
+        } catch (Exception e) {
+            logger.error("combining files related to this issue:{} failed", issueId);
+            return 0;
         }
-        return list;
     }
 
     @Override
-    public IssueInfoWithBLOBs getByUUID(String UUID) {
-        return issueInfoDao.selectByUUID(UUID);
-    }
-
-    @Override
-    public int updateIssueInfo(IssueInfoWithBLOBs issue) {
-        return issueInfoDao.updateIssueInfo(issue);
+    public String getCurrentIssueId(HttpServletRequest request) {
+        // TODO Auto-generated method stub
+        Object obj = request.getSession().getAttribute(Constants.ISSUE_ID);
+        if (null == obj) {
+            return StringUtils.EMPTY;
+        }
+        return obj.toString();
     }
 
 }

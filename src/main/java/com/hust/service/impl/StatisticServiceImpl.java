@@ -3,37 +3,32 @@ package com.hust.service.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hust.constants.Constants;
-import com.hust.constants.Emotion;
-import com.hust.constants.Interval;
-import com.hust.constants.Media;
-import com.hust.constants.Media.INFOTYPE;
-import com.hust.constants.Media.MEDIALEVEL;
-import com.hust.model.StatisticCondition;
+import com.hust.constants.Constants.Emotion;
+import com.hust.constants.Constants.Index;
+import com.hust.constants.Constants.Interval;
+import com.hust.dao.WebsiteDao;
+import com.hust.dao.WeightDao;
 import com.hust.service.StatisticService;
-import com.hust.util.JSONUtil;
+import com.hust.util.CommonUtil;
 import com.hust.util.TimeUtil;
-
-import net.sf.json.JSONObject;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(StatisticServiceImpl.class);
+
+    @Autowired
+    private WebsiteDao websiteDao;
+    @Autowired
+    private WeightDao weightDao;
 
     @Override
     public List<String[]> getOrigAndCount(List<List<String[]>> setList, int timeIndex) {
@@ -71,58 +66,61 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public Map<String, Integer> getIntervalCount(List<String> list, int interval) {
-        Map<String, Integer> map = new TreeMap<String, Integer>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        });
+    public Map<String, Map<String, Map<String, Integer>>> processAll(List<String[]> list, int interval) {
+        Map<String, Map<String, Map<String, Integer>>> map =
+                new TreeMap<String, Map<String, Map<String, Integer>>>(new Comparator<String>() {
+                    @Override
+                    public int compare(String o1, String o2) {
+                        return o1.compareTo(o2);
+                    }
+                });
         if (null == list || 0 == list.size()) {
             return map;
         }
-        switch (interval) {
-            case Interval.DAY: {
-                for (String time : list) {
-                    if (!StringUtils.isBlank(time) && TimeUtil.isvalidate(time)) {
-                        time = time.substring(5, 10);
-                        if (null != map.get(time)) {
-                            map.put(time, map.get(time) + 1);
-                        } else {
-                            map.put(time, 1);
-                        }
-                    }
-                }
+        for (String[] array : list) {
+            if (CommonUtil.isEmptyArray(array)) {
+                continue;
             }
-                break;
-            case Interval.HOUR: {
-                for (String time : list) {
-                    if ("" != time && null != time) {
-                        time = time.substring(5, 13);
-                        if (null != map.get(time)) {
-                            map.put(time, map.get(time) + 1);
-                        } else {
-                            map.put(time, 1);
-                        }
-                    }
+            String level = websiteDao.queryLevelByUrl(array[Index.URL_INDEX]);
+            String type = websiteDao.queryTypeByUrl(array[Index.URL_INDEX]);
+            String timeKey = getTimeKey(array[Index.TIME_INDEX], interval);
+            Map<String, Map<String, Integer>> timeMap = map.get(timeKey);
+            if (timeMap == null) {
+                timeMap = new HashMap<String, Map<String, Integer>>();
+                Map<String, Integer> typeMap = new HashMap<String, Integer>();
+                Map<String, Integer> levelMap = new HashMap<String, Integer>();
+                typeMap.put(type, 1);
+                levelMap.put(level, 1);
+                timeMap.put(Constants.MEDIA_CH, levelMap);
+                timeMap.put(Constants.INFOTYPE_CH, typeMap);
+                map.put(timeKey, timeMap);
+            } else {
+                Map<String, Integer> typeMap = timeMap.get(Constants.INFOTYPE_CH);
+                if (null == typeMap) {
+                    typeMap = new HashMap<String, Integer>();
+                    typeMap.put(type, 1);
+                } else {
+                    typeMap.put(type, typeMap.get(type) + 1);
                 }
-            }
-                break;
-            case Interval.MONTH: {
-                for (String time : list) {
-                    if ("" != time && null != time) {
-                        time = time.substring(0, 4);
-                        if (null != map.get(time)) {
-                            map.put(time, map.get(time) + 1);
-                        } else {
-                            map.put(time, 1);
-                        }
-                    }
-                }
-            }
-                break;
-        }
 
+                Map<String, Integer> levelMap = timeMap.get(Constants.MEDIA_CH);
+                if (null == levelMap) {
+                    levelMap = new HashMap<String, Integer>();
+                    levelMap.put(level, 1);
+                } else {
+                    levelMap.put(level, levelMap.get(level) + 1);
+                }
+                timeMap.put(Constants.MEDIA_CH, levelMap);
+                timeMap.put(Constants.INFOTYPE_CH, typeMap);
+            }
+        }
+        for (String time : map.keySet()) {
+            Map<String, Map<String, Integer>> timeMap = map.get(time);
+            Map<String, Integer> mediaAttention = calculateAttention(timeMap.get(Constants.MEDIA_EN));
+            Map<String, Integer> netizenAttention = calculateAttention(timeMap.get(Constants.INFOTYPE_EN));
+            timeMap.put(Constants.NETIZENATTENTION_EN, netizenAttention);
+            timeMap.put(Constants.MEDIA_EN, mediaAttention);
+        }
         return map;
     }
 
@@ -134,11 +132,11 @@ public class StatisticServiceImpl implements StatisticService {
             return map;
         int positive = 0, negative = 0, neutral = 0;
         for (String emotion : list) {
-            if (emotion.matches(Emotion.POSITIVE_REGEX)) {
+            if (emotion.matches(Emotion.POSITIVE)) {
                 positive++;
-            } else if (emotion.matches(Emotion.NEUTRAL_REGEX)) {
+            } else if (emotion.matches(Emotion.NEUTRAL)) {
                 negative++;
-            } else if (emotion.matches(Emotion.NEGATIVE_REGEX)) {
+            } else if (emotion.matches(Emotion.NEGATIVE)) {
                 neutral++;
             }
         }
@@ -146,298 +144,6 @@ public class StatisticServiceImpl implements StatisticService {
         map.put(Emotion.NEUTRAL, neutral);
         map.put(Emotion.NEGATIVE, negative);
         return map;
-    }
-
-    @Override
-    public Map<String, Integer> getInfoTypeCount(List<String> list) {
-        // TODO Auto-generated method stub
-        Map<String, Integer> map = new HashMap<String, Integer>();
-        if (null == list || list.size() == 0) {
-            return map;
-        }
-        int xinwen = 0, baozhi = 0, luntan = 0, wenda = 0, boke = 0, weixin = 0, tieba = 0, shouji = 0, shiping = 0,
-                weibo = 0, weizhi = 0;
-        for (String infotype : list) {
-            switch (infotype) {
-                case StringUtils.EMPTY: {
-                    weizhi++;
-                    break;
-                }
-                case INFOTYPE.XINWEN: {
-                    xinwen++;
-                    break;
-                }
-                case INFOTYPE.BAOZHI: {
-                    baozhi++;
-                    break;
-                }
-                case INFOTYPE.LUNTAN: {
-                    luntan++;
-                    break;
-                }
-                case INFOTYPE.WENDA: {
-                    wenda++;
-                    break;
-                }
-                case INFOTYPE.BOKE: {
-                    boke++;
-                    break;
-                }
-                case INFOTYPE.WEIXIN: {
-                    weixin++;
-                    break;
-                }
-                case INFOTYPE.TIEBA: {
-                    tieba++;
-                    break;
-                }
-                case INFOTYPE.SHOUJI: {
-                    shouji++;
-                    break;
-                }
-                case INFOTYPE.SHIPING: {
-                    shiping++;
-                    break;
-                }
-                case INFOTYPE.WEIBO: {
-                    weibo++;
-                    break;
-                }
-                default: {
-                    weizhi++;
-                    break;
-                }
-            }
-        }
-        map.put(INFOTYPE.XINWEN, xinwen);
-        map.put(INFOTYPE.BAOZHI, baozhi);
-        map.put(INFOTYPE.LUNTAN, luntan);
-        map.put(INFOTYPE.WENDA, wenda);
-        map.put(INFOTYPE.BOKE, boke);
-        map.put(INFOTYPE.WEIXIN, weixin);
-        map.put(INFOTYPE.TIEBA, tieba);
-        map.put(INFOTYPE.SHOUJI, shouji);
-        map.put(INFOTYPE.SHIPING, shiping);
-        map.put(INFOTYPE.WEIBO, weibo);
-        map.put(INFOTYPE.WEIZHI, weizhi);
-        return map;
-    }
-
-    @Override
-    public Map<String, Integer> getMediaLevelCount(List<String> list) {
-        // TODO Auto-generated method stub
-        if (null == list || list.size() == 0) {
-            return null;
-        }
-        Map<String, Integer> map = new HashMap<String, Integer>();
-        int zhongyang = 0, shengji = 0, qita = 0, weizhi = 0;
-        for (String media : list) {
-            String level = Media.getMediaLevelByName(media);
-            switch (level) {
-                case StringUtils.EMPTY: {
-                    weizhi++;
-                    break;
-                }
-                case MEDIALEVEL.ZHONGYANG: {
-                    zhongyang++;
-                    break;
-                }
-                case MEDIALEVEL.SHENGJI: {
-                    shengji++;
-                    break;
-                }
-                case MEDIALEVEL.QITA: {
-                    qita++;
-                    break;
-                }
-                default: {
-                    weizhi++;
-                    break;
-                }
-            }
-        }
-        map.put(MEDIALEVEL.ZHONGYANG, zhongyang);
-        map.put(MEDIALEVEL.SHENGJI, shengji);
-        map.put(MEDIALEVEL.QITA, qita);
-        map.put(MEDIALEVEL.WEIZHI, weizhi++);
-        return map;
-    }
-
-    @Override
-    public Map<String, Integer> getNetizenAttention(Map<String, Integer> map) {
-        // TODO Auto-generated method stub
-        Map<String, Integer> weightMap = new HashMap<String, Integer>();
-        if (null == map || map.size() == 0) {
-            return weightMap;
-        }
-        Set<Entry<String, Integer>> infotype = map.entrySet();
-        for (Entry<String, Integer> entry : infotype) {
-            int weight = entry.getValue() * Media.getInfoTypeWeightByName(entry.getKey());
-            weightMap.put(entry.getKey(), weight);
-        }
-        return weightMap;
-    }
-
-    @Override
-    public Map<String, Integer> getMediaAttention(List<String> list) {
-        // TODO Auto-generated method stub
-        Map<String, Integer> map = getMediaLevelCount(list);
-        Map<String, Integer> weightMap = new HashMap<String, Integer>();
-        if (null == list || map.size() == 0) {
-            return weightMap;
-        }
-        for (Entry<String, Integer> entry : map.entrySet()) {
-            int weight = entry.getValue() * Media.getMediaWeightByName(entry.getKey());
-            weightMap.put(entry.getKey(), weight);
-        }
-        return weightMap;
-    }
-
-    @Override
-    public JSONObject statistic(StatisticCondition sc) {
-        // TODO Auto-generated method stub
-        List<String[]> list = sc.getList();
-        JSONObject json = new JSONObject();
-        if (null == list || list.size() == 0) {
-            json.put("msg", "error");
-            return json;
-        }
-        JSONObject timelineJson = new JSONObject();
-        for (int i = 1; i < list.size() - 1; i++) {
-            String[] array = list.get(i);
-            if (isEmptyArray(array)) {
-                continue;
-            }
-            String timeKey = getTimeKey(array[sc.getTimeIndex()], sc.getInterval());
-            putValue(timelineJson, timeKey, Constants.EMOTION_EN, array[sc.getEmotionIndex()]);
-            putValue(timelineJson, timeKey, Constants.INFOTYPE_EN, array[sc.getInfoTypeIndex()]);
-            putValue(timelineJson, timeKey, Constants.MEDIA_EN, Media.getMediaLevelByName(array[sc.getMediaIndex()]));
-        }
-        json.put(Constants.TIMELINE_EN, timelineJson);
-        calculateNetizenAttention(json);
-        calculateMediaAttention(json);
-        calculateCount(json);
-        json.put("msg", "success");
-        logger.info("统计结果：" + json.toString());
-        return json;
-    }
-
-    private boolean isEmptyArray(String[] array) {
-        if (null == array || array.length == 0) {
-            return true;
-        }
-        for (int i = 0; i < array.length / 2; i++) {
-            if (!StringUtils.isBlank(array[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void calculateCount(JSONObject json) {
-        if (null == json) {
-            return;
-        }
-        JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_EN);
-        JSONObject mediaCount = new JSONObject();
-        JSONObject infoTypeCount = new JSONObject();
-        JSONObject emotionCount = new JSONObject();
-        for (Iterator iterator = timelineJson.keys(); iterator.hasNext();) {
-            JSONObject timeJson = timelineJson.getJSONObject(iterator.next().toString());
-            JSONObject mediaJson = timeJson.getJSONObject(Constants.MEDIA_EN);
-            for (Iterator mediaIterator = mediaJson.keys(); mediaIterator.hasNext();) {
-                String key = mediaIterator.next().toString();
-                int value = mediaJson.getInt(key);
-                try {
-                    int oldValue = mediaCount.getInt(key);
-                    mediaCount.put(key, oldValue + value);
-                } catch (Exception e) {
-                    mediaCount.put(key, value);
-                }
-            }
-            JSONObject infoTypeJson = timeJson.getJSONObject(Constants.INFOTYPE_EN);
-            for (Iterator infoTypeIterator = infoTypeJson.keys(); infoTypeIterator.hasNext();) {
-                String key = infoTypeIterator.next().toString();
-                int value = infoTypeJson.getInt(key);
-                try {
-                    int oldValue = infoTypeCount.getInt(key);
-                    infoTypeCount.put(key, oldValue + value);
-                } catch (Exception e) {
-                    infoTypeCount.put(key, value);
-                }
-            }
-            JSONObject emotionJson = timeJson.getJSONObject(Constants.EMOTION_EN);
-            for (Iterator emotionIterator = emotionJson.keys(); emotionIterator.hasNext();) {
-                String key = emotionIterator.next().toString();
-                int value = emotionJson.getInt(key);
-                try {
-                    int oldValue = emotionCount.getInt(key);
-                    emotionCount.put(key, oldValue + value);
-                } catch (Exception e) {
-                    emotionCount.put(key, value);
-                }
-            }
-        }
-        JSONObject countJson = new JSONObject();
-        countJson.put(Constants.MEDIA_COUNT_EN, mediaCount);
-        countJson.put(Constants.INFOTYPE_COUNT_EN, infoTypeCount);
-        countJson.put(Constants.EMOTION_COUNT_EN, emotionCount);
-        json.put(Constants.COUNT_EN, countJson);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private void calculateMediaAttention(JSONObject json) {
-        if (null == json) {
-            return;
-        }
-        JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_EN);
-        for (Iterator iterator = timelineJson.keys(); iterator.hasNext();) {
-            JSONObject timeJson = timelineJson.getJSONObject(iterator.next().toString());
-            JSONObject mediaJson = timeJson.getJSONObject(Constants.MEDIA_EN);
-            JSONObject mediaAttenJson = new JSONObject();
-            for (Iterator mediaIterator = mediaJson.keys(); mediaIterator.hasNext();) {
-                String key = mediaIterator.next().toString();
-                int value = mediaJson.getInt(key);
-                int attention = value * Media.getLevelWeightByName(key);
-                mediaAttenJson.put(key, attention);
-            }
-            timeJson.put(Constants.MEDIAATTENTION_EN, mediaAttenJson);
-        }
-    }
-
-    @SuppressWarnings("rawtypes")
-    private void calculateNetizenAttention(JSONObject json) {
-        if (null == json) {
-            return;
-        }
-        JSONObject timelineJson = json.getJSONObject(Constants.TIMELINE_EN);
-        for (Iterator iterator = timelineJson.keys(); iterator.hasNext();) {
-            JSONObject timeJson = timelineJson.getJSONObject(iterator.next().toString());
-            JSONObject infoTypeJson = timeJson.getJSONObject(Constants.INFOTYPE_EN);
-            JSONObject netizenAttenJson = new JSONObject();
-            for (Iterator infoIterator = infoTypeJson.keys(); infoIterator.hasNext();) {
-                String key = infoIterator.next().toString();
-                int value = infoTypeJson.getInt(key);
-                int attention = value * Media.getInfoTypeWeightByName(key);
-                netizenAttenJson.put(key, attention);
-            }
-            timeJson.put(Constants.NETIZENATTENTION_EN, netizenAttenJson);
-        }
-    }
-
-    private void putValue(JSONObject json, String timeKey, String proKey, String elemKey) {
-        JSONObject timeJson = json.getJSONObject(timeKey);
-        if (timeJson.isNullObject()) {
-            timeJson = JSONUtil.createTimeJson();
-            json.put(timeKey, timeJson);
-        }
-        JSONObject proJson = timeJson.getJSONObject(proKey);
-        try {
-            int value = proJson.getInt(elemKey);
-            proJson.put(elemKey, value + 1);
-        } catch (Exception e) {
-            proJson.put(Constants.WEIZHI_CH, 1);
-        }
     }
 
     private String getTimeKey(String time, int interval) {
@@ -458,6 +164,52 @@ public class StatisticServiceImpl implements StatisticService {
                 return Constants.INVALID_TIME;
             }
         }
+    }
+
+    @Override
+    public Map<String, Integer> getTypeCount(Map<String, Map<String, Map<String, Integer>>> map) {
+        // TODO Auto-generated method stub
+        Map<String, Integer> countMap = new HashMap<String, Integer>();
+        if (null == map) {
+            return countMap;
+        }
+        for (Map<String, Map<String, Integer>> values : map.values()) {
+            Map<String, Integer> typeMap = values.get(Constants.INFOTYPE_CH);
+            for (Entry<String, Integer> entry : typeMap.entrySet()) {
+                countMap.put(entry.getKey(), entry.getValue() + countMap.get(entry.getKey()));
+            }
+        }
+        return countMap;
+    }
+
+    @Override
+    public Map<String, Integer> getLevelCount(Map<String, Map<String, Map<String, Integer>>> map) {
+        // TODO Auto-generated method stub
+        Map<String, Integer> countMap = new HashMap<String, Integer>();
+        if (null == map) {
+            return countMap;
+        }
+        for (Map<String, Map<String, Integer>> values : map.values()) {
+            Map<String, Integer> typeMap = values.get(Constants.MEDIA_CH);
+            for (Entry<String, Integer> entry : typeMap.entrySet()) {
+                countMap.put(entry.getKey(), entry.getValue() + countMap.get(entry.getKey()));
+            }
+        }
+        return countMap;
+    }
+
+    @Override
+    public Map<String, Integer> calculateAttention(Map<String, Integer> map) {
+        Map<String, Integer> attention = new HashMap<String, Integer>();
+        if (null == map) {
+            return attention;
+        }
+        for (Entry<String, Integer> entry : map.entrySet()) {
+            int weight = weightDao.queryWeightByName(entry.getKey());
+            int atten = weight * entry.getValue();
+            attention.put(entry.getKey(), atten);
+        }
+        return attention;
     }
 
 }
