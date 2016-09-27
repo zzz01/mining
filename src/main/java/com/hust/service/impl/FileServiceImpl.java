@@ -76,4 +76,10 @@ public class FileServiceImpl implements FileService {
         return fileDao.deleteById(fileId);
     }
 
+    @Override
+    public List<IssueFile> queryFilesByIssueId(String issueId) {
+        // TODO Auto-generated method stub
+        return fileDao.queryFiles(issueId);
+    }
+
 }

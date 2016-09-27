@@ -16,11 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.constants.Constants;
 import com.hust.model.Condition;
+import com.hust.model.IssueFile;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.service.FileService;
 import com.hust.service.IssueService;
@@ -84,5 +86,12 @@ public class FileController {
                 logger.info("导出excel时，关闭outputstream失败");
             }
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/queryIssueFiles")
+    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId) {
+        List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
+        return ResultUtil.success(list);
     }
 }

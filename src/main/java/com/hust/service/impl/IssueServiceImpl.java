@@ -15,6 +15,8 @@ import com.hust.constants.Constants;
 import com.hust.constants.Constants.Index;
 import com.hust.dao.FileDao;
 import com.hust.dao.IssueDao;
+import com.hust.model.Issue;
+import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.service.IssueService;
 import com.hust.util.ConvertUtil;
@@ -85,6 +87,12 @@ public class IssueServiceImpl implements IssueService {
             return StringUtils.EMPTY;
         }
         return obj.toString();
+    }
+
+    @Override
+    public List<Issue> queryIssue(IssueQueryCondition con) {
+        // TODO Auto-generated method stub
+        return issueDao.queryIssue(con);
     }
 
 }

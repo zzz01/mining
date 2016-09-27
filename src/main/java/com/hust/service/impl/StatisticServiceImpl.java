@@ -190,7 +190,7 @@ public class StatisticServiceImpl implements StatisticService {
             return countMap;
         }
         for (Map<String, Map<String, Integer>> values : map.values()) {
-            Map<String, Integer> typeMap = values.get(Constants.MEDIA_CH);
+            Map<String, Integer> typeMap = values.get(Constants.MEDIA_EN);
             for (Entry<String, Integer> entry : typeMap.entrySet()) {
                 countMap.put(entry.getKey(), entry.getValue() + countMap.get(entry.getKey()));
             }

@@ -34,4 +34,10 @@ public class FileDao {
         }
         return list;
     }
+
+    public List<IssueFile> queryFiles(String issueId) {
+        IssueFileExample example = new IssueFileExample();
+        example.createCriteria().andIssueIdEqualTo(issueId);
+        return issueFileMapper.selectByExample(example);
+    }
 }

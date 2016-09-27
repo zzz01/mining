@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
 import com.hust.constants.Constants.Index;
+import com.hust.model.Issue;
+import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.model.ViewPage;
 import com.hust.service.IssueService;
@@ -317,4 +320,19 @@ public class IssueController {
         return ResultUtil.success("合并成功");
     }
 
+    @ResponseBody
+    @RequestMapping("/queryOwnIssue")
+    public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
+        String user = userService.getCurrentUser(request);
+        con.setUser(user);
+        List<Issue> list = issueService.queryIssue(con);
+        return ResultUtil.success(list);
+    }
+
+    @ResponseBody
+    @RequestMapping("/queryAllIssue")
+    public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
+        List<Issue> list = issueService.queryIssue(con);
+        return ResultUtil.success(list);
+    }
 }
