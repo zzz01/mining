@@ -10,6 +10,10 @@ public class WeightExample {
 
     protected List<Criteria> oredCriteria;
 
+    protected int start;
+
+    protected int limit;
+
     public WeightExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -386,5 +390,21 @@ public class WeightExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

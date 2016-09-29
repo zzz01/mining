@@ -12,6 +12,10 @@ public class UserExample {
 
     protected List<Criteria> oredCriteria;
 
+    protected int start;
+
+    protected int limit;
+
     public UserExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -908,5 +912,21 @@ public class UserExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

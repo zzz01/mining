@@ -10,6 +10,10 @@ public class WebsiteExample {
 
     protected List<Criteria> oredCriteria;
 
+    protected int start;
+
+    protected int limit;
+
     public WebsiteExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -536,5 +540,21 @@ public class WebsiteExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

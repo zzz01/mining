@@ -79,7 +79,25 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<IssueFile> queryFilesByIssueId(String issueId) {
         // TODO Auto-generated method stub
-        return fileDao.queryFiles(issueId);
+        return fileDao.queryFilesByIssueId(issueId);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<String[]> combineFilesContentOnSameIssueId(String issueId) {
+        // TODO Auto-generated method stub
+        List<IssueFile> files = fileDao.queryFilesByIssueId(issueId);
+        List<String[]> list = new ArrayList<String[]>();
+        try {
+            for (IssueFile file : files) {
+                List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(file.getContent());
+                list.addAll(content);
+            }
+        } catch (Exception e) {
+            logger.error("合并issueid:{}相关的文件失败", issueId);
+            return null;
+        }
+        return list;
     }
 
 }

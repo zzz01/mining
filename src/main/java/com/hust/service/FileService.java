@@ -13,4 +13,6 @@ public interface FileService {
     int deleteById(String fileId);
 
     List<IssueFile> queryFilesByIssueId(String issueId);
+
+    List<String[]> combineFilesContentOnSameIssueId(String issueId);
 }

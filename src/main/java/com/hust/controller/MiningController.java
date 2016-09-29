@@ -1,6 +1,5 @@
 package com.hust.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import com.hust.model.IssueWithBLOBs;
 import com.hust.service.ClusterService;
 import com.hust.service.IssueService;
 import com.hust.service.StatisticService;
-import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
 import com.hust.util.ResultUtil;
 
@@ -36,8 +34,6 @@ public class MiningController {
     private ClusterService clusterService;
     @Autowired
     private StatisticService statisticService;
-    @Autowired
-    private UserService userService;
 
     @SuppressWarnings("unchecked")
     @ResponseBody
@@ -45,9 +41,9 @@ public class MiningController {
     public Object cluster(HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("query current issue failed,please create or select a issue");
+            return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        IssueWithBLOBs issue = issueService.getById(issueId);
+        IssueWithBLOBs issue = issueService.getIssueById(issueId);
         List<String[]> content = null;
         try {
             content = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getFilteredContent());
@@ -55,26 +51,42 @@ public class MiningController {
             return ResultUtil.errorWithMsg("query content from DB failed before cluster \t" + e.toString());
         }
         List<List<String[]>> clusterResult = clusterService.getClusterResult(content, Index.TITLE_INDEX);
-        List<String[]> origAndCountResult = statisticService.getOrigAndCount(clusterResult, Index.TIME_INDEX);
         try {
             issue.setClusterResult(ConvertUtil.convertToBytes(clusterResult));
-            issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
         } catch (Exception e) {
             logger.error("convert cluster result and origAndCount result to byte[] failed \t" + e.toString());
             return ResultUtil.unknowError();
         }
-        issue.setLastOperator(userService.getCurrentUser(request));
-        issue.setLastUpdateTime(new Date());
-        if (issueService.updateIssueInfo(issue) == 0) {
+        if (issueService.updateIssueInfo(issue, request) == 0) {
             return ResultUtil.errorWithMsg("update DB failed after cluster and count");
         }
-        return ResultUtil.success("聚类和统计完成");
+        return ResultUtil.success("mining complete");
     }
 
     @ResponseBody
-    @RequestMapping("/statistic")
-    public Object statistic(HttpServletRequest request) {
-        return null;
+    @RequestMapping("/calculateOrigAndCountResult")
+    public Object calculateOrigAndCountResult(HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
+        }
+        List<List<String[]>> clusterResult = issueService.queryClusterResult(issueId);
+        if (null == clusterResult) {
+            return ResultUtil.errorWithMsg("query cluster result failed");
+        }
+        List<String[]> origAndCountResult = statisticService.getOrigAndCount(clusterResult, Index.TIME_INDEX);
+        IssueWithBLOBs issue = new IssueWithBLOBs();
+        issue.setIssueId(issueId);
+        try {
+            issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
+        } catch (Exception e) {
+            logger.error("convert origAndCountResult failed");
+            return ResultUtil.errorWithMsg("execute failed");
+        }
+        if (issueService.updateIssueInfo(issue, request) == 0) {
+            return ResultUtil.errorWithMsg("execute failed");
+        }
+        return ResultUtil.success("execute success");
     }
 
 }

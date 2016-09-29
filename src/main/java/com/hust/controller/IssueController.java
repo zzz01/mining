@@ -1,9 +1,5 @@
 package com.hust.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
-import com.hust.constants.Constants.Index;
+import com.hust.constants.Constants;
 import com.hust.model.Issue;
 import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.model.ViewPage;
 import com.hust.service.IssueService;
-import com.hust.service.StatisticService;
 import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
 import com.hust.util.ResultUtil;
@@ -46,8 +41,6 @@ public class IssueController {
     private UserService userService;
     @Autowired
     private IssueService issueService;
-    @Autowired
-    private StatisticService statisticService;
 
     @ResponseBody
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -64,6 +57,7 @@ public class IssueController {
             logger.info("create issue fail");
             return ResultUtil.errorWithMsg("create issue fail");
         }
+        request.getSession().setAttribute(Constants.ISSUE_ID, issue.getIssueId());
         return ResultUtil.success("create issue success");
     }
 
@@ -93,7 +87,7 @@ public class IssueController {
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getClusterResult());
+                    .convertBytesToObject(issueService.getIssueById(issueId).getClusterResult());
             ViewPage page = new ViewPage();
             page.setCurrentPage(currentSet);
             page.setTotalPage(list.size());
@@ -115,7 +109,7 @@ public class IssueController {
         }
         try {
             List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getOrigCountResult());
+                    .convertBytesToObject(issueService.getIssueById(issueId).getOrigCountResult());
             return ResultUtil.success(list);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
@@ -134,7 +128,7 @@ public class IssueController {
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getModifiedClusterResult());
+                    .convertBytesToObject(issueService.getIssueById(issueId).getModifiedClusterResult());
             ViewPage page = new ViewPage();
             page.setCurrentPage(currentSet);
             page.setTotalPage(list.size());
@@ -156,14 +150,13 @@ public class IssueController {
         }
         try {
             List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getModifiedOrigCountResult());
+                    .convertBytesToObject(issueService.getIssueById(issueId).getModifiedOrigCountResult());
             return ResultUtil.success(list);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/deleteItemsFromModifiedClusterResult")
     public Object deleteItemsFromModifiedClusterResult(
@@ -173,58 +166,30 @@ public class IssueController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        try {
-            List<List<String[]>> allList = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getModifiedClusterResult());
-            List<String[]> setList = allList.get(currentset);
-            Arrays.sort(indexes);
-            for (int i = indexes.length - 1; i > 0; i--) {
-                setList.remove(i);
-            }
-            allList.set(currentset, setList);
-            IssueWithBLOBs issue = new IssueWithBLOBs();
-            issue.setIssueId(issueId);
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(allList));
-            issue.setLastOperator(userService.getCurrentUser(request));
-            issue.setLastUpdateTime(new Date());
-            issueService.updateIssueInfo(issue);
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("删除失败");
+        boolean result = issueService.deleteItemsFromModifiedClusterResult(currentset, indexes, request);
+        if (result) {
+            return ResultUtil.success("删除成功");
+        } else {
+            return ResultUtil.success("删除失败");
         }
-        return ResultUtil.success("删除成功");
     }
 
-    @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping("/deleteItemsFromClusterResult")
-    public Object deleteItemsFromClusterResult(@RequestParam(value = "currentset", required = true) int currentset,
+    @RequestMapping("/deleteItemsFromOrigClusterResult")
+    public Object deleteItemsFromOrigClusterResult(@RequestParam(value = "currentset", required = true) int currentset,
             @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        try {
-            List<List<String[]>> allList = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getClusterResult());
-            List<String[]> setList = allList.get(currentset);
-            Arrays.sort(indexes);
-            for (int i = indexes.length - 1; i > 0; i--) {
-                setList.remove(i);
-            }
-            allList.set(currentset, setList);
-            IssueWithBLOBs issue = new IssueWithBLOBs();
-            issue.setIssueId(issueId);
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(allList));
-            issue.setLastOperator(userService.getCurrentUser(request));
-            issue.setLastUpdateTime(new Date());
-            issueService.updateIssueInfo(issue);
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("删除失败");
+        boolean result = issueService.deleteItemsFromOrigClusterResult(currentset, indexes, request);
+        if (result) {
+            return ResultUtil.success("删除成功");
+        } else {
+            return ResultUtil.success("删除失败");
         }
-        return ResultUtil.success("删除成功");
     }
 
-    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/combineModifiedResult")
     public Object combineModifiedResult(@RequestParam(value = "indexes", required = true) int[] indexes,
@@ -233,46 +198,14 @@ public class IssueController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        List<List<String[]>> resultList = null;
-        try {
-            resultList = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getModifiedClusterResult());
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
+        boolean result = issueService.combineModifiedCountResult(indexes, request);
+        if (result) {
+            return ResultUtil.success("删除成功");
+        } else {
+            return ResultUtil.success("删除失败");
         }
-        List<String[]> combineList = new ArrayList<String[]>();
-        for (int i = 0; i < indexes.length; i++) {
-            combineList.addAll(resultList.get(indexes[i]));
-        }
-        Arrays.sort(indexes);
-        for (int i = indexes.length - 1; i > 0; i--) {
-            resultList.remove(indexes[i]);
-        }
-        resultList.add(combineList);
-        Collections.sort(resultList, new Comparator<List<String[]>>() {
-
-            @Override
-            public int compare(List<String[]> o1, List<String[]> o2) {
-                // TODO Auto-generated method stub
-                return o1.size() - o2.size();
-            }
-        });
-        List<String[]> newOrigAndCountList = statisticService.getOrigAndCount(resultList, Index.TIME_INDEX);
-        IssueWithBLOBs issue = new IssueWithBLOBs();
-        issue.setIssueId(issueId);
-        try {
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(resultList));
-            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(newOrigAndCountList));
-            issue.setLastOperator(userService.getCurrentUser(request));
-            issue.setLastUpdateTime(new Date());
-            issueService.updateIssueInfo(issue);
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("更新数据库出错，请重新操作");
-        }
-        return ResultUtil.success("合并成功");
     }
 
-    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping("/combineResult")
     public Object combineResult(@RequestParam(value = "indexes", required = true) int[] indexes,
@@ -281,42 +214,7 @@ public class IssueController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        List<List<String[]>> resultList = null;
-        try {
-            resultList = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getById(issueId).getClusterResult());
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
-        }
-        List<String[]> combineList = new ArrayList<String[]>();
-        for (int i = 0; i < indexes.length; i++) {
-            combineList.addAll(resultList.get(indexes[i]));
-        }
-        Arrays.sort(indexes);
-        for (int i = indexes.length - 1; i > 0; i--) {
-            resultList.remove(indexes[i]);
-        }
-        resultList.add(combineList);
-        Collections.sort(resultList, new Comparator<List<String[]>>() {
 
-            @Override
-            public int compare(List<String[]> o1, List<String[]> o2) {
-                // TODO Auto-generated method stub
-                return o1.size() - o2.size();
-            }
-        });
-        List<String[]> newOrigAndCountList = statisticService.getOrigAndCount(resultList, Index.TIME_INDEX);
-        IssueWithBLOBs issue = new IssueWithBLOBs();
-        issue.setIssueId(issueId);
-        try {
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(resultList));
-            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(newOrigAndCountList));
-            issue.setLastOperator(userService.getCurrentUser(request));
-            issue.setLastUpdateTime(new Date());
-            issueService.updateIssueInfo(issue);
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("更新数据库出错，请重新操作");
-        }
         return ResultUtil.success("合并成功");
     }
 

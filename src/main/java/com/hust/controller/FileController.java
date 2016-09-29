@@ -46,6 +46,9 @@ public class FileController {
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public Object upload(@RequestBody Condition condition, HttpServletRequest request) {
+        if(request.getSession().getAttribute(Constants.ISSUE_ID)==null){
+            return ResultUtil.errorWithMsg("请选择或者创建一个话题");
+        }
         MultipartFile file = condition.getFile();
         if (file.isEmpty()) {
             return ResultUtil.errorWithMsg("文件为空");
@@ -68,7 +71,7 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            IssueWithBLOBs issue = issueService.getById(uuid);
+            IssueWithBLOBs issue = issueService.getIssueById(uuid);
             List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
             List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
             outputStream = response.getOutputStream();
