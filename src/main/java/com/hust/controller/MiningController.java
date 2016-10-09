@@ -89,4 +89,31 @@ public class MiningController {
         return ResultUtil.success("execute success");
     }
 
+    @ResponseBody
+    @RequestMapping("/calModifiedOrigAndCountResult")
+    public Object calModifiedOrigAndCountResult(HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
+        }
+        List<List<String[]>> modifiedClusterResult = issueService.queryModifiedClusterResult(issueId);
+        if (null == modifiedClusterResult) {
+            return ResultUtil.errorWithMsg("query modified cluster result failed");
+        }
+        List<String[]> modifiedOrigAndCountResult = statisticService.getOrigAndCount(modifiedClusterResult, Index.TIME_INDEX);
+        IssueWithBLOBs issue = new IssueWithBLOBs();
+        issue.setIssueId(issueId);
+        try {
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(modifiedOrigAndCountResult));
+        } catch (Exception e) {
+            logger.error("convert modifiedOrigAndCountResult failed");
+            return ResultUtil.errorWithMsg("execute failed");
+        }
+        if (issueService.updateIssueInfo(issue, request) == 0) {
+            return ResultUtil.errorWithMsg("execute failed");
+        }
+        return ResultUtil.success("execute success");
+    }
+    
+
 }

@@ -3,10 +3,6 @@ package com.hust.service;
 import java.util.List;
 import java.util.Map;
 
-import com.hust.model.StatisticCondition;
-
-import net.sf.json.JSONObject;
-
 public interface StatisticService {
     public List<String[]> getOrigAndCount(List<List<String[]>> list, int timeIndex);
 

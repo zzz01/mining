@@ -31,4 +31,10 @@ public interface IssueService {
     int updateIssueInfo(IssueWithBLOBs issue, HttpServletRequest request);
 
     List<List<String[]>> queryClusterResult(String issueId);
+   
+    
+    List<List<String[]>> queryModifiedClusterResult(String issueId);
+
+    
+    
 }

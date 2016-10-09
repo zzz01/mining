@@ -18,6 +18,7 @@ import com.hust.constants.Constants.Index;
 import com.hust.constants.Constants.Interval;
 import com.hust.dao.WebsiteDao;
 import com.hust.dao.WeightDao;
+import com.hust.model.Website;
 import com.hust.service.StatisticService;
 import com.hust.util.CommonUtil;
 import com.hust.util.TimeUtil;
@@ -81,8 +82,9 @@ public class StatisticServiceImpl implements StatisticService {
             if (CommonUtil.isEmptyArray(array)) {
                 continue;
             }
-            String level = websiteDao.queryLevelByUrl(array[Index.URL_INDEX]);
-            String type = websiteDao.queryTypeByUrl(array[Index.URL_INDEX]);
+            Website website = websiteDao.queryByUrl(array[Index.URL_INDEX]);
+            String level = website.getLevel();
+            String type = website.getType();
             String timeKey = getTimeKey(array[Index.TIME_INDEX], interval);
             Map<String, Map<String, Integer>> timeMap = map.get(timeKey);
             if (timeMap == null) {
@@ -176,7 +178,11 @@ public class StatisticServiceImpl implements StatisticService {
         for (Map<String, Map<String, Integer>> values : map.values()) {
             Map<String, Integer> typeMap = values.get(Constants.INFOTYPE_CH);
             for (Entry<String, Integer> entry : typeMap.entrySet()) {
-                countMap.put(entry.getKey(), entry.getValue() + countMap.get(entry.getKey()));
+                Integer oldValue = countMap.get(entry.getKey());
+                if (null == oldValue) {
+                    oldValue = 0;
+                }
+                countMap.put(entry.getKey(), entry.getValue() + oldValue);
             }
         }
         return countMap;
@@ -190,9 +196,13 @@ public class StatisticServiceImpl implements StatisticService {
             return countMap;
         }
         for (Map<String, Map<String, Integer>> values : map.values()) {
-            Map<String, Integer> typeMap = values.get(Constants.MEDIA_EN);
-            for (Entry<String, Integer> entry : typeMap.entrySet()) {
-                countMap.put(entry.getKey(), entry.getValue() + countMap.get(entry.getKey()));
+            Map<String, Integer> mediaMap = values.get(Constants.MEDIA_EN);
+            for (Entry<String, Integer> entry : mediaMap.entrySet()) {
+                Integer oldValue = countMap.get(entry.getKey());
+                if (null == oldValue) {
+                    oldValue = 0;
+                }
+                countMap.put(entry.getKey(), entry.getValue() + oldValue);
             }
         }
         return countMap;

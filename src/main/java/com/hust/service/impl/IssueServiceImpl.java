@@ -225,4 +225,18 @@ public class IssueServiceImpl implements IssueService {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<List<String[]>> queryModifiedClusterResult(String issueId) {
+        // TODO Auto-generated method stub
+        try {
+            List<List<String[]>> result = (List<List<String[]>>) ConvertUtil
+                    .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
+            return result;
+        } catch (Exception e) {
+            logger.info("query modified cluster result from DB failed, issueId:{} \t" + e.toString(), issueId);
+            return null;
+        }
+    }
+
 }
