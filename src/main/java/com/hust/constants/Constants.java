@@ -28,6 +28,8 @@ public class Constants {
     public final static String CLUSTER_RESULT_10ROW_EN = "clusterResult10row";
     public final static String ORIG_COUNT_10ROW_EN = "origAndCount10row";
     public final static String ISSUE_ID = "issueId";
+    public final static String TYPE_ORIG = "orig";
+    public final static String TYPE_MODIFIED = "modified";
 
     public static class Index {
         public static final int URL_INDEX = 0;

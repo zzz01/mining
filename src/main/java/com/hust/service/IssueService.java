@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.hust.model.Issue;
 import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
+import com.hust.model.params.DeleteItemsParams;
 
 public interface IssueService {
 
@@ -18,23 +19,16 @@ public interface IssueService {
 
     List<Issue> queryIssue(IssueQueryCondition con);
 
-    boolean combineOrigCountResult(int indexes, HttpServletRequest request);
-
-    boolean deleteItemsFromModifiedClusterResult(int currentset, int[] indexes, HttpServletRequest request);
-
     IssueWithBLOBs getIssueById(String uuid);
 
-    boolean deleteItemsFromOrigClusterResult(int currentset, int[] indexes, HttpServletRequest request);
+    boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request);
 
-    boolean combineModifiedCountResult(int[] indexes, HttpServletRequest request);
+    boolean combineCountResult(String type, int[] indexes, HttpServletRequest request);
 
     int updateIssueInfo(IssueWithBLOBs issue, HttpServletRequest request);
 
     List<List<String[]>> queryClusterResult(String issueId);
-   
-    
+
     List<List<String[]>> queryModifiedClusterResult(String issueId);
 
-    
-    
 }

@@ -24,6 +24,7 @@ import com.hust.model.Issue;
 import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.model.ViewPage;
+import com.hust.model.params.DeleteItemsParams;
 import com.hust.service.IssueService;
 import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
@@ -158,47 +159,13 @@ public class IssueController {
     }
 
     @ResponseBody
-    @RequestMapping("/deleteItemsFromModifiedClusterResult")
-    public Object deleteItemsFromModifiedClusterResult(
-            @RequestParam(value = "currentset", required = true) int currentset,
-            @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {
+    @RequestMapping("/deleteItemsFromClusterResult")
+    public Object deleteItemsFromClusterResult(@RequestBody DeleteItemsParams params, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        boolean result = issueService.deleteItemsFromModifiedClusterResult(currentset, indexes, request);
-        if (result) {
-            return ResultUtil.success("删除成功");
-        } else {
-            return ResultUtil.success("删除失败");
-        }
-    }
-
-    @ResponseBody
-    @RequestMapping("/deleteItemsFromOrigClusterResult")
-    public Object deleteItemsFromOrigClusterResult(@RequestParam(value = "currentset", required = true) int currentset,
-            @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
-        if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
-        }
-        boolean result = issueService.deleteItemsFromOrigClusterResult(currentset, indexes, request);
-        if (result) {
-            return ResultUtil.success("删除成功");
-        } else {
-            return ResultUtil.success("删除失败");
-        }
-    }
-
-    @ResponseBody
-    @RequestMapping("/combineModifiedResult")
-    public Object combineModifiedResult(@RequestParam(value = "indexes", required = true) int[] indexes,
-            HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
-        if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
-        }
-        boolean result = issueService.combineModifiedCountResult(indexes, request);
+        boolean result = issueService.deleteItemsFromClusterResult(params, request);
         if (result) {
             return ResultUtil.success("删除成功");
         } else {
@@ -208,14 +175,18 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/combineResult")
-    public Object combineResult(@RequestParam(value = "indexes", required = true) int[] indexes,
-            HttpServletRequest request) {
+    public Object combineResult(@RequestParam(value = "type", required = true) String type,
+            @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-
-        return ResultUtil.success("合并成功");
+        boolean result = issueService.combineCountResult(type, indexes, request);
+        if (result) {
+            return ResultUtil.success("合并成功");
+        } else {
+            return ResultUtil.success("合并失败");
+        }
     }
 
     @ResponseBody

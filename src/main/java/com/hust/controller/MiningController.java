@@ -64,21 +64,30 @@ public class MiningController {
     }
 
     @ResponseBody
-    @RequestMapping("/calculateOrigAndCountResult")
-    public Object calculateOrigAndCountResult(HttpServletRequest request) {
+    @RequestMapping("/calOrigAndCountResult")
+    public Object calculateOrigAndCountResult(String type, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        List<List<String[]>> clusterResult = issueService.queryClusterResult(issueId);
-        if (null == clusterResult) {
-            return ResultUtil.errorWithMsg("query cluster result failed");
+        List<List<String[]>> list = null;
+        if ("orig".equals(type)) {
+            list = issueService.queryClusterResult(issueId);
+        } else {
+            list = issueService.queryModifiedClusterResult(issueId);
         }
-        List<String[]> origAndCountResult = statisticService.getOrigAndCount(clusterResult, Index.TIME_INDEX);
+        if (null == list) {
+            return ResultUtil.errorWithMsg("query (modified)cluster result failed");
+        }
+        List<String[]> origAndCountResult = statisticService.getOrigAndCount(list, Index.TIME_INDEX);
         IssueWithBLOBs issue = new IssueWithBLOBs();
         issue.setIssueId(issueId);
         try {
-            issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
+            if("orig".equals(type)){
+                issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
+            }else{
+                issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
+            }
         } catch (Exception e) {
             logger.error("convert origAndCountResult failed");
             return ResultUtil.errorWithMsg("execute failed");
@@ -89,31 +98,12 @@ public class MiningController {
         return ResultUtil.success("execute success");
     }
 
-    @ResponseBody
-    @RequestMapping("/calModifiedOrigAndCountResult")
-    public Object calModifiedOrigAndCountResult(HttpServletRequest request) {
+    public Object statisticOnOrig(HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        List<List<String[]>> modifiedClusterResult = issueService.queryModifiedClusterResult(issueId);
-        if (null == modifiedClusterResult) {
-            return ResultUtil.errorWithMsg("query modified cluster result failed");
-        }
-        List<String[]> modifiedOrigAndCountResult = statisticService.getOrigAndCount(modifiedClusterResult, Index.TIME_INDEX);
-        IssueWithBLOBs issue = new IssueWithBLOBs();
-        issue.setIssueId(issueId);
-        try {
-            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(modifiedOrigAndCountResult));
-        } catch (Exception e) {
-            logger.error("convert modifiedOrigAndCountResult failed");
-            return ResultUtil.errorWithMsg("execute failed");
-        }
-        if (issueService.updateIssueInfo(issue, request) == 0) {
-            return ResultUtil.errorWithMsg("execute failed");
-        }
-        return ResultUtil.success("execute success");
+        return null;
     }
-    
 
 }

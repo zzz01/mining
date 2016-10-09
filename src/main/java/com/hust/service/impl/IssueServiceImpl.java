@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hust.constants.Constants;
 import com.hust.constants.Constants.Index;
@@ -22,6 +21,7 @@ import com.hust.dao.IssueDao;
 import com.hust.model.Issue;
 import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
+import com.hust.model.params.DeleteItemsParams;
 import com.hust.service.FileService;
 import com.hust.service.IssueService;
 import com.hust.service.UserService;
@@ -94,12 +94,17 @@ public class IssueServiceImpl implements IssueService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean combineModifiedCountResult(int[] indexes, HttpServletRequest request) {
+    public boolean combineCountResult(String type, int[] indexes, HttpServletRequest request) {
         String issueId = request.getSession().getAttribute(Constants.ISSUE_ID).toString();
         List<List<String[]>> resultList = null;
         try {
-            resultList = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueDao.selectByUUID(issueId).getClusterResult());
+            if ("orig".equals(type)) {
+                resultList = (List<List<String[]>>) ConvertUtil
+                        .convertBytesToObject(issueDao.selectByUUID(issueId).getClusterResult());
+            } else {
+                resultList = (List<List<String[]>>) ConvertUtil
+                        .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
+            }
         } catch (Exception e) {
             return false;
         }
@@ -136,39 +141,6 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public boolean combineOrigCountResult(int indexes, HttpServletRequest request) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean deleteItemsFromModifiedClusterResult(int currentset, int[] indexes, HttpServletRequest request) {
-        String issueId = request.getSession().getAttribute(Constants.ISSUE_ID).toString();
-        try {
-            List<List<String[]>> allList = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
-            List<String[]> setList = allList.get(currentset);
-            Arrays.sort(indexes);
-            for (int i = indexes.length - 1; i > 0; i--) {
-                setList.remove(i);
-            }
-            allList.set(currentset, setList);
-            IssueWithBLOBs issue = new IssueWithBLOBs();
-            issue.setIssueId(issueId);
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(allList));
-            issue.setLastOperator(userService.getCurrentUser(request));
-            issue.setLastUpdateTime(new Date());
-            if (0 == issueDao.updateIssueInfo(issue)) {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public IssueWithBLOBs getIssueById(String uuid) {
         // TODO Auto-generated method stub
         return issueDao.selectByUUID(uuid);
@@ -176,21 +148,36 @@ public class IssueServiceImpl implements IssueService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean deleteItemsFromOrigClusterResult(@RequestParam(value = "currentset", required = true) int currentset,
-            @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {
+    public boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request) {
         String issueId = getCurrentIssueId(request);
         try {
-            List<List<String[]>> allList =
-                    (List<List<String[]>>) ConvertUtil.convertBytesToObject(getIssueById(issueId).getClusterResult());
-            List<String[]> setList = allList.get(currentset);
-            Arrays.sort(indexes);
-            for (int i = indexes.length - 1; i > 0; i--) {
+            List<List<String[]>> origlist = null;
+            if (Constants.TYPE_ORIG.equals(params.getType())) {
+                origlist = (List<List<String[]>>) ConvertUtil
+                        .convertBytesToObject(getIssueById(issueId).getClusterResult());
+            } else {
+                origlist = (List<List<String[]>>) ConvertUtil
+                        .convertBytesToObject(getIssueById(issueId).getModifiedClusterResult());
+            }
+
+            List<String[]> setList = origlist.get(params.getCurrentSet());
+            Arrays.sort(params.getIndexSet());
+            for (int i = params.getIndexSet().length - 1; i > 0; i--) {
                 setList.remove(i);
             }
-            allList.set(currentset, setList);
+            origlist.set(params.getCurrentSet(), setList);
+            Collections.sort(origlist, new Comparator<List<String[]>>() {
+
+                @Override
+                public int compare(List<String[]> o1, List<String[]> o2) {
+                    // TODO Auto-generated method stub
+                    return o1.size() - o2.size();
+                }
+            });
+
             IssueWithBLOBs issue = new IssueWithBLOBs();
             issue.setIssueId(issueId);
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(allList));
+            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(origlist));
             issue.setLastOperator(userService.getCurrentUser(request));
             issue.setLastUpdateTime(new Date());
             if (0 == issueDao.updateIssueInfo(issue)) {
