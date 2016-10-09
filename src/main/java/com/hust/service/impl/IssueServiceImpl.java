@@ -141,7 +141,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueWithBLOBs getIssueById(String uuid) {
+    public IssueWithBLOBs queryIssueById(String uuid) {
         // TODO Auto-generated method stub
         return issueDao.selectByUUID(uuid);
     }
@@ -154,10 +154,10 @@ public class IssueServiceImpl implements IssueService {
             List<List<String[]>> origlist = null;
             if (Constants.TYPE_ORIG.equals(params.getType())) {
                 origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(getIssueById(issueId).getClusterResult());
+                        .convertBytesToObject(queryIssueById(issueId).getClusterResult());
             } else {
                 origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(getIssueById(issueId).getModifiedClusterResult());
+                        .convertBytesToObject(queryIssueById(issueId).getModifiedClusterResult());
             }
 
             List<String[]> setList = origlist.get(params.getCurrentSet());

@@ -19,7 +19,7 @@ public interface IssueService {
 
     List<Issue> queryIssue(IssueQueryCondition con);
 
-    IssueWithBLOBs getIssueById(String uuid);
+    IssueWithBLOBs queryIssueById(String uuid);
 
     boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request);
 

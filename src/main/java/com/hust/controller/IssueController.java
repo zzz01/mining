@@ -88,7 +88,7 @@ public class IssueController {
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getIssueById(issueId).getClusterResult());
+                    .convertBytesToObject(issueService.queryIssueById(issueId).getClusterResult());
             ViewPage page = new ViewPage();
             page.setCurrentPage(currentSet);
             page.setTotalPage(list.size());
@@ -110,7 +110,7 @@ public class IssueController {
         }
         try {
             List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.getIssueById(issueId).getOrigCountResult());
+                    .convertBytesToObject(issueService.queryIssueById(issueId).getOrigCountResult());
             return ResultUtil.success(list);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
@@ -129,7 +129,7 @@ public class IssueController {
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.getIssueById(issueId).getModifiedClusterResult());
+                    .convertBytesToObject(issueService.queryIssueById(issueId).getModifiedClusterResult());
             ViewPage page = new ViewPage();
             page.setCurrentPage(currentSet);
             page.setTotalPage(list.size());
@@ -151,7 +151,7 @@ public class IssueController {
         }
         try {
             List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.getIssueById(issueId).getModifiedOrigCountResult());
+                    .convertBytesToObject(issueService.queryIssueById(issueId).getModifiedOrigCountResult());
             return ResultUtil.success(list);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");

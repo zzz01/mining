@@ -1,6 +1,7 @@
 package com.hust.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hust.constants.Constants;
 import com.hust.constants.Constants.Index;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.service.ClusterService;
@@ -83,9 +85,9 @@ public class MiningController {
         IssueWithBLOBs issue = new IssueWithBLOBs();
         issue.setIssueId(issueId);
         try {
-            if("orig".equals(type)){
+            if ("orig".equals(type)) {
                 issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
-            }else{
+            } else {
                 issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
             }
         } catch (Exception e) {
@@ -98,10 +100,34 @@ public class MiningController {
         return ResultUtil.success("execute success");
     }
 
-    public Object statisticOnOrig(HttpServletRequest request) {
+    @SuppressWarnings("unchecked")
+    public Object statistic(String type, int currentSet, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
+        }
+        IssueWithBLOBs issue = issueService.queryIssueById(issueId);
+        if (Constants.TYPE_ORIG.equals(type)) {
+            if (null != issue.getStatisticResult()) {
+                return ResultUtil.success(issue.getStatisticResult());
+            }
+        } else {
+            if (null != issue.getStatisticResult()) {
+                return ResultUtil.success(issue.getStatisticResult());
+            }
+        }
+        try {
+            List<String[]> list = null;
+            if (Constants.TYPE_ORIG.equals(type)) {
+                list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getClusterResult()))
+                        .get(currentSet);
+            } else {
+                list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getModifiedClusterResult()))
+                        .get(currentSet);
+            }
+            Map<String, Map<String, Map<String, Integer>>> map = statisticService.processAll(list, interval)
+        } catch (Exception e) {
+            // TODO: handle exception
         }
         return null;
     }
