@@ -10,12 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Maps;
 import com.hust.constants.Constants;
 import com.hust.constants.Constants.Index;
 import com.hust.model.IssueWithBLOBs;
+import com.hust.model.params.StatisticParams;
 import com.hust.service.ClusterService;
 import com.hust.service.IssueService;
 import com.hust.service.StatisticService;
@@ -45,7 +48,7 @@ public class MiningController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        IssueWithBLOBs issue = issueService.getIssueById(issueId);
+        IssueWithBLOBs issue = issueService.queryIssueById(issueId);
         List<String[]> content = null;
         try {
             content = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getFilteredContent());
@@ -100,36 +103,38 @@ public class MiningController {
         return ResultUtil.success("execute success");
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/statisticSingleSet")
     @SuppressWarnings("unchecked")
-    public Object statistic(String type, int currentSet, HttpServletRequest request) {
+    public Object statistic(@RequestBody StatisticParams params, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
         IssueWithBLOBs issue = issueService.queryIssueById(issueId);
-        if (Constants.TYPE_ORIG.equals(type)) {
-            if (null != issue.getStatisticResult()) {
-                return ResultUtil.success(issue.getStatisticResult());
-            }
-        } else {
-            if (null != issue.getStatisticResult()) {
-                return ResultUtil.success(issue.getStatisticResult());
-            }
-        }
         try {
             List<String[]> list = null;
-            if (Constants.TYPE_ORIG.equals(type)) {
+            if (Constants.TYPE_ORIG.equals(params.getType())) {
                 list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getClusterResult()))
-                        .get(currentSet);
+                        .get(params.getCurrentSet());
             } else {
                 list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getModifiedClusterResult()))
-                        .get(currentSet);
+                        .get(params.getCurrentSet());
             }
-            Map<String, Map<String, Map<String, Integer>>> map = statisticService.processAll(list, interval)
+            Map<String, Map<String, Map<String, Integer>>> timeMap =
+                    statisticService.processAll(list, params.getInterval());
+            Map<String, Integer> typeMap = statisticService.getTypeCount(timeMap);
+            Map<String, Integer> levelMap = statisticService.getLevelCount(timeMap);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("time", timeMap);
+            Map<String, Object> countMap = Maps.newHashMap();
+            countMap.put("type", typeMap);
+            countMap.put("level", levelMap);
+            map.put("count", countMap);
+            return ResultUtil.success(map);
         } catch (Exception e) {
-            // TODO: handle exception
+            logger.error("exception occur during statistic\t" + e.toString());
+            return ResultUtil.errorWithMsg("统计失败");
         }
-        return null;
     }
-
 }

@@ -174,6 +174,22 @@ public class IssueController {
     }
 
     @ResponseBody
+    @RequestMapping("/deleteSetsFromClusterResult")
+    public Object deleteSetsFromClusterResult(@RequestParam(value = "type", required = true) String type,
+            @RequestParam(value = "indexSet", required = true) int[] indexs, HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
+        }
+        boolean result = issueService.deleteSetsFromClusterResult(type, indexs, request);
+        if (result) {
+            return ResultUtil.success("删除成功");
+        } else {
+            return ResultUtil.success("删除失败");
+        }
+    }
+
+    @ResponseBody
     @RequestMapping("/combineResult")
     public Object combineResult(@RequestParam(value = "type", required = true) String type,
             @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {

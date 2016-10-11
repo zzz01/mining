@@ -184,6 +184,7 @@ public class IssueServiceImpl implements IssueService {
                 return false;
             }
         } catch (Exception e) {
+            logger.error("exception occur during deleting items from cluster result\t" + e.toString());
             return false;
         }
         return true;
@@ -224,6 +225,38 @@ public class IssueServiceImpl implements IssueService {
             logger.info("query modified cluster result from DB failed, issueId:{} \t" + e.toString(), issueId);
             return null;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean deleteSetsFromClusterResult(String type, int[] set, HttpServletRequest request) {
+        String issueId = getCurrentIssueId(request);
+        try {
+            List<List<String[]>> origlist = null;
+            if (Constants.TYPE_ORIG.equals(type)) {
+                origlist = (List<List<String[]>>) ConvertUtil
+                        .convertBytesToObject(queryIssueById(issueId).getClusterResult());
+            } else {
+                origlist = (List<List<String[]>>) ConvertUtil
+                        .convertBytesToObject(queryIssueById(issueId).getModifiedClusterResult());
+            }
+            Arrays.sort(set);
+            for (int i = set.length - 1; i > 0; i--) {
+                origlist.remove(i);
+            }
+            IssueWithBLOBs issue = new IssueWithBLOBs();
+            issue.setIssueId(issueId);
+            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(origlist));
+            issue.setLastOperator(userService.getCurrentUser(request));
+            issue.setLastUpdateTime(new Date());
+            if (0 == issueDao.updateIssueInfo(issue)) {
+                return false;
+            }
+        } catch (Exception e) {
+            logger.error("exception occur during deleting sets from cluster result\t" + e.toString());
+            return false;
+        }
+        return true;
     }
 
 }

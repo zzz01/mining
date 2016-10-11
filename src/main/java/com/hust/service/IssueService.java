@@ -31,4 +31,6 @@ public interface IssueService {
 
     List<List<String[]>> queryModifiedClusterResult(String issueId);
 
+    boolean deleteSetsFromClusterResult(String type, int[] set, HttpServletRequest request);
+
 }
