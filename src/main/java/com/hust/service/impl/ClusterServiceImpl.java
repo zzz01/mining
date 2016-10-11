@@ -11,9 +11,9 @@ import com.hust.cluster.Canopy;
 import com.hust.constants.Config;
 import com.hust.convertor.Convertor;
 import com.hust.convertor.DigitalConvertor;
+import com.hust.distance.AcrossDistance;
 import com.hust.service.ClusterService;
 import com.hust.service.SegmentService;
-import com.hust.similarity.CrossSimilarity;
 import com.hust.util.ConvertUtil;
 
 @Service
@@ -35,7 +35,7 @@ public class ClusterServiceImpl implements ClusterService {
         List<double[]> vectors = convertor.getVector();
         Canopy canopy = new Canopy();
         canopy.setVectors(vectors);
-        canopy.setSimilarity(new CrossSimilarity());
+        canopy.setDis(new AcrossDistance(vectors));
         canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
         try {
             canopy.clustering();
