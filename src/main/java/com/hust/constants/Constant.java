@@ -1,6 +1,6 @@
 package com.hust.constants;
 
-public class Constants {
+public class Constant {
 
     public final static String INVALID_TIME = "1970-01-01";
     public final static String EMOTION_EN = "emotion";

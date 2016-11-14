@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
-import com.hust.constants.Constants;
+import com.hust.constants.Constant;
 import com.hust.model.Issue;
 import com.hust.model.IssueQueryCondition;
 import com.hust.model.IssueWithBLOBs;
@@ -58,7 +58,7 @@ public class IssueController {
             logger.info("create issue fail");
             return ResultUtil.errorWithMsg("create issue fail");
         }
-        request.getSession().setAttribute(Constants.ISSUE_ID, issue.getIssueId());
+        request.getSession().setAttribute(Constant.ISSUE_ID, issue.getIssueId());
         return ResultUtil.success("create issue success");
     }
 

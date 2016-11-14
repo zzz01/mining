@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.constants.Constants;
+import com.hust.constants.Constant;
 import com.hust.dao.FileDao;
 import com.hust.model.Condition;
 import com.hust.model.IssueFile;
@@ -51,7 +51,7 @@ public class FileServiceImpl implements FileService {
         }
 
         String user = userService.getCurrentUser(request);
-        String issueId = request.getSession().getAttribute(Constants.ISSUE_ID).toString();
+        String issueId = request.getSession().getAttribute(Constant.ISSUE_ID).toString();
         IssueFile issueFile = new IssueFile();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());

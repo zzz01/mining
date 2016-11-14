@@ -4,39 +4,37 @@ import java.util.Date;
 
 public class IssueQueryCondition {
 
-    private String name;
-    private Date startTime;
-    private Date endTime;
+    private String issueName;
+    private Date createStartTime;
+    private Date createEndTime;
     private String user;
+    private Date lastUpdateStartTime;
+    private Date lastUpdateEndTime;
+    private int pageNo;
+    private int pageSize;
 
-    public String getName() {
-        return name;
+    public String getIssueName() {
+        return issueName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIssueName(String issueName) {
+        this.issueName = issueName;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getCreateStartTime() {
+        return createStartTime;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setCreateStartTime(Date createStartTime) {
+        this.createStartTime = createStartTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getCreateEndTime() {
+        return createEndTime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    @Override
-    public String toString() {
-        return "IssueQueryCondition [name=" + name + ", startTime=" + startTime + ", endTime=" + endTime + ", user="
-                + user + "]";
+    public void setCreateEndTime(Date createEndTime) {
+        this.createEndTime = createEndTime;
     }
 
     public String getUser() {
@@ -45,6 +43,38 @@ public class IssueQueryCondition {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Date getLastUpdateStartTime() {
+        return lastUpdateStartTime;
+    }
+
+    public void setLastUpdateStartTime(Date lastUpdateStartTime) {
+        this.lastUpdateStartTime = lastUpdateStartTime;
+    }
+
+    public Date getLastUpdateEndTime() {
+        return lastUpdateEndTime;
+    }
+
+    public void setLastUpdateEndTime(Date lastUpdateEndTime) {
+        this.lastUpdateEndTime = lastUpdateEndTime;
     }
 
 }

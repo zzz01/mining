@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hust.constants.Constants;
-import com.hust.constants.Constants.Index;
+import com.hust.constants.Constant;
+import com.hust.constants.Constant.Index;
 import com.hust.dao.IssueDao;
 import com.hust.model.Issue;
 import com.hust.model.IssueQueryCondition;
@@ -79,7 +79,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public String getCurrentIssueId(HttpServletRequest request) {
         // TODO Auto-generated method stub
-        Object obj = request.getSession().getAttribute(Constants.ISSUE_ID);
+        Object obj = request.getSession().getAttribute(Constant.ISSUE_ID);
         if (null == obj) {
             return StringUtils.EMPTY;
         }
@@ -95,7 +95,7 @@ public class IssueServiceImpl implements IssueService {
     @SuppressWarnings("unchecked")
     @Override
     public boolean combineCountResult(String type, int[] indexes, HttpServletRequest request) {
-        String issueId = request.getSession().getAttribute(Constants.ISSUE_ID).toString();
+        String issueId = request.getSession().getAttribute(Constant.ISSUE_ID).toString();
         List<List<String[]>> resultList = null;
         try {
             if ("orig".equals(type)) {
@@ -152,7 +152,7 @@ public class IssueServiceImpl implements IssueService {
         String issueId = getCurrentIssueId(request);
         try {
             List<List<String[]>> origlist = null;
-            if (Constants.TYPE_ORIG.equals(params.getType())) {
+            if (Constant.TYPE_ORIG.equals(params.getType())) {
                 origlist = (List<List<String[]>>) ConvertUtil
                         .convertBytesToObject(queryIssueById(issueId).getClusterResult());
             } else {
@@ -233,7 +233,7 @@ public class IssueServiceImpl implements IssueService {
         String issueId = getCurrentIssueId(request);
         try {
             List<List<String[]>> origlist = null;
-            if (Constants.TYPE_ORIG.equals(type)) {
+            if (Constant.TYPE_ORIG.equals(type)) {
                 origlist = (List<List<String[]>>) ConvertUtil
                         .convertBytesToObject(queryIssueById(issueId).getClusterResult());
             } else {

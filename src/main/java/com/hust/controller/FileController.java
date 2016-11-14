@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.constants.Constants;
+import com.hust.constants.Constant;
 import com.hust.model.Condition;
 import com.hust.model.IssueFile;
 import com.hust.model.IssueWithBLOBs;
@@ -46,7 +46,7 @@ public class FileController {
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public Object upload(@RequestBody Condition condition, HttpServletRequest request) {
-        if(request.getSession().getAttribute(Constants.ISSUE_ID)==null){
+        if(request.getSession().getAttribute(Constant.ISSUE_ID)==null){
             return ResultUtil.errorWithMsg("请选择或者创建一个话题");
         }
         MultipartFile file = condition.getFile();
@@ -62,7 +62,7 @@ public class FileController {
     @SuppressWarnings("unchecked")
     @RequestMapping("/download")
     public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Object uuidObj = request.getSession().getAttribute(Constants.ISSUE_ID);
+        Object uuidObj = request.getSession().getAttribute(Constant.ISSUE_ID);
         String uuid = uuidObj == null ? StringUtils.EMPTY : uuidObj.toString();
         if (StringUtils.isBlank(uuid)) {
             response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");

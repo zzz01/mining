@@ -12,10 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hust.constants.Constants;
-import com.hust.constants.Constants.Emotion;
-import com.hust.constants.Constants.Index;
-import com.hust.constants.Constants.Interval;
+import com.hust.constants.Constant;
+import com.hust.constants.Constant.Emotion;
+import com.hust.constants.Constant.Index;
+import com.hust.constants.Constant.Interval;
 import com.hust.dao.WebsiteDao;
 import com.hust.dao.WeightDao;
 import com.hust.model.Website;
@@ -93,11 +93,11 @@ public class StatisticServiceImpl implements StatisticService {
                 Map<String, Integer> levelMap = new HashMap<String, Integer>();
                 typeMap.put(type, 1);
                 levelMap.put(level, 1);
-                timeMap.put(Constants.MEDIA_CH, levelMap);
-                timeMap.put(Constants.INFOTYPE_CH, typeMap);
+                timeMap.put(Constant.MEDIA_CH, levelMap);
+                timeMap.put(Constant.INFOTYPE_CH, typeMap);
                 map.put(timeKey, timeMap);
             } else {
-                Map<String, Integer> typeMap = timeMap.get(Constants.INFOTYPE_CH);
+                Map<String, Integer> typeMap = timeMap.get(Constant.INFOTYPE_CH);
                 if (null == typeMap) {
                     typeMap = new HashMap<String, Integer>();
                     typeMap.put(type, 1);
@@ -105,23 +105,23 @@ public class StatisticServiceImpl implements StatisticService {
                     typeMap.put(type, typeMap.get(type) + 1);
                 }
 
-                Map<String, Integer> levelMap = timeMap.get(Constants.MEDIA_CH);
+                Map<String, Integer> levelMap = timeMap.get(Constant.MEDIA_CH);
                 if (null == levelMap) {
                     levelMap = new HashMap<String, Integer>();
                     levelMap.put(level, 1);
                 } else {
                     levelMap.put(level, levelMap.get(level) + 1);
                 }
-                timeMap.put(Constants.MEDIA_CH, levelMap);
-                timeMap.put(Constants.INFOTYPE_CH, typeMap);
+                timeMap.put(Constant.MEDIA_CH, levelMap);
+                timeMap.put(Constant.INFOTYPE_CH, typeMap);
             }
         }
         for (String time : map.keySet()) {
             Map<String, Map<String, Integer>> timeMap = map.get(time);
-            Map<String, Integer> mediaAttention = calculateAttention(timeMap.get(Constants.MEDIA_EN));
-            Map<String, Integer> netizenAttention = calculateAttention(timeMap.get(Constants.INFOTYPE_EN));
-            timeMap.put(Constants.NETIZENATTENTION_EN, netizenAttention);
-            timeMap.put(Constants.MEDIA_EN, mediaAttention);
+            Map<String, Integer> mediaAttention = calculateAttention(timeMap.get(Constant.MEDIA_EN));
+            Map<String, Integer> netizenAttention = calculateAttention(timeMap.get(Constant.INFOTYPE_EN));
+            timeMap.put(Constant.NETIZENATTENTION_EN, netizenAttention);
+            timeMap.put(Constant.MEDIA_EN, mediaAttention);
         }
         return map;
     }
@@ -150,7 +150,7 @@ public class StatisticServiceImpl implements StatisticService {
 
     private String getTimeKey(String time, int interval) {
         if (StringUtils.isBlank(time) || !TimeUtil.isvalidate(time)) {
-            return Constants.INVALID_TIME;
+            return Constant.INVALID_TIME;
         }
         switch (interval) {
             case Interval.DAY: {
@@ -163,7 +163,7 @@ public class StatisticServiceImpl implements StatisticService {
                 return time.substring(0, 7);
             }
             default: {
-                return Constants.INVALID_TIME;
+                return Constant.INVALID_TIME;
             }
         }
     }
@@ -176,7 +176,7 @@ public class StatisticServiceImpl implements StatisticService {
             return countMap;
         }
         for (Map<String, Map<String, Integer>> values : map.values()) {
-            Map<String, Integer> typeMap = values.get(Constants.INFOTYPE_CH);
+            Map<String, Integer> typeMap = values.get(Constant.INFOTYPE_CH);
             for (Entry<String, Integer> entry : typeMap.entrySet()) {
                 Integer oldValue = countMap.get(entry.getKey());
                 if (null == oldValue) {
@@ -196,7 +196,7 @@ public class StatisticServiceImpl implements StatisticService {
             return countMap;
         }
         for (Map<String, Map<String, Integer>> values : map.values()) {
-            Map<String, Integer> mediaMap = values.get(Constants.MEDIA_EN);
+            Map<String, Integer> mediaMap = values.get(Constant.MEDIA_EN);
             for (Entry<String, Integer> entry : mediaMap.entrySet()) {
                 Integer oldValue = countMap.get(entry.getKey());
                 if (null == oldValue) {

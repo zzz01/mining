@@ -45,12 +45,24 @@ public class IssueDao {
         if (!StringUtils.isBlank(con.getUser())) {
             criteria.andCreatorEqualTo(con.getUser());
         }
-        if (null != con.getStartTime()) {
-            criteria.andCreateTimeGreaterThanOrEqualTo(con.getStartTime());
+        if (!StringUtils.isBlank(con.getIssueName())) {
+            criteria.andIssueNameEqualTo(con.getIssueName());
         }
-        if (null != con.getEndTime()) {
-            criteria.andCreateTimeLessThanOrEqualTo(con.getEndTime());
+        if (null != con.getCreateStartTime()) {
+            criteria.andCreateTimeGreaterThanOrEqualTo(con.getCreateStartTime());
         }
+        if (null != con.getCreateEndTime()) {
+            criteria.andCreateTimeLessThanOrEqualTo(con.getCreateEndTime());
+        }
+        if (null != con.getLastUpdateStartTime()) {
+            criteria.andLastUpdateTimeGreaterThanOrEqualTo(con.getLastUpdateStartTime());
+        }
+        if (null != con.getLastUpdateEndTime()) {
+            criteria.andLastUpdateTimeLessThanOrEqualTo(con.getLastUpdateEndTime());
+        }
+        example.setOrderByClause("last_update_time desc");
+        example.setStart(con.getPageNo() - 1);
+        example.setLimit(con.getPageSize());
         return issueMapper.selectByExample(example);
     }
 }

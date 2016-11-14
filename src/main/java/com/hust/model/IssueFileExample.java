@@ -664,6 +664,10 @@ public class IssueFileExample {
 
         private String typeHandler;
 
+        public Criterion() {
+            super();
+        }
+
         public String getCondition() {
             return condition;
         }

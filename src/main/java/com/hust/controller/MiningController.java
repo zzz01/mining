@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
-import com.hust.constants.Constants;
-import com.hust.constants.Constants.Index;
+import com.hust.constants.Constant;
+import com.hust.constants.Constant.Index;
 import com.hust.model.IssueWithBLOBs;
 import com.hust.model.params.StatisticParams;
 import com.hust.service.ClusterService;
@@ -114,7 +114,7 @@ public class MiningController {
         IssueWithBLOBs issue = issueService.queryIssueById(issueId);
         try {
             List<String[]> list = null;
-            if (Constants.TYPE_ORIG.equals(params.getType())) {
+            if (Constant.TYPE_ORIG.equals(params.getType())) {
                 list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getClusterResult()))
                         .get(params.getCurrentSet());
             } else {
