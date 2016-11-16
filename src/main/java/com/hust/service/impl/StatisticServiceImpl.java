@@ -114,6 +114,7 @@ public class StatisticServiceImpl implements StatisticService {
                 }
                 timeMap.put(Constant.MEDIA_CH, levelMap);
                 timeMap.put(Constant.INFOTYPE_CH, typeMap);
+                map.put(timeKey, timeMap);
             }
         }
         for (String time : map.keySet()) {
