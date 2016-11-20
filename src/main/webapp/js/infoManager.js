@@ -4,31 +4,28 @@ $(document).ready(
             var paginationDomTemp = "#paginationTemplate";
             var paginationTarget = "#contentSearchResultList";
             var $originLink = $("a[title='privateTopic']");
+            var originPage = 1;
             $originLink.addClass('active');
 
-            $(function() {
+            getPageContent( originPage ).done(function(){
                 var that = this;
-                var originPage = 1;
+                var totalPages = that.totalPages;
+                var visiblePages = utilGetVisiblePages( totalPages );
+                $('#pagination').twbsPagination({
+                    totalPages : totalPages, // need backend data totalPage
+                    visiblePages : visiblePages, // set it.
+                    onPageClick : function(event, page) {
+                        // send page info here, something as ajax call
+                        getPageContent(page);
+                    },
+                    first : '首页',
+                    prev : '上一页',
+                    next : '下一页',
+                    last : '尾页'
+                });
                 eventBind();
-                getPageContent( originPage ).done(function(){
-                    var totalPages = that.totalPages;
-                    var visiblePages = utilGetVisiblePages( totalPages );
-                    $('#pagination').twbsPagination({
-                        totalPages : totalPages, // need backend data totalPage
-                        visiblePages : visiblePages, // set it.
-                        onPageClick : function(event, page) {
-                            // send page info here, something as ajax call
-                            getPageContent(page);
-                        },
-                        first : '首页',
-                        prev : '上一页',
-                        next : '下一页',
-                        last : '尾页'
-                    });
-                })
+                $(".form_datetime").datepicker();
             });
-
-            $(".form_datetime").datepicker();
 
             function getDataOfPagination(data,page) {
                 var page = page;
