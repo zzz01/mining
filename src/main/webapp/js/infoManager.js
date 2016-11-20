@@ -66,7 +66,7 @@ $(document).ready(
                 var that = this;
                 that.$waitingMask = $(".waiting-mask");
                 that.page = page;
-                that.url = "http://localhost:8080/issue/queryOwnIssue";
+                that.url = "http://218.199.92.27:8080/issue/queryOwnIssue";
                 that.type = "POST";
                 that.dataType = "json";
                 that.contentType = "application/json";
