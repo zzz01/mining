@@ -8,8 +8,7 @@ $(document).ready(
             $originLink.addClass('active');
 
             getPageContent( originPage ).done(function(){
-                var that = this;
-                var totalPages = that.totalPages;
+                var totalPages = window.totalPages;
                 var visiblePages = utilGetVisiblePages( totalPages );
                 $('#pagination').twbsPagination({
                     totalPages : totalPages, // need backend data totalPage
