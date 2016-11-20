@@ -2,8 +2,10 @@ package com.hust.util;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 
@@ -23,6 +25,14 @@ public class TimeUtil {
         String regex = "^\\d{4}\\D+\\d{1,2}\\D+\\d{1,2}\\D+\\d{1,2}\\D+\\d{1,2}\\D+\\d{1,2}\\D*$";
         return Pattern.matches(regex, time);
     }
-    
-    
+
+    public static String DateToStr(Date date) {
+        if (null == date) {
+            return StringUtils.EMPTY;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+        String dateStr = sdf.format(date);
+        return dateStr;
+    }
+
 }
