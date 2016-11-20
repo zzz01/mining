@@ -30,6 +30,8 @@ import com.hust.service.UserService;
 import com.hust.util.ConvertUtil;
 import com.hust.util.ResultUtil;
 
+import net.sf.json.JSONObject;
+
 @Controller
 @RequestMapping("/issue")
 public class IssueController {
@@ -210,8 +212,12 @@ public class IssueController {
     public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
         con.setUser(user);
+        long count = issueService.countIssues(con);
         List<Issue> list = issueService.queryIssue(con);
-        return ResultUtil.success(list);
+        JSONObject result = new JSONObject();
+        result.put("count", count);
+        result.put("list", list);
+        return ResultUtil.success(result);
     }
 
     @ResponseBody

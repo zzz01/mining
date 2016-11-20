@@ -65,4 +65,29 @@ public class IssueDao {
         example.setLimit(con.getPageSize());
         return issueMapper.selectByExample(example);
     }
+    
+    public long countIssues(IssueQueryCondition con){
+        IssueExample example = new IssueExample();
+        Criteria criteria = example.createCriteria();
+        if (!StringUtils.isBlank(con.getUser())) {
+            criteria.andCreatorEqualTo(con.getUser());
+        }
+        if (!StringUtils.isBlank(con.getIssueName())) {
+            criteria.andIssueNameEqualTo(con.getIssueName());
+        }
+        if (null != con.getCreateStartTime()) {
+            criteria.andCreateTimeGreaterThanOrEqualTo(con.getCreateStartTime());
+        }
+        if (null != con.getCreateEndTime()) {
+            criteria.andCreateTimeLessThanOrEqualTo(con.getCreateEndTime());
+        }
+        if (null != con.getLastUpdateStartTime()) {
+            criteria.andLastUpdateTimeGreaterThanOrEqualTo(con.getLastUpdateStartTime());
+        }
+        if (null != con.getLastUpdateEndTime()) {
+            criteria.andLastUpdateTimeLessThanOrEqualTo(con.getLastUpdateEndTime());
+        }
+        example.setOrderByClause("last_update_time desc");
+        return issueMapper.countByExample(example);
+    }
 }

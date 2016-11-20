@@ -33,4 +33,6 @@ public interface IssueService {
 
     boolean deleteSetsFromClusterResult(String type, int[] set, HttpServletRequest request);
 
+    long countIssues(IssueQueryCondition con);
+
 }

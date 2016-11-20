@@ -259,4 +259,10 @@ public class IssueServiceImpl implements IssueService {
         return true;
     }
 
+    @Override
+    public long countIssues(IssueQueryCondition con) {
+        // TODO Auto-generated method stub
+        return issueDao.countIssues(con);
+    }
+
 }

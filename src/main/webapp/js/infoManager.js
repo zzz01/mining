@@ -93,7 +93,7 @@ $(document).ready(
                     success : function(data) {
                         if(data !== undefined && data !== ''){
                             if(data.status === 'OK'){
-                                var resultList = mockDataOfPagination(data.result,that.page);
+                                var resultList = mockDataOfPagination(data.result.list,that.page);
                                 handleBarTemplate(paginationDomTemp, paginationTarget,
                                         resultList);
                                 that.$waitingMask.hide();
