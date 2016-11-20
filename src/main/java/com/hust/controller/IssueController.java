@@ -215,7 +215,8 @@ public class IssueController {
         long count = issueService.countIssues(con);
         List<Issue> list = issueService.queryIssue(con);
         JSONObject result = new JSONObject();
-        result.put("count", count);
+        long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
+        result.put("pageTotal", pageTotal);
         result.put("list", list);
         return ResultUtil.success(result);
     }
