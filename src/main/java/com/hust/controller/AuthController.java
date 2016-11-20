@@ -25,7 +25,7 @@ public class AuthController {
             request.getSession().setAttribute("username", userName);
             // mav.setViewName("page/upload.html");
             // return mav;
-            return "redirect:page/main.html";
+            return "redirect:page/infoManager.html";
         }
         // mav.setViewName("page/error.html");
         // return mav;
