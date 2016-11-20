@@ -27,28 +27,40 @@ $(document).ready(
 
             $(".form_datetime").datepicker();
 
-            function mockDataOfPagination(data,page) {
-                var i;
+            function getDataOfPagination(data,page) {
                 var page = page;
                 var json = {};
 
-                // mock data of pagination
+                // data of pagination
                 var resultList = []
                 for(var index in data){
                     var obj = data[index];
+                    var createTimeString = utilConvertTimeObject2String( obj.createTime);
+                    var modifyTimeString = utilConvertTimeObject2String( obj.lastUpdateTime);
                     var resultElement = {
                             NO : page,
                             topicName : obj.issueName,
                             author : obj.creator,
-                            createTime : obj.createTime,
+                            createTime : createTimeString,
                             modifier : obj.lastOperator,
-                            modifyTime : obj.lastUpdateTime
+                            modifyTime : modifyTimeString
                     }
                     resultList.push(resultElement);
                 }
                 json.resultList = resultList;
 
                 return json;
+            }
+
+            function utilConvertTimeObject2String( docTime ){
+                var year = 1900 + docTime.year;
+                var month = docTime.month;
+                var day = docTime.date;
+                var hour = docTime.hours;
+                var minute = docTime.minutes;
+                var second = docTime.seconds;
+
+                return year + "年" + month + "月" + day + "日 " + hour + ":" + minute + ":" + second;
             }
 
             function handleBarTemplate(tempDom, targetDom, context) {
@@ -92,7 +104,7 @@ $(document).ready(
                     success : function(data) {
                         if(data !== undefined && data !== ''){
                             if(data.status === 'OK'){
-                                var resultList = mockDataOfPagination(data.result.list,that.page);
+                                var resultList = getDataOfPagination(data.result.list,that.page);
                                 handleBarTemplate(paginationDomTemp, paginationTarget,
                                         resultList);
                                 that.$waitingMask.hide();
@@ -102,7 +114,7 @@ $(document).ready(
                         }
                     },
                     error : function() {
-                        var resultList = mockDataOfPagination(that.page);
+                        var resultList = getDataOfPagination(that.page);
                         handleBarTemplate(paginationDomTemp, paginationTarget,
                                 resultList);
                         that.$waitingMask.hide();
