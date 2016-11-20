@@ -1,15 +1,18 @@
 $(document).ready(
         function() {
-            var resultList;
+            this.totalPages;
             var paginationDomTemp = "#paginationTemplate";
             var paginationTarget = "#contentSearchResultList";
             var $originLink = $("a[title='privateTopic']");
+            var originPage = 1;
             $originLink.addClass('active');
 
-            $(function() {
-                var obj = $('#pagination').twbsPagination({
-                    totalPages : 35, // need backend data totalPage
-                    visiblePages : 7, // set it.
+            getPageContent( originPage ).done(function(){
+                var totalPages = window.totalPages;
+                var visiblePages = utilGetVisiblePages( totalPages );
+                $('#pagination').twbsPagination({
+                    totalPages : totalPages, // need backend data totalPage
+                    visiblePages : visiblePages, // set it.
                     onPageClick : function(event, page) {
                         // send page info here, something as ajax call
                         getPageContent(page);
@@ -19,37 +22,52 @@ $(document).ready(
                     next : '下一页',
                     last : '尾页'
                 });
-
-                resultList = mockDataOfPagination(1);
-                handleBarTemplate(paginationDomTemp, paginationTarget,
-                        resultList);
                 eventBind();
+                $(".form_datetime").datepicker();
             });
 
-            $(".form_datetime").datepicker();
-
-            function mockDataOfPagination(data,page) {
-                var i;
+            function getDataOfPagination(data,page) {
                 var page = page;
                 var json = {};
 
-                // mock data of pagination
+                // data of pagination
                 var resultList = []
                 for(var index in data){
                     var obj = data[index];
+                    var createTimeString = utilConvertTimeObject2String( obj.createTime);
+                    var modifyTimeString = utilConvertTimeObject2String( obj.lastUpdateTime);
                     var resultElement = {
                             NO : page,
                             topicName : obj.issueName,
                             author : obj.creator,
-                            createTime : obj.createTime,
+                            createTime : createTimeString,
                             modifier : obj.lastOperator,
-                            modifyTime : obj.lastUpdateTime
+                            modifyTime : modifyTimeString
                     }
                     resultList.push(resultElement);
                 }
                 json.resultList = resultList;
 
                 return json;
+            }
+
+            function utilGetVisiblePages( totalPages ){
+                if( totalPages < 7 ){
+                    return totalPages;
+                } else {
+                    return 7;
+                }
+            }
+
+            function utilConvertTimeObject2String( docTime ){
+                var year = 1900 + docTime.year;
+                var month = docTime.month;
+                var day = docTime.date;
+                var hour = docTime.hours;
+                var minute = docTime.minutes;
+                var second = docTime.seconds;
+
+                return year + "年" + month + "月" + day + "日 " + hour + ":" + minute + ":" + second;
             }
 
             function handleBarTemplate(tempDom, targetDom, context) {
@@ -65,9 +83,10 @@ $(document).ready(
 
             function getPageContent(page) {
                 var that = this;
+                that.totalPages;
                 that.$waitingMask = $(".waiting-mask");
                 that.page = page;
-                that.url = "http://localhost:8080/issue/queryOwnIssue";
+                that.url = "http://218.199.92.27:8080/issue/queryOwnIssue";
                 that.type = "POST";
                 that.dataType = "json";
                 that.contentType = "application/json";
@@ -91,9 +110,10 @@ $(document).ready(
                         that.$waitingMask.show();
                     },
                     success : function(data) {
+                        that.totalPages = data.result.pageTotal;
                         if(data !== undefined && data !== ''){
                             if(data.status === 'OK'){
-                                var resultList = mockDataOfPagination(data.result.list,that.page);
+                                var resultList = getDataOfPagination(data.result.list,that.page);
                                 handleBarTemplate(paginationDomTemp, paginationTarget,
                                         resultList);
                                 that.$waitingMask.hide();
@@ -103,7 +123,7 @@ $(document).ready(
                         }
                     },
                     error : function() {
-                        var resultList = mockDataOfPagination(that.page);
+                        var resultList = getDataOfPagination(that.page);
                         handleBarTemplate(paginationDomTemp, paginationTarget,
                                 resultList);
                         that.$waitingMask.hide();
