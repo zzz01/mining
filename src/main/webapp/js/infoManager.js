@@ -1,18 +1,21 @@
 $(document).ready(
         function() {
-            var resultList;
+            this.totalPages;
             var paginationDomTemp = "#paginationTemplate";
             var paginationTarget = "#contentSearchResultList";
             var $originLink = $("a[title='privateTopic']");
             $originLink.addClass('active');
 
             $(function() {
+                var that = this;
                 var originPage = 1;
                 eventBind();
                 getPageContent( originPage ).done(function(){
-                    var obj = $('#pagination').twbsPagination({
-                        totalPages : 35, // need backend data totalPage
-                        visiblePages : 7, // set it.
+                    var totalPages = that.totalPages;
+                    var visiblePages = utilGetVisiblePages( totalPages );
+                    $('#pagination').twbsPagination({
+                        totalPages : totalPages, // need backend data totalPage
+                        visiblePages : visiblePages, // set it.
                         onPageClick : function(event, page) {
                             // send page info here, something as ajax call
                             getPageContent(page);
@@ -52,6 +55,14 @@ $(document).ready(
                 return json;
             }
 
+            function utilGetVisiblePages( totalPages ){
+                if( totalPages < 7 ){
+                    return totalPages;
+                } else {
+                    return 7;
+                }
+            }
+
             function utilConvertTimeObject2String( docTime ){
                 var year = 1900 + docTime.year;
                 var month = docTime.month;
@@ -76,6 +87,7 @@ $(document).ready(
 
             function getPageContent(page) {
                 var that = this;
+                that.totalPages;
                 that.$waitingMask = $(".waiting-mask");
                 that.page = page;
                 that.url = "http://218.199.92.27:8080/issue/queryOwnIssue";
@@ -102,6 +114,7 @@ $(document).ready(
                         that.$waitingMask.show();
                     },
                     success : function(data) {
+                        that.totalPages = data.pageTotal;
                         if(data !== undefined && data !== ''){
                             if(data.status === 'OK'){
                                 var resultList = getDataOfPagination(data.result.list,that.page);
