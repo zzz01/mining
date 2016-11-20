@@ -7,23 +7,22 @@ $(document).ready(
             $originLink.addClass('active');
 
             $(function() {
-                var obj = $('#pagination').twbsPagination({
-                    totalPages : 35, // need backend data totalPage
-                    visiblePages : 7, // set it.
-                    onPageClick : function(event, page) {
-                        // send page info here, something as ajax call
-                        getPageContent(page);
-                    },
-                    first : '首页',
-                    prev : '上一页',
-                    next : '下一页',
-                    last : '尾页'
-                });
-
-                resultList = mockDataOfPagination(1);
-                handleBarTemplate(paginationDomTemp, paginationTarget,
-                        resultList);
+                var originPage = 1;
                 eventBind();
+                getPageContent( originPage ).done(function(){
+                    var obj = $('#pagination').twbsPagination({
+                        totalPages : 35, // need backend data totalPage
+                        visiblePages : 7, // set it.
+                        onPageClick : function(event, page) {
+                            // send page info here, something as ajax call
+                            getPageContent(page);
+                        },
+                        first : '首页',
+                        prev : '上一页',
+                        next : '下一页',
+                        last : '尾页'
+                    });
+                })
             });
 
             $(".form_datetime").datepicker();
