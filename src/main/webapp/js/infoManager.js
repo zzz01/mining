@@ -114,7 +114,7 @@ $(document).ready(
                         that.$waitingMask.show();
                     },
                     success : function(data) {
-                        that.totalPages = data.pageTotal;
+                        that.totalPages = data.result.pageTotal;
                         if(data !== undefined && data !== ''){
                             if(data.status === 'OK'){
                                 var resultList = getDataOfPagination(data.result.list,that.page);
