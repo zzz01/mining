@@ -24,6 +24,6 @@ public class FileDao {
     public List<IssueFile> queryFilesByIssueId(String issueId) {
         IssueFileExample example = new IssueFileExample();
         example.createCriteria().andIssueIdEqualTo(issueId);
-        return issueFileMapper.selectByExample(example);
+        return issueFileMapper.selectByExampleWithBLOBs(example);
     }
 }

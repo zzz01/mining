@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
@@ -70,7 +71,8 @@ public class MiningController {
 
     @ResponseBody
     @RequestMapping("/calOrigAndCountResult")
-    public Object calculateOrigAndCountResult(String type, HttpServletRequest request) {
+    public Object calculateOrigAndCountResult(@RequestParam(value = "type", required = true) String type,
+            HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");

@@ -35,7 +35,7 @@ public class ExcelUtil {
             }
         }
         for (int i = 0; i <= rowNum; i++) {
-            String[] rowStr = new String[colNum];
+            String[] rowStr = new String[indexes.length];
             for (int j = 0; j < indexes.length; j++) {
                 try {
                     Cell cell = sheet.getRow(i).getCell(indexes[j]);

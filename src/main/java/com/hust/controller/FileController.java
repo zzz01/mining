@@ -46,13 +46,38 @@ public class FileController {
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public Object upload(@RequestBody Condition condition, HttpServletRequest request) {
-        if(request.getSession().getAttribute(Constant.ISSUE_ID)==null){
+        if (request.getSession().getAttribute(Constant.ISSUE_ID) == null) {
             return ResultUtil.errorWithMsg("请选择或者创建一个话题");
         }
         MultipartFile file = condition.getFile();
         if (file.isEmpty()) {
             return ResultUtil.errorWithMsg("文件为空");
         }
+        if (fileService.insert(condition, request) == 0) {
+            return ResultUtil.errorWithMsg("上传失败");
+        }
+        return ResultUtil.success("上传成功");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/uploadx", method = RequestMethod.POST)
+    public Object uploadx(@RequestParam(value = "file", required = true) MultipartFile file,
+            @RequestParam(value = "titleIndex", required = true) int titleIndex,
+            @RequestParam(value = "timeIndex", required = true) int timeIndex,
+            @RequestParam(value = "urlIndex", required = true) int urlIndex,
+            @RequestParam(value = "sourceType", required = true) String sourceType, HttpServletRequest request) {
+        if (request.getSession().getAttribute(Constant.ISSUE_ID) == null) {
+            return ResultUtil.errorWithMsg("请选择或者创建一个话题");
+        }
+        if (file.isEmpty()) {
+            return ResultUtil.errorWithMsg("文件为空");
+        }
+        Condition condition = new Condition();
+        condition.setFile(file);
+        condition.setTimeIndex(timeIndex);
+        condition.setUrlIndex(urlIndex);
+        condition.setTitleIndex(titleIndex);
+        condition.setSourceType(sourceType);
         if (fileService.insert(condition, request) == 0) {
             return ResultUtil.errorWithMsg("上传失败");
         }

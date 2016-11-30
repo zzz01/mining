@@ -94,7 +94,7 @@ public class FileServiceImpl implements FileService {
                 list.addAll(content);
             }
         } catch (Exception e) {
-            logger.error("合并issueid:{}相关的文件失败", issueId);
+            logger.error("合并issueid:{}相关的文件失败 \t" + e.toString(), issueId);
             return null;
         }
         return list;

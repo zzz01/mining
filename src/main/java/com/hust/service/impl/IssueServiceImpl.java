@@ -113,7 +113,7 @@ public class IssueServiceImpl implements IssueService {
             combineList.addAll(resultList.get(indexes[i]));
         }
         Arrays.sort(indexes);
-        for (int i = indexes.length - 1; i > 0; i--) {
+        for (int i = indexes.length - 1; i >= 0; i--) {
             resultList.remove(indexes[i]);
         }
         resultList.add(combineList);
@@ -122,7 +122,7 @@ public class IssueServiceImpl implements IssueService {
             @Override
             public int compare(List<String[]> o1, List<String[]> o2) {
                 // TODO Auto-generated method stub
-                return o1.size() - o2.size();
+                return o2.size() - o1.size();
             }
         });
         IssueWithBLOBs issue = new IssueWithBLOBs();
@@ -162,7 +162,7 @@ public class IssueServiceImpl implements IssueService {
 
             List<String[]> setList = origlist.get(params.getCurrentSet());
             Arrays.sort(params.getIndexSet());
-            for (int i = params.getIndexSet().length - 1; i > 0; i--) {
+            for (int i = params.getIndexSet().length - 1; i >= 0; i--) {
                 setList.remove(i);
             }
             origlist.set(params.getCurrentSet(), setList);
@@ -171,7 +171,7 @@ public class IssueServiceImpl implements IssueService {
                 @Override
                 public int compare(List<String[]> o1, List<String[]> o2) {
                     // TODO Auto-generated method stub
-                    return o1.size() - o2.size();
+                    return o2.size() - o1.size();
                 }
             });
 
@@ -241,7 +241,7 @@ public class IssueServiceImpl implements IssueService {
                         .convertBytesToObject(queryIssueById(issueId).getModifiedClusterResult());
             }
             Arrays.sort(set);
-            for (int i = set.length - 1; i > 0; i--) {
+            for (int i = set.length - 1; i >= 0; i--) {
                 origlist.remove(i);
             }
             IssueWithBLOBs issue = new IssueWithBLOBs();

@@ -6,7 +6,7 @@ $(document).ready(
             var $originLink = $("a[title='privateTopic']");
             var originPage = 1;
             $originLink.addClass('active');
-
+            $('#searchSubmit').on("click",getPageContent)
             getPageContent( originPage ).done(function(){
                 var totalPages = window.totalPages;
                 var visiblePages = utilGetVisiblePages( totalPages );
@@ -86,7 +86,7 @@ $(document).ready(
                 that.totalPages;
                 that.$waitingMask = $(".waiting-mask");
                 that.page = page;
-                that.url = "http://218.199.92.27:8080/issue/queryOwnIssue";
+                that.url = "http://localhost:8080/issue/queryOwnIssue";
                 that.type = "POST";
                 that.dataType = "json";
                 that.contentType = "application/json";
@@ -100,6 +100,7 @@ $(document).ready(
                     lastUpdateStartTime : $.trim($('#searchModifyStartTime').val()),
                     lastUpdateEndTime : $.trim($('#searchModifyEndTime').val()),
                 };
+                alert(that.json);
                 return $.ajax({
                     type : that.type,
                     url : that.url,

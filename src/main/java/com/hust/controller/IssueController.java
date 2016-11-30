@@ -65,6 +65,17 @@ public class IssueController {
     }
 
     @ResponseBody
+    @RequestMapping("/enterIntoIssue")
+    public Object enterIntoIssue(@RequestParam(value = "issue_id", required = true) String issueId,
+            HttpServletRequest request) {
+        if (issueService.queryIssueById(issueId) == null) {
+            return ResultUtil.errorWithMsg("current issue doesn't exist");
+        }
+        request.getSession().setAttribute(Constant.ISSUE_ID, issueId);
+        return ResultUtil.success("enter issue success!");
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/shuffle", method = RequestMethod.POST)
     public Object shuffle(HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
@@ -167,6 +178,27 @@ public class IssueController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
+        boolean result = issueService.deleteItemsFromClusterResult(params, request);
+        if (result) {
+            return ResultUtil.success("删除成功");
+        } else {
+            return ResultUtil.success("删除失败");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping("/deleteItemsFromClusterResultx")
+    public Object deleteItemsFromClusterResultx(@RequestParam(value = "type", required = true) String type,
+            @RequestParam(value = "currentset", required = true) int currentset,
+            @RequestParam(value = "indexset", required = true) int[] indexset, HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
+        }
+        DeleteItemsParams params = new DeleteItemsParams();
+        params.setType(type);
+        params.setCurrentSet(currentset);
+        params.setIndexSet(indexset);
         boolean result = issueService.deleteItemsFromClusterResult(params, request);
         if (result) {
             return ResultUtil.success("删除成功");
