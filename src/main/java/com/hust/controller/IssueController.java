@@ -173,22 +173,7 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/deleteItemsFromClusterResult")
-    public Object deleteItemsFromClusterResult(@RequestBody DeleteItemsParams params, HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
-        if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
-        }
-        boolean result = issueService.deleteItemsFromClusterResult(params, request);
-        if (result) {
-            return ResultUtil.success("删除成功");
-        } else {
-            return ResultUtil.success("删除失败");
-        }
-    }
-
-    @ResponseBody
-    @RequestMapping("/deleteItemsFromClusterResultx")
-    public Object deleteItemsFromClusterResultx(@RequestParam(value = "type", required = true) String type,
+    public Object deleteItemsFromClusterResult(@RequestParam(value = "type", required = true) String type,
             @RequestParam(value = "currentset", required = true) int currentset,
             @RequestParam(value = "indexset", required = true) int[] indexset, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
