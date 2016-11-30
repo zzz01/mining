@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hust.cluster.Canopy;
-import com.hust.convertor.Convertor;
-import com.hust.convertor.DigitalConvertor;
-import com.hust.distance.AcrossDistance;
+import com.hust.datamining.cluster.Canopy;
+import com.hust.datamining.convertor.Convertor;
+import com.hust.datamining.convertor.DigitalConvertor;
+import com.hust.datamining.distance.AcrossDistance;
 import com.hust.mining.constant.Config;
 import com.hust.mining.service.ClusterService;
 import com.hust.mining.service.SegmentService;
