@@ -5,9 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hust.mining.model.Issue;
-import com.hust.mining.model.IssueQueryCondition;
 import com.hust.mining.model.IssueWithBLOBs;
 import com.hust.mining.model.params.DeleteItemsParams;
+import com.hust.mining.model.params.IssueQueryCondition;
 
 public interface IssueService {
 

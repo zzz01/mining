@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hust.mining.dao.mapper.IssueMapper;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueExample;
-import com.hust.mining.model.IssueQueryCondition;
 import com.hust.mining.model.IssueWithBLOBs;
 import com.hust.mining.model.IssueExample.Criteria;
+import com.hust.mining.model.params.IssueQueryCondition;
 
 public class IssueDao {
 
@@ -61,12 +61,12 @@ public class IssueDao {
             criteria.andLastUpdateTimeLessThanOrEqualTo(con.getLastUpdateEndTime());
         }
         example.setOrderByClause("last_update_time desc");
-        example.setStart(con.getPageNo() - 1);
+        example.setStart((con.getPageNo() - 1) * con.getPageSize());
         example.setLimit(con.getPageSize());
         return issueMapper.selectByExample(example);
     }
-    
-    public long countIssues(IssueQueryCondition con){
+
+    public long countIssues(IssueQueryCondition con) {
         IssueExample example = new IssueExample();
         Criteria criteria = example.createCriteria();
         if (!StringUtils.isBlank(con.getUser())) {

@@ -1,4 +1,4 @@
-package com.hust.mining.model;
+package com.hust.mining.model.params;
 
 import java.util.List;
 
