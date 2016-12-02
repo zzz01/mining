@@ -8,10 +8,10 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	<context:component-scan base-package="com.hust"
+	<context:component-scan base-package="com.hust.mining"
 		use-default-filters="false">
 		<context:include-filter type="regex"
-			expression="com.hust.*" />
+			expression="com.hust.mining*" />
 	</context:component-scan>
 
 	<mvc:interceptors>
@@ -24,7 +24,7 @@
 	<!-- <mvc:exclude-mapping path="/index.html" /> -->
 			<mvc:exclude-mapping path="/login" />
 			<mvc:exclude-mapping path="/page/error.html" />
-			<bean class="com.hust.interceptor.PermissionInterceptor" />
+			<bean class="com.hust.mining.interceptor.PermissionInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 

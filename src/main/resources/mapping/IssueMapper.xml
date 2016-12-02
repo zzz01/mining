@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hust.dao.mapper.IssueMapper">
-	<resultMap id="BaseResultMap" type="com.hust.model.Issue">
+<mapper namespace="com.hust.mining.dao.mapper.IssueMapper">
+	<resultMap id="BaseResultMap" type="com.hust.mining.model.Issue">
 		<id column="issue_id" jdbcType="VARCHAR" property="issueId" />
 		<result column="issue_name" jdbcType="VARCHAR" property="issueName" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -11,7 +11,7 @@
 			property="lastUpdateTime" />
 	</resultMap>
 	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-		type="com.hust.model.IssueWithBLOBs">
+		type="com.hust.mining.model.IssueWithBLOBs">
 		<result column="filtered_content" jdbcType="LONGVARBINARY"
 			property="filteredContent" />
 		<result column="cluster_result" jdbcType="LONGVARBINARY"
@@ -100,7 +100,7 @@
 		modified_orig_count_result,
 		statistic_result
 	</sql>
-	<select id="selectByExampleWithBLOBs" parameterType="com.hust.model.IssueExample"
+	<select id="selectByExampleWithBLOBs" parameterType="com.hust.mining.model.IssueExample"
 		resultMap="ResultMapWithBLOBs">
 		select
 		<if test="distinct">
@@ -121,7 +121,7 @@
 			limit #{start},#{limit}
 		</if>
 	</select>
-	<select id="selectByExample" parameterType="com.hust.model.IssueExample"
+	<select id="selectByExample" parameterType="com.hust.mining.model.IssueExample"
 		resultMap="BaseResultMap">
 		select
 		<if test="distinct">
@@ -153,13 +153,13 @@
 		delete from issue
 		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</delete>
-	<delete id="deleteByExample" parameterType="com.hust.model.IssueExample">
+	<delete id="deleteByExample" parameterType="com.hust.mining.model.IssueExample">
 		delete from issue
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.model.IssueWithBLOBs">
+	<insert id="insert" parameterType="com.hust.mining.model.IssueWithBLOBs">
 		insert into issue (issue_id,
 		issue_name, create_time,
 		creator, last_operator, last_update_time,
@@ -182,7 +182,7 @@
 		#{statisticResult,jdbcType=LONGVARBINARY}
 		)
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.model.IssueWithBLOBs">
+	<insert id="insertSelective" parameterType="com.hust.mining.model.IssueWithBLOBs">
 		insert into issue
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="issueId != null">
@@ -261,7 +261,7 @@
 			</if>
 		</trim>
 	</insert>
-	<select id="countByExample" parameterType="com.hust.model.IssueExample"
+	<select id="countByExample" parameterType="com.hust.mining.model.IssueExample"
 		resultType="java.lang.Long">
 		select count(*) from issue
 		<if test="_parameter != null">
@@ -361,7 +361,7 @@
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.model.IssueWithBLOBs">
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.IssueWithBLOBs">
 		update issue
 		<set>
 			<if test="issueName != null">
@@ -405,7 +405,7 @@
 		</set>
 		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.model.IssueWithBLOBs">
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.IssueWithBLOBs">
 		update
 		issue
 		set issue_name = #{issueName,jdbcType=VARCHAR},
@@ -432,7 +432,7 @@
 		where issue_id =
 		#{issueId,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.hust.model.Issue">
+	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Issue">
 		update issue
 		set
 		issue_name = #{issueName,jdbcType=VARCHAR},

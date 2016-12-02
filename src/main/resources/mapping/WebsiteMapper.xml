@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hust.dao.mapper.WebsiteMapper">
-	<resultMap id="BaseResultMap" type="com.hust.model.Website">
+<mapper namespace="com.hust.mining.dao.mapper.WebsiteMapper">
+	<resultMap id="BaseResultMap" type="com.hust.mining.model.Website">
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
@@ -74,7 +74,7 @@
 	<sql id="Base_Column_List">
 		id, url, name, level, type
 	</sql>
-	<select id="selectByExample" parameterType="com.hust.model.WebsiteExample"
+	<select id="selectByExample" parameterType="com.hust.mining.model.WebsiteExample"
 		resultMap="BaseResultMap">
 		select
 		<if test="distinct">
@@ -104,20 +104,20 @@
 		delete from website
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
-	<delete id="deleteByExample" parameterType="com.hust.model.WebsiteExample">
+	<delete id="deleteByExample" parameterType="com.hust.mining.model.WebsiteExample">
 		delete from website
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.model.Website">
+	<insert id="insert" parameterType="com.hust.mining.model.Website">
 		insert into website (id, url, name,
 		level, type)
 		values (#{id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
 		#{level,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.model.Website">
+	<insert id="insertSelective" parameterType="com.hust.mining.model.Website">
 		insert into website
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -154,7 +154,7 @@
 			</if>
 		</trim>
 	</insert>
-	<select id="countByExample" parameterType="com.hust.model.WebsiteExample"
+	<select id="countByExample" parameterType="com.hust.mining.model.WebsiteExample"
 		resultType="java.lang.Long">
 		select count(*) from website
 		<if test="_parameter != null">
@@ -195,7 +195,7 @@
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.model.Website">
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.Website">
 		update website
 		<set>
 			<if test="url != null">
@@ -213,7 +213,7 @@
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.hust.model.Website">
+	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Website">
 		update website
 		set url = #{url,jdbcType=VARCHAR},
 		name = #{name,jdbcType=VARCHAR},

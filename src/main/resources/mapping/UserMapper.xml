@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hust.dao.mapper.UserMapper">
-	<resultMap id="BaseResultMap" type="com.hust.model.User">
+<mapper namespace="com.hust.mining.dao.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.hust.mining.model.User">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="user_name" jdbcType="VARCHAR" property="userName" />
 		<result column="passwrod" jdbcType="VARCHAR" property="passwrod" />
@@ -84,7 +84,7 @@
 		master_name,
 		create_date
 	</sql>
-	<select id="selectByExample" parameterType="com.hust.model.UserExample"
+	<select id="selectByExample" parameterType="com.hust.mining.model.UserExample"
 		resultMap="BaseResultMap">
 		select
 		<if test="distinct">
@@ -114,13 +114,13 @@
 		delete from user
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
-	<delete id="deleteByExample" parameterType="com.hust.model.UserExample">
+	<delete id="deleteByExample" parameterType="com.hust.mining.model.UserExample">
 		delete from user
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.model.User">
+	<insert id="insert" parameterType="com.hust.mining.model.User">
 		insert into user (id,
 		user_name, passwrod,
 		true_name, email, phone,
@@ -137,7 +137,7 @@
 		#{masterName,jdbcType=VARCHAR},
 		#{createDate,jdbcType=DATE})
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.model.User">
+	<insert id="insertSelective" parameterType="com.hust.mining.model.User">
 		insert into user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -204,7 +204,7 @@
 			</if>
 		</trim>
 	</insert>
-	<select id="countByExample" parameterType="com.hust.model.UserExample"
+	<select id="countByExample" parameterType="com.hust.mining.model.UserExample"
 		resultType="java.lang.Long">
 		select count(*) from user
 		<if test="_parameter != null">
@@ -274,7 +274,7 @@
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.model.User">
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.User">
 		update user
 		<set>
 			<if test="userName != null">
@@ -307,7 +307,7 @@
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.hust.model.User">
+	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.User">
 		update user
 		set
 		user_name = #{userName,jdbcType=VARCHAR},
